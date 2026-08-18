@@ -25,7 +25,7 @@ import { ForgotPasswordView } from './views/ForgotPasswordView';
 import { OtpVerificationModal } from './components/OtpVerificationModal';
 import { DuplicateLoginModal } from './components/DuplicateLoginModal';
 import { ToastNotification } from './components/ToastNotification';
-import { ShieldCheck, Heart, Mail, Phone, MapPin, Lock } from 'lucide-react';
+import { ShieldCheck, Heart, Mail, Phone, MapPin, Lock, ArrowLeft } from 'lucide-react';
 
 import { useApp } from './context/AppContext';
 
@@ -39,59 +39,82 @@ function MainLayout() {
     }
     return 'home';
   });
+
+  // Navigation History Stack
+  const [navHistory, setNavHistory] = useState(['home']);
+
+  const handleNavigate = (newTab) => {
+    if (newTab !== activeTab) {
+      setNavHistory(prev => [...prev, activeTab]);
+      setActiveTab(newTab);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  };
+
+  const handleGoBack = () => {
+    if (navHistory.length > 0) {
+      const prevTab = navHistory[navHistory.length - 1];
+      setNavHistory(prev => prev.slice(0, -1));
+      setActiveTab(prevTab);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+      setActiveTab('home');
+    }
+  };
+
   const { currentUser } = useApp();
 
   const renderView = () => {
     if (activeTab.startsWith('verify-certificate-')) {
       const certId = activeTab.replace('verify-certificate-', '');
-      return <CertificateVerificationView certificateId={certId} onNavigate={(tab) => setActiveTab(tab)} />;
+      return <CertificateVerificationView certificateId={certId} onNavigate={handleNavigate} />;
     }
 
     switch (activeTab) {
       case 'esg-report':
       case 'csr-report':
       case 'csr-analytics':
-        return <EsgReportGeneratorView onNavigate={(tab) => setActiveTab(tab)} />;
+        return <EsgReportGeneratorView onNavigate={handleNavigate} />;
       case 'matchmaker':
       case 'csr-matchmaker':
       case 'ai-matchmaker':
-        return <AiMatchmakerView onNavigate={(tab) => setActiveTab(tab)} />;
+        return <AiMatchmakerView onNavigate={handleNavigate} />;
       case 'verify-certificate':
-        return <CertificateVerificationView onNavigate={(tab) => setActiveTab(tab)} />;
+        return <CertificateVerificationView onNavigate={handleNavigate} />;
       case 'about':
       case 'about-us':
-        return <AboutUsView onNavigate={(tab) => setActiveTab(tab)} />;
+        return <AboutUsView onNavigate={handleNavigate} />;
       case 'events':
         return <EventsView />;
       case 'history':
         return <PastHistoryView />;
       case 'volunteer-hub':
-        return <VolunteerDashboardView onNavigate={(tab) => setActiveTab(tab)} />;
+        return <VolunteerDashboardView onNavigate={handleNavigate} />;
       case 'corporate':
       case 'corporate-partner':
-        return <CorporatePartnerView onNavigate={(tab) => setActiveTab(tab)} />;
+        return <CorporatePartnerView onNavigate={handleNavigate} />;
       case 'volunteer-login':
-        return <VolunteerLoginView onNavigate={(tab) => setActiveTab(tab)} />;
+        return <VolunteerLoginView onNavigate={handleNavigate} />;
       case 'ngo-login':
       case 'ngo-staff-login':
-        return <NgoLoginView onNavigate={(tab) => setActiveTab(tab)} />;
+        return <NgoLoginView onNavigate={handleNavigate} />;
       case 'company-login':
-        return <CompanyLoginView onNavigate={(tab) => setActiveTab(tab)} />;
+        return <CompanyLoginView onNavigate={handleNavigate} />;
       case 'hidden-admin-login':
-        return <HiddenAdminLoginView onNavigate={(tab) => setActiveTab(tab)} />;
+        return <HiddenAdminLoginView onNavigate={handleNavigate} />;
       case 'forgot-password':
       case 'reset-password':
-        return <ForgotPasswordView onNavigate={(tab) => setActiveTab(tab)} />;
+        return <ForgotPasswordView onNavigate={handleNavigate} />;
       case 'dbms':
         // RBAC Enforcement Guard: Strictly SUPER_ADMIN only
         if (!currentUser || currentUser.role !== 'SUPER_ADMIN') {
-          return <HiddenAdminLoginView onNavigate={(tab) => setActiveTab(tab)} />;
+          return <HiddenAdminLoginView onNavigate={handleNavigate} />;
         }
         return <AdminDbmsView />;
       default:
         return (
           <HomeView 
-            onNavigate={(tab) => setActiveTab(tab)} 
+            onNavigate={handleNavigate} 
           />
         );
     }
@@ -102,12 +125,26 @@ function MainLayout() {
       
       {/* 1. Global Emergency Banner & Navigation Bar */}
       <div>
-        <SosEmergencyBanner onSelectEvent={() => setActiveTab('events')} />
+        <SosEmergencyBanner onSelectEvent={() => handleNavigate('events')} />
         <Navbar 
           activeTab={activeTab} 
-          setActiveTab={setActiveTab} 
+          setActiveTab={handleNavigate} 
         />
         
+        {/* Universal Top-Left Back Arrow for Internal Subpages */}
+        {activeTab !== 'home' && (
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-3 pb-1 flex items-center">
+            <button
+              onClick={handleGoBack}
+              className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-white dark:bg-slate-900 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200 border border-slate-200/90 dark:border-slate-800 text-xs font-bold shadow-xs transition-all hover-lift press-effect group"
+              title="Go back to previous screen"
+            >
+              <ArrowLeft className="w-4 h-4 text-sky-600 dark:text-sky-400 group-hover:-translate-x-1 transition-transform" />
+              <span>Back</span>
+            </button>
+          </div>
+        )}
+
         {/* Main Content Render */}
         <main className="transition-opacity duration-300 page-enter" key={activeTab}>
           {renderView()}

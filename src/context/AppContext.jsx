@@ -93,17 +93,11 @@ export const AppProvider = ({ children }) => {
     }
   });
 
-  // 2. Authentication & Active Session Tracking
-  const [currentUser, setCurrentUser] = useState(() => {
-    const savedUser = localStorage.getItem('sankalp_current_user');
-    return savedUser ? JSON.parse(savedUser) : null;
-  });
+  // 2. Authentication & In-Memory Session Tracking (Zero session persistence across reloads/revisits for security)
+  const [currentUser, setCurrentUser] = useState(null);
 
-  // Active Session Tokens store (Simulates central auth session registry to detect duplicate logins)
-  const [activeSessions, setActiveSessions] = useState(() => {
-    const saved = localStorage.getItem('sankalp_active_sessions');
-    return saved ? JSON.parse(saved) : {};
-  });
+  // Active Session Tokens store (In-memory session registry)
+  const [activeSessions, setActiveSessions] = useState({});
 
   // Modals & UI Controls
   const [authModalOpen, setAuthModalOpen] = useState(false);
@@ -131,42 +125,11 @@ export const AppProvider = ({ children }) => {
 
   const toggleDarkMode = () => setDarkMode(prev => !prev);
 
-  // Sync state changes to LocalStorage
+  // Clear any legacy saved user sessions from localStorage on load
   useEffect(() => {
-    localStorage.setItem('sankalp_ngos_list', JSON.stringify(ngos));
-  }, [ngos]);
-
-  useEffect(() => {
-    localStorage.setItem('sankalp_events', JSON.stringify(events));
-  }, [events]);
-
-  useEffect(() => {
-    localStorage.setItem('sankalp_past_events', JSON.stringify(pastEvents));
-  }, [pastEvents]);
-
-  useEffect(() => {
-    localStorage.setItem('sankalp_volunteers', JSON.stringify(volunteers));
-  }, [volunteers]);
-
-  useEffect(() => {
-    localStorage.setItem('sankalp_corporate_requests', JSON.stringify(corporateRequests));
-  }, [corporateRequests]);
-
-  useEffect(() => {
-    localStorage.setItem('sankalp_users', JSON.stringify(users));
-  }, [users]);
-
-  useEffect(() => {
-    localStorage.setItem('sankalp_active_sessions', JSON.stringify(activeSessions));
-  }, [activeSessions]);
-
-  useEffect(() => {
-    if (currentUser) {
-      localStorage.setItem('sankalp_current_user', JSON.stringify(currentUser));
-    } else {
-      localStorage.removeItem('sankalp_current_user');
-    }
-  }, [currentUser]);
+    localStorage.removeItem('sankalp_current_user');
+    localStorage.removeItem('sankalp_active_sessions');
+  }, []);
 
   // Helper Toast Trigger
   const showToast = (message, type = 'info') => {
