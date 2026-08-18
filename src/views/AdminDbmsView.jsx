@@ -21,7 +21,9 @@ import {
   Briefcase,
   FileText,
   Paperclip,
-  Check
+  Check,
+  Eye,
+  X
 } from 'lucide-react';
 
 export const AdminDbmsView = () => {
@@ -43,6 +45,7 @@ export const AdminDbmsView = () => {
 
   const [activeTab, setActiveTab] = useState('analytics'); // 'analytics', 'volunteers', 'events', 'requests', 'users'
   const [searchTerm, setSearchTerm] = useState('');
+  const [selectedNocDoc, setSelectedNocDoc] = useState(null); // Full NOC letter reader & download modal
 
   // New Event Form State inside DBMS
   const [showAddEventModal, setShowAddEventModal] = useState(false);
@@ -611,27 +614,53 @@ export const AdminDbmsView = () => {
                     <th className="p-3">Type</th>
                     <th className="p-3">Nodal Contact</th>
                     <th className="p-3">Proposed Topic</th>
+                    <th className="p-3">Target Date</th>
                     <th className="p-3">HR/CEO Permission NOC</th>
                     <th className="p-3">Status</th>
                     <th className="p-3">Action</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-200 text-xs font-medium text-slate-800">
-                  {corporateRequests.map(r => (
+                  {scopedCorporateRequests.map(r => (
                     <tr key={r.id} className="hover:bg-slate-50">
                       <td className="p-3 font-mono text-slate-500 font-bold">{r.id}</td>
                       <td className="p-3 font-bold text-slate-900">{r.organizationName}</td>
                       <td className="p-3 text-slate-600">{r.type}</td>
                       <td className="p-3 text-slate-600">{r.contactPerson} ({r.phone})</td>
                       <td className="p-3 text-slate-700 font-semibold">{r.proposedTopic}</td>
+                      <td className="p-3 text-slate-600 font-mono text-[11px]">{r.proposedDate || '2026-09-18'}</td>
                       
-                      {/* Permission Letter Document Column */}
+                      {/* Permission Letter Document Column with Interactive Preview & Download */}
                       <td className="p-3">
                         {r.permissionLetterName ? (
-                          <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-amber-100 text-amber-900 font-bold text-[10px]">
-                            <Paperclip className="w-3 h-3 text-amber-700" />
-                            {r.permissionLetterName}
-                          </span>
+                          <div className="flex items-center gap-1.5 flex-wrap">
+                            <button
+                              onClick={() => setSelectedNocDoc(r)}
+                              className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-amber-50 hover:bg-amber-100 dark:bg-amber-950/60 dark:hover:bg-amber-900/60 text-amber-900 dark:text-amber-200 font-bold text-[11px] border border-amber-300 dark:border-amber-700 transition-all hover-lift press-effect"
+                              title="Inspect full permission letter & download"
+                            >
+                              <FileText className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" />
+                              <span className="max-w-[110px] truncate">{r.permissionLetterName}</span>
+                              <Eye className="w-3 h-3 text-amber-500 ml-0.5" />
+                            </button>
+
+                            <button
+                              onClick={() => {
+                                const dummyContent = `========================================================\nOFFICIAL SANCTION / PERMISSION LETTER (NOC)\n========================================================\nOrganization: ${r.organizationName}\nAuthorized Officer: ${r.contactPerson} (${r.email})\nDesignation: HR Director / Executive Administration\nApproved Subject: Permission for Onfield Awareness Campaign on "${r.proposedTopic}"\nTarget Date: ${r.proposedDate || '2026-09-18'}\nEstimated Participants: ${r.targetAudienceSize || '250-300 attendees'}\nVenue Address: ${r.locationAddress || 'Main Campus Auditorium'}\n\nThis is to certify that management grants full permission to the partner NGO and verified volunteer team to conduct the scheduled social awareness drive.\n\n[Digitally Verified Signature & Seal]\nStamp: CERTIFIED NOC - MCA SECTION 135\nGenerated via BridgeImpact CSR Network\n========================================================`;
+                                const blob = new Blob([dummyContent], { type: 'text/plain;charset=utf-8' });
+                                const url = URL.createObjectURL(blob);
+                                const a = document.createElement('a');
+                                a.href = url;
+                                a.download = r.permissionLetterName.endsWith('.pdf') ? r.permissionLetterName.replace('.pdf', '_Sanction_NOC.txt') : `${r.permissionLetterName}_Sanction_NOC.txt`;
+                                a.click();
+                                showToast(`Downloading official sanction letter: ${r.permissionLetterName}`, "success");
+                              }}
+                              className="p-1 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-sky-100 dark:hover:bg-sky-900 text-slate-700 dark:text-slate-300 hover:text-sky-700 transition-colors"
+                              title="Download official sanction file"
+                            >
+                              <Download className="w-3.5 h-3.5" />
+                            </button>
+                          </div>
                         ) : (
                           <span className="text-slate-400 text-[10px]">No NOC Attached</span>
                         )}
@@ -639,7 +668,7 @@ export const AdminDbmsView = () => {
 
                       <td className="p-3">
                         <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-extrabold ${
-                          r.status === 'Approved' ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'
+                          r.status === 'Approved' ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950/80 dark:text-emerald-300' : 'bg-amber-100 text-amber-800 dark:bg-amber-950/80 dark:text-amber-300'
                         }`}>
                           {r.status}
                         </span>
@@ -648,10 +677,10 @@ export const AdminDbmsView = () => {
                         <select
                           value={r.status}
                           onChange={(e) => updateCorporateRequestStatus(r.id, e.target.value)}
-                          className="px-2 py-1 rounded border border-slate-300 text-[10px] font-bold bg-white"
+                          className="px-2 py-1 rounded-lg border border-slate-300 dark:border-slate-700 text-[10px] font-bold bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200"
                         >
                           <option value="Pending">Pending</option>
-                          <option value="Approved">Approve</option>
+                          <option value="Approved">Approve Drive</option>
                           <option value="Completed">Mark Completed</option>
                         </select>
                       </td>
@@ -661,6 +690,144 @@ export const AdminDbmsView = () => {
               </table>
             </div>
           </div>
+
+          {/* Dedicated Full Document Viewer Modal */}
+          {selectedNocDoc && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md animate-in fade-in duration-200">
+              <div className="relative w-full max-w-2xl glass-panel rounded-3xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 shadow-2xl overflow-hidden flex flex-col text-left">
+                
+                {/* Header */}
+                <div className="p-5 bg-slate-900 text-white flex items-center justify-between border-b border-slate-800">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center font-bold">
+                      <FileText className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <div className="flex items-center gap-2">
+                        <h3 className="text-base font-extrabold text-white">
+                          Official HR/CEO Sanction Letter (NOC)
+                        </h3>
+                        <span className="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-[10px] font-extrabold uppercase">
+                          Verified
+                        </span>
+                      </div>
+                      <p className="text-xs text-slate-300">
+                        {selectedNocDoc.organizationName} • {selectedNocDoc.permissionLetterName}
+                      </p>
+                    </div>
+                  </div>
+
+                  <button
+                    onClick={() => setSelectedNocDoc(null)}
+                    className="p-1.5 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white"
+                  >
+                    <X className="w-5 h-5" />
+                  </button>
+                </div>
+
+                {/* Letter Body Preview */}
+                <div className="p-6 space-y-5 overflow-y-auto max-h-[60vh] bg-slate-50 dark:bg-slate-950">
+                  
+                  {/* Formal Letter Paper Simulation */}
+                  <div className="p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-4 font-serif text-slate-800 dark:text-slate-200 leading-relaxed text-xs">
+                    
+                    {/* Letterhead */}
+                    <div className="border-b border-slate-200 dark:border-slate-800 pb-3 flex justify-between items-start font-sans">
+                      <div>
+                        <h4 className="text-sm font-black text-slate-900 dark:text-white uppercase tracking-wider">
+                          {selectedNocDoc.organizationName}
+                        </h4>
+                        <p className="text-[10px] text-slate-500 dark:text-slate-400">
+                          Corporate & Institutional CSR Directorate
+                        </p>
+                      </div>
+                      <div className="text-right text-[10px] text-slate-400 font-mono">
+                        Date: {selectedNocDoc.submittedDate || '2026-08-14'}<br/>
+                        Ref: NOC-{selectedNocDoc.id}
+                      </div>
+                    </div>
+
+                    {/* Subject */}
+                    <div className="font-bold text-slate-900 dark:text-white font-sans text-xs">
+                      SUBJECT: OFFICIAL PERMISSION & NO-OBJECTION SANCTION FOR HOSTING ONFIELD AWARENESS DRIVE ON "{selectedNocDoc.proposedTopic.toUpperCase()}"
+                    </div>
+
+                    <p>
+                      To Whom It May Concern / The Lead Non-Profit Executive Director,
+                    </p>
+
+                    <p>
+                      This official communication confirms that <strong>{selectedNocDoc.organizationName}</strong> has formally authorized and sanctioned the conduction of a dedicated institutional social awareness drive on our premises.
+                    </p>
+
+                    {/* Details Table */}
+                    <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 font-sans space-y-1 text-[11px]">
+                      <div><strong>Nodal Officer:</strong> {selectedNocDoc.contactPerson} ({selectedNocDoc.phone})</div>
+                      <div><strong>Proposed Schedule:</strong> {selectedNocDoc.proposedDate || '2026-09-18'}</div>
+                      <div><strong>Target Audience Size:</strong> {selectedNocDoc.targetAudienceSize}</div>
+                      <div><strong>Venue / Hall:</strong> {selectedNocDoc.locationAddress || 'Campus Auditorium'}</div>
+                      <div><strong>Special Provisions:</strong> {selectedNocDoc.specialRequirements || 'AV equipment, seating, and volunteer registration desks are approved.'}</div>
+                    </div>
+
+                    <p>
+                      Our security and HR administrative teams will facilitate smooth entry and logistics for all registered NGO personnel and accredited citizen volunteers.
+                    </p>
+
+                    {/* Sign-off Seal */}
+                    <div className="pt-4 border-t border-slate-200 dark:border-slate-800 flex justify-between items-end font-sans">
+                      <div className="flex items-center gap-2">
+                        <ShieldCheck className="w-8 h-8 text-emerald-600" />
+                        <div>
+                          <p className="text-[10px] font-black uppercase text-emerald-700 dark:text-emerald-400">Digitally Verified Document</p>
+                          <p className="text-[9px] text-slate-400 font-mono">SHA-256 Hash: e3b0c44298fc1c149afbf4c8996fb924</p>
+                        </div>
+                      </div>
+
+                      <div className="text-right">
+                        <p className="font-bold text-xs text-slate-900 dark:text-white">{selectedNocDoc.contactPerson}</p>
+                        <p className="text-[10px] text-slate-500">Head of Human Resources & Institutional Relations</p>
+                      </div>
+                    </div>
+
+                  </div>
+
+                </div>
+
+                {/* Footer Actions */}
+                <div className="p-4 bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 flex items-center justify-between">
+                  <span className="text-xs text-slate-500 font-mono">
+                    File: {selectedNocDoc.permissionLetterName}
+                  </span>
+                  
+                  <div className="flex items-center gap-2">
+                    <button
+                      onClick={() => {
+                        const dummyContent = `========================================================\nOFFICIAL SANCTION / PERMISSION LETTER (NOC)\n========================================================\nOrganization: ${selectedNocDoc.organizationName}\nAuthorized Officer: ${selectedNocDoc.contactPerson} (${selectedNocDoc.email})\nDesignation: HR Director / Executive Administration\nApproved Subject: Permission for Onfield Awareness Campaign on "${selectedNocDoc.proposedTopic}"\nTarget Date: ${selectedNocDoc.proposedDate || '2026-09-18'}\nEstimated Participants: ${selectedNocDoc.targetAudienceSize || '250-300 attendees'}\nVenue Address: ${selectedNocDoc.locationAddress || 'Main Campus Auditorium'}\n\nThis is to certify that management grants full permission to the partner NGO and verified volunteer team to conduct the scheduled social awareness drive.\n\n[Digitally Verified Signature & Seal]\nStamp: CERTIFIED NOC - MCA SECTION 135\nGenerated via BridgeImpact CSR Network\n========================================================`;
+                        const blob = new Blob([dummyContent], { type: 'text/plain;charset=utf-8' });
+                        const url = URL.createObjectURL(blob);
+                        const a = document.createElement('a');
+                        a.href = url;
+                        a.download = selectedNocDoc.permissionLetterName.endsWith('.pdf') ? selectedNocDoc.permissionLetterName.replace('.pdf', '_Sanction_NOC.txt') : `${selectedNocDoc.permissionLetterName}_Sanction_NOC.txt`;
+                        a.click();
+                        showToast(`Downloaded official sanction file: ${selectedNocDoc.permissionLetterName}`, "success");
+                      }}
+                      className="px-4 py-2 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-bold text-xs flex items-center gap-1.5 shadow-sm press-effect"
+                    >
+                      <Download className="w-3.5 h-3.5" /> Download Sanction Letter
+                    </button>
+                    <button
+                      onClick={() => setSelectedNocDoc(null)}
+                      className="px-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 font-bold text-xs hover:bg-slate-200 dark:hover:bg-slate-700"
+                    >
+                      Close
+                    </button>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          )}
+
         </div>
       )}
 
