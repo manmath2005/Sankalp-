@@ -80,16 +80,19 @@ export const VolunteerDashboardView = ({ onNavigate }) => {
     );
   }
 
-  // Find volunteer profile record
+  // Check if currentUser is an Institutional Partner (NGO, Company, Super Admin)
+  const isInstitutionalUser = currentUser.role === 'NGO_PARTNER' || currentUser.role === 'NGO_STAFF' || currentUser.role === 'COMPANY_PARTNER' || currentUser.role === 'SUPER_ADMIN';
+
+  // Find volunteer profile record only if user is volunteer
   const volunteerProfile = volunteers.find(v => v.email.toLowerCase() === currentUser.email.toLowerCase()) || {
     name: currentUser.name,
     email: currentUser.email,
-    institution: currentUser.institution || 'Independent Volunteer',
-    profession: currentUser.profession || 'Student',
+    institution: currentUser.ngoName || currentUser.companyName || currentUser.institution || 'Institutional Lead',
+    profession: currentUser.role === 'NGO_PARTNER' || currentUser.role === 'NGO_STAFF' ? 'NGO Director / Lead' : currentUser.role === 'COMPANY_PARTNER' ? 'Corporate CSR Lead' : 'System Administrator',
     city: currentUser.city || 'Mumbai',
-    age: currentUser.age || 22,
+    age: currentUser.age || 32,
     phone: currentUser.phone || '',
-    skills: currentUser.skills || ['Public Speaking', 'Digital Literacy'],
+    skills: currentUser.skills || ['CSR Management', 'Social Impact', 'Community Outreach'],
     status: 'Verified',
     assignedEventIds: [],
     certificates: []
@@ -120,23 +123,65 @@ export const VolunteerDashboardView = ({ onNavigate }) => {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8 text-left page-enter">
       
+      {/* Role Alert Banner if Institutional Partner */}
+      {isInstitutionalUser && (
+        <div className="p-4 rounded-2xl bg-sky-50 dark:bg-sky-950/60 border border-sky-200 dark:border-sky-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-xs">
+          <div className="flex items-center gap-3">
+            <div className="w-9 h-9 rounded-xl bg-sky-600 text-white flex items-center justify-center font-bold text-sm shrink-0">
+              <ShieldCheck className="w-5 h-5" />
+            </div>
+            <div>
+              <p className="text-xs font-bold text-slate-900 dark:text-white">
+                Logged in as <strong>{currentUser.role === 'NGO_PARTNER' || currentUser.role === 'NGO_STAFF' ? 'Non-Profit Partner' : currentUser.role === 'COMPANY_PARTNER' ? 'Corporate CSR Lead' : 'Super Admin'}</strong> ({currentUser.ngoName || currentUser.companyName || currentUser.name})
+              </p>
+              <p className="text-[11px] text-slate-500 dark:text-slate-400">
+                You are viewing the Volunteer Hub in institutional inspection & verify preview mode. Your official profile remains <strong>{currentUser.role.replace('_', ' ')}</strong>.
+              </p>
+            </div>
+          </div>
+          <div className="flex items-center gap-2 shrink-0">
+            {(currentUser.role === 'NGO_PARTNER' || currentUser.role === 'NGO_STAFF' || currentUser.role === 'SUPER_ADMIN') && (
+              <button
+                onClick={() => onNavigate('dbms')}
+                className="px-3.5 py-1.5 rounded-xl bg-slate-900 dark:bg-slate-800 text-white text-xs font-bold hover:bg-slate-800 shadow-xs press-effect"
+              >
+                Go to NGO Manager
+              </button>
+            )}
+            {currentUser.role === 'COMPANY_PARTNER' && (
+              <button
+                onClick={() => onNavigate('corporate')}
+                className="px-3.5 py-1.5 rounded-xl bg-indigo-600 text-white text-xs font-bold hover:bg-indigo-700 shadow-xs press-effect"
+              >
+                Go to Corporate CSR
+              </button>
+            )}
+          </div>
+        </div>
+      )}
+
       {/* 1. Header Profile Banner */}
-      <div className="glass-panel p-6 sm:p-8 rounded-3xl border border-white/80 shadow-float flex flex-col md:flex-row md:items-center justify-between gap-6 relative overflow-hidden">
+      <div className="glass-panel p-6 sm:p-8 rounded-3xl border border-white/80 dark:border-slate-800 shadow-float flex flex-col md:flex-row md:items-center justify-between gap-6 relative overflow-hidden">
         <div className="flex items-center gap-5">
           <div className="w-18 h-18 sm:w-20 sm:h-20 rounded-3xl bg-gradient-to-tr from-sky-600 via-indigo-600 to-emerald-500 text-white font-black text-3xl flex items-center justify-center shadow-lg shadow-sky-500/20 shrink-0">
             {currentUser.name.charAt(0)}
           </div>
           <div>
             <div className="flex flex-wrap items-center gap-2.5">
-              <h1 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">{currentUser.name}</h1>
-              <span className="bg-emerald-50 text-emerald-800 border border-emerald-200 text-[10px] font-extrabold px-3 py-1 rounded-full flex items-center gap-1 uppercase tracking-wider">
-                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" /> Verified Volunteer
+              <h1 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white tracking-tight">{currentUser.name}</h1>
+              <span className={`border text-[10px] font-extrabold px-3 py-1 rounded-full flex items-center gap-1 uppercase tracking-wider ${
+                currentUser.role === 'SUPER_ADMIN' ? 'bg-amber-50 text-amber-800 border-amber-200 dark:bg-amber-950/60 dark:text-amber-300' :
+                currentUser.role === 'NGO_PARTNER' || currentUser.role === 'NGO_STAFF' ? 'bg-sky-50 text-sky-800 border-sky-200 dark:bg-sky-950/60 dark:text-sky-300' :
+                currentUser.role === 'COMPANY_PARTNER' ? 'bg-indigo-50 text-indigo-800 border-indigo-200 dark:bg-indigo-950/60 dark:text-indigo-300' :
+                'bg-emerald-50 text-emerald-800 border-emerald-200 dark:bg-emerald-950/60 dark:text-emerald-300'
+              }`}>
+                <CheckCircle2 className="w-3.5 h-3.5" /> {currentUser.role.replace('_', ' ')}
               </span>
             </div>
-            <p className="text-xs text-slate-600 font-medium mt-1 flex flex-wrap items-center gap-2">
-              <span className="font-mono text-slate-800">{currentUser.email}</span>
+            <p className="text-xs text-slate-600 dark:text-slate-300 font-medium mt-1 flex flex-wrap items-center gap-2">
+              <span className="font-mono text-slate-800 dark:text-slate-200">{currentUser.email}</span>
               <span>•</span>
-              <span className="font-semibold text-slate-700">{volunteerProfile.profession || 'Volunteer'}</span>
+              <span className="font-semibold text-slate-700 dark:text-slate-300">{currentUser.ngoName || currentUser.companyName || volunteerProfile.profession || 'Partner'}</span>
               <span>•</span>
               <span className="text-slate-600">{volunteerProfile.city || 'India'}</span>
             </p>

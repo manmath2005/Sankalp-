@@ -106,9 +106,9 @@ function MainLayout() {
       case 'reset-password':
         return <ForgotPasswordView onNavigate={handleNavigate} />;
       case 'dbms':
-        // RBAC Enforcement Guard: Strictly SUPER_ADMIN only
-        if (!currentUser || currentUser.role !== 'SUPER_ADMIN') {
-          return <HiddenAdminLoginView onNavigate={handleNavigate} />;
+        // RBAC Enforcement: NGO_PARTNER, NGO_STAFF, and SUPER_ADMIN can manage campaigns, volunteers & NOCs
+        if (!currentUser || (currentUser.role !== 'NGO_PARTNER' && currentUser.role !== 'NGO_STAFF' && currentUser.role !== 'SUPER_ADMIN')) {
+          return <NgoLoginView onNavigate={handleNavigate} />;
         }
         return <AdminDbmsView />;
       default:

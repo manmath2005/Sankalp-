@@ -68,12 +68,18 @@ export const NgoLoginView = ({ onNavigate }) => {
           <p className="text-xs text-slate-600">
             Organization: <strong>{currentUser.ngoName || currentUser.name}</strong> ({currentUser.email})
           </p>
-          <div className="flex justify-center gap-3">
+          <div className="flex flex-wrap justify-center gap-3">
+            <button
+              onClick={() => onNavigate('dbms')}
+              className="px-6 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs shadow-md press-effect flex items-center gap-2"
+            >
+              Open NGO Drives & Volunteer Manager <ArrowRight className="w-4 h-4" />
+            </button>
             <button
               onClick={() => onNavigate('events')}
-              className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-bold text-xs shadow press-effect flex items-center gap-2"
+              className="px-4 py-2.5 rounded-xl bg-sky-50 dark:bg-sky-950/60 text-sky-700 dark:text-sky-300 font-bold text-xs border border-sky-200 dark:border-sky-800 press-effect"
             >
-              Browse Awareness Drives <ArrowRight className="w-4 h-4" />
+              Browse Public Drives
             </button>
             <button
               onClick={logoutUser}
