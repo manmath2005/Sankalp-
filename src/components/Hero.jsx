@@ -55,23 +55,23 @@ export const Hero = ({ onExploreEvents, onHostEvent }) => {
             </div>
 
             {/* Main Punchy Headline */}
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight leading-[1.12]">
-              Connecting Purpose with Action: <br />
+            <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight leading-[1.15]">
+              Connecting Purpose with Action: <br className="hidden sm:inline" />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-sky-400 via-teal-300 to-emerald-400">
                 Bridge Companies, NGOs & Volunteers
               </span>
             </h1>
 
             {/* Subtitle */}
-            <p className="text-base sm:text-lg text-slate-200 font-normal leading-relaxed max-w-2xl drop-shadow-sm">
+            <p className="text-sm sm:text-lg text-slate-200 font-normal leading-relaxed max-w-2xl drop-shadow-sm">
               Discover 50+ accredited non-profits, host structured awareness campaigns across government ministries, corporate campuses & colleges, and issue automated verifiable QR certificates.
             </p>
 
             {/* Action Buttons */}
-            <div className="flex flex-wrap items-center gap-3.5 pt-2">
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 pt-2">
               <button
                 onClick={onExploreEvents}
-                className="btn-glow-primary px-6 py-3.5 rounded-2xl font-bold text-xs uppercase tracking-wider flex items-center gap-2 group press-effect shadow-xl"
+                className="btn-glow-primary px-6 py-3.5 rounded-2xl font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 group press-effect shadow-xl"
               >
                 <span>Browse & Participate in Events</span>
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
@@ -79,7 +79,7 @@ export const Hero = ({ onExploreEvents, onHostEvent }) => {
 
               <button
                 onClick={onHostEvent}
-                className="px-6 py-3.5 rounded-2xl bg-white hover:bg-slate-100 text-slate-900 font-bold text-xs uppercase tracking-wider border border-white/80 shadow-lg hover:shadow-xl transition-all flex items-center gap-2 press-effect"
+                className="px-6 py-3.5 rounded-2xl bg-white hover:bg-slate-100 text-slate-900 font-bold text-xs uppercase tracking-wider border border-white/80 shadow-lg hover:shadow-xl transition-all flex items-center justify-center gap-2 press-effect"
               >
                 <Building className="w-4 h-4 text-sky-600" />
                 <span>Conduct Corporate Drive</span>

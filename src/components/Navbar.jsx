@@ -264,70 +264,140 @@ export const Navbar = ({ activeTab, setActiveTab }) => {
         </div>
       </div>
 
-      {/* Mobile Drawer Menu */}
+      {/* Mobile Drawer Menu with Full Responsiveness */}
       {mobileMenuOpen && (
-        <div className="lg:hidden mt-2 p-4 glass-panel rounded-2xl border border-slate-200 shadow-float-lg space-y-2 text-left animate-in fade-in duration-200">
+        <div className="lg:hidden mt-2 p-4 glass-panel rounded-2xl border border-slate-200/90 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 shadow-float-lg space-y-2 text-left animate-in fade-in duration-200">
+          
+          {/* User Profile Card inside Mobile Drawer if logged in */}
+          {currentUser ? (
+            <div className="p-3 mb-2 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200/80 dark:border-slate-700/80 flex items-center justify-between">
+              <div className="flex items-center gap-2.5">
+                <div className={`w-8 h-8 rounded-lg flex items-center justify-center text-xs font-black shadow-xs ${
+                  currentUser.role === 'SUPER_ADMIN' ? 'bg-slate-900 text-amber-400' :
+                  currentUser.role === 'NGO_STAFF' || currentUser.role === 'NGO_PARTNER' ? 'bg-sky-600 text-white' :
+                  currentUser.role === 'COMPANY_PARTNER' ? 'bg-indigo-600 text-white' :
+                  'bg-emerald-600 text-white'
+                }`}>
+                  {currentUser.name.charAt(0)}
+                </div>
+                <div className="leading-tight">
+                  <p className="text-xs font-bold text-slate-900 dark:text-white truncate max-w-[170px]">
+                    {currentUser.name}
+                  </p>
+                  <p className="text-[10px] font-extrabold text-sky-600 dark:text-sky-400 uppercase tracking-wider">
+                    {currentUser.role.replace('_', ' ')}
+                  </p>
+                </div>
+              </div>
+
+              <button
+                onClick={() => { logoutUser(); setMobileMenuOpen(false); }}
+                className="px-2.5 py-1.5 rounded-lg bg-red-50 dark:bg-red-950/60 hover:bg-red-100 text-red-600 dark:text-red-400 text-xs font-bold flex items-center gap-1 border border-red-200 dark:border-red-800/60"
+              >
+                <LogOut className="w-3.5 h-3.5" /> Logout
+              </button>
+            </div>
+          ) : null}
+
           <button
             onClick={() => { setActiveTab('home'); setMobileMenuOpen(false); }}
-            className="w-full flex items-center gap-3 p-2.5 rounded-xl text-xs font-semibold text-slate-700 hover:bg-sky-50"
+            className={`w-full flex items-center gap-3 p-2.5 rounded-xl text-xs font-bold transition-colors ${
+              activeTab === 'home' ? 'bg-sky-50 dark:bg-sky-950/80 text-sky-700 dark:text-sky-300' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800'
+            }`}
           >
             <Sparkles className="w-4 h-4 text-sky-600" /> Home
           </button>
+          
           <button
             onClick={() => { setActiveTab('events'); setMobileMenuOpen(false); }}
-            className="w-full flex items-center gap-3 p-2.5 rounded-xl text-xs font-semibold text-slate-700 hover:bg-sky-50"
+            className={`w-full flex items-center gap-3 p-2.5 rounded-xl text-xs font-bold transition-colors ${
+              activeTab === 'events' ? 'bg-sky-50 dark:bg-sky-950/80 text-sky-700 dark:text-sky-300' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800'
+            }`}
           >
             <Calendar className="w-4 h-4 text-sky-600" /> Awareness Events
           </button>
+
           <button
             onClick={() => { setActiveTab('history'); setMobileMenuOpen(false); }}
-            className="w-full flex items-center gap-3 p-2.5 rounded-xl text-xs font-semibold text-slate-700 hover:bg-sky-50"
+            className={`w-full flex items-center gap-3 p-2.5 rounded-xl text-xs font-bold transition-colors ${
+              activeTab === 'history' ? 'bg-amber-50 dark:bg-amber-950/80 text-amber-700 dark:text-amber-300' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800'
+            }`}
           >
-            <History className="w-4 h-4 text-amber-600" /> Past Records
+            <History className="w-4 h-4 text-amber-600" /> Past Records & Audits
           </button>
+
           <button
             onClick={() => { setActiveTab('corporate'); setMobileMenuOpen(false); }}
-            className="w-full flex items-center gap-3 p-2.5 rounded-xl text-xs font-semibold text-slate-700 hover:bg-sky-50"
+            className={`w-full flex items-center gap-3 p-2.5 rounded-xl text-xs font-bold transition-colors ${
+              activeTab === 'corporate' ? 'bg-indigo-50 dark:bg-indigo-950/80 text-indigo-700 dark:text-indigo-300' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800'
+            }`}
           >
-            <Building2 className="w-4 h-4 text-indigo-600" /> Host Event (Companies & Gov)
+            <Building2 className="w-4 h-4 text-indigo-600" /> Host Corporate / Govt Drive
           </button>
-          {/* Volunteer Hub in Mobile Menu (Only if logged in as Volunteer) */}
+
+          {/* NGO / Admin Manager inside Mobile Menu for Authorized Accounts */}
+          {(currentUser?.role === 'SUPER_ADMIN' || currentUser?.role === 'NGO_PARTNER' || currentUser?.role === 'NGO_STAFF') && (
+            <button
+              onClick={() => { setActiveTab('dbms'); setMobileMenuOpen(false); }}
+              className={`w-full flex items-center gap-3 p-2.5 rounded-xl text-xs font-bold transition-colors ${
+                activeTab === 'dbms' ? 'bg-slate-900 text-sky-400' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800'
+              }`}
+            >
+              <Database className="w-4 h-4 text-sky-500" /> 
+              {currentUser?.role === 'SUPER_ADMIN' ? 'Admin DBMS Master Control' : 'NGO Campaign & Volunteer Manager'}
+            </button>
+          )}
+
+          {/* Volunteer Hub in Mobile Menu (Strictly if logged in as Volunteer) */}
           {currentUser?.role === 'VOLUNTEER' && (
             <button
               onClick={() => { setActiveTab('volunteer-hub'); setMobileMenuOpen(false); }}
-              className="w-full flex items-center gap-3 p-2.5 rounded-xl text-xs font-semibold text-slate-700 hover:bg-sky-50"
+              className={`w-full flex items-center gap-3 p-2.5 rounded-xl text-xs font-bold transition-colors ${
+                activeTab === 'volunteer-hub' ? 'bg-emerald-50 dark:bg-emerald-950/80 text-emerald-700 dark:text-emerald-300' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800'
+              }`}
             >
-              <Award className="w-4 h-4 text-emerald-600" /> Volunteer Hub
+              <Award className="w-4 h-4 text-emerald-600" /> Volunteer Hub & Certificates
             </button>
           )}
+
           <button
             onClick={() => { setActiveTab('about'); setMobileMenuOpen(false); }}
-            className="w-full flex items-center gap-3 p-2.5 rounded-xl text-xs font-semibold text-slate-700 hover:bg-emerald-50"
+            className={`w-full flex items-center gap-3 p-2.5 rounded-xl text-xs font-bold transition-colors ${
+              activeTab === 'about' ? 'bg-emerald-50 dark:bg-emerald-950/80 text-emerald-700 dark:text-emerald-300' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800'
+            }`}
           >
             <Sparkles className="w-4 h-4 text-emerald-600" /> About BridgeImpact & Founder
           </button>
 
-          <div className="pt-3 border-t border-slate-200 space-y-2">
-            <p className="text-[10px] font-extrabold text-slate-400 uppercase">Separate Access Portals:</p>
-            <button
-              onClick={() => { setActiveTab('volunteer-login'); setMobileMenuOpen(false); }}
-              className="w-full p-2 rounded-xl text-xs font-bold text-slate-800 bg-slate-100 flex items-center gap-2"
-            >
-              <Award className="w-4 h-4 text-sky-600" /> Volunteer Login Portal
-            </button>
-            <button
-              onClick={() => { setActiveTab('company-login'); setMobileMenuOpen(false); }}
-              className="w-full p-2 rounded-xl text-xs font-bold text-slate-800 bg-slate-100 flex items-center gap-2"
-            >
-              <Building className="w-4 h-4 text-indigo-600" /> Company / Institutional Login
-            </button>
-            <button
-              onClick={() => { setActiveTab('ngo-login'); setMobileMenuOpen(false); }}
-              className="w-full p-2 rounded-xl text-xs font-bold text-white bg-slate-900 flex items-center gap-2"
-            >
-              <UserCheck className="w-4 h-4 text-sky-400" /> NGO Portal (Login / Register)
-            </button>
-          </div>
+          {/* If NOT Logged in: Show Separate Login Buttons */}
+          {!currentUser && (
+            <div className="pt-3 border-t border-slate-200 dark:border-slate-800 space-y-2">
+              <p className="text-[10px] font-extrabold text-slate-400 dark:text-slate-500 uppercase tracking-wider">
+                Separate Role Portals:
+              </p>
+              
+              <button
+                onClick={() => { setActiveTab('volunteer-login'); setMobileMenuOpen(false); }}
+                className="w-full p-2.5 rounded-xl text-xs font-bold text-slate-800 dark:text-slate-200 bg-slate-100 dark:bg-slate-800 flex items-center gap-2 press-effect hover:bg-slate-200 dark:hover:bg-slate-700"
+              >
+                <Award className="w-4 h-4 text-sky-600" /> 👤 Volunteer Portal (Sign In / Register)
+              </button>
+              
+              <button
+                onClick={() => { setActiveTab('company-login'); setMobileMenuOpen(false); }}
+                className="w-full p-2.5 rounded-xl text-xs font-bold text-slate-800 dark:text-slate-200 bg-slate-100 dark:bg-slate-800 flex items-center gap-2 press-effect hover:bg-slate-200 dark:hover:bg-slate-700"
+              >
+                <Building className="w-4 h-4 text-indigo-600" /> 🏢 Company / Institutional Login
+              </button>
+              
+              <button
+                onClick={() => { setActiveTab('ngo-login'); setMobileMenuOpen(false); }}
+                className="w-full p-2.5 rounded-xl text-xs font-bold text-white bg-slate-900 dark:bg-sky-600 flex items-center gap-2 press-effect hover:bg-slate-800 dark:hover:bg-sky-700 shadow-sm"
+              >
+                <UserCheck className="w-4 h-4 text-sky-400 dark:text-white" /> 🛡️ Partner NGO Portal (Login / Register)
+              </button>
+            </div>
+          )}
         </div>
       )}
     </header>
