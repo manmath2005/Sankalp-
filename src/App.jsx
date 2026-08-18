@@ -114,37 +114,37 @@ function MainLayout() {
         </main>
       </div>
 
-      {/* 2. Global Footer */}
-      <footer className="bg-slate-900 text-slate-400 border-t border-slate-800 text-left pt-12 pb-8 mt-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+      {/* 2. Global Footer (Compact & Clean) */}
+      <footer className="bg-slate-900 text-slate-400 border-t border-slate-800 text-left py-6 mt-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-5">
           
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 items-start">
             
-            {/* NGO info */}
-            <div className="space-y-3 md:col-span-2">
+            {/* Brand info */}
+            <div className="space-y-2 md:col-span-2">
               <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-lg bg-sky-600 flex items-center justify-center text-white">
-                  <ShieldCheck className="w-5 h-5" />
+                <div className="w-7 h-7 rounded-lg bg-sky-600 flex items-center justify-center text-white">
+                  <ShieldCheck className="w-4 h-4" />
                 </div>
-                <span className="font-extrabold text-lg text-white tracking-tight">
-                  SANKALP FOUNDATION NGO
+                <span className="font-extrabold text-base text-white tracking-tight">
+                  SANKALP FOUNDATION
                 </span>
               </div>
-              <p className="text-xs text-slate-400 max-w-md leading-relaxed">
-                Govt Registered Social Awareness Organization conducting onfield and virtual drives across government offices, public sectors, colleges, and schools. Empowering volunteers with accredited certificates and corporate transparent auditing.
+              <p className="text-[11px] text-slate-400 max-w-md leading-relaxed">
+                Govt Registered Social Awareness Organization conducting onfield and virtual drives across government offices, public sectors, colleges, and schools. Empowering volunteers with accredited certificates and transparent corporate auditing.
               </p>
-              <div className="text-[11px] text-slate-500 font-mono">
-                Reg No: NGO/MAH/2018/094821 • 80G & 12A Certified
+              <div className="text-[10px] text-slate-500 font-mono">
+                Reg No: MAH/2018/094821 • 80G & 12A Certified
               </div>
             </div>
 
             {/* Separate Login Portals Links */}
-            <div className="space-y-2">
-              <h4 className="text-xs font-extrabold text-white uppercase tracking-wider">Role Access Portals</h4>
-              <ul className="space-y-1.5 text-xs">
+            <div className="space-y-1.5">
+              <h4 className="text-[11px] font-extrabold text-white uppercase tracking-wider">Role Portals</h4>
+              <ul className="space-y-1 text-[11px]">
                 <li>
                   <button onClick={() => setActiveTab('volunteer-login')} className="hover:text-sky-400 transition-colors">
-                    👤 Volunteer Login & Signup (OTP)
+                    👤 Volunteer Portal (OTP Sign In)
                   </button>
                 </li>
                 <li>
@@ -154,7 +154,7 @@ function MainLayout() {
                 </li>
                 <li>
                   <button onClick={() => setActiveTab('ngo-login')} className="hover:text-amber-400 transition-colors">
-                    🛡️ NGO Portal (Login / Register)
+                    🛡️ Partner Portal (Login / Register)
                   </button>
                 </li>
                 <li>
@@ -164,39 +164,39 @@ function MainLayout() {
                 </li>
                 <li>
                   <button onClick={() => setActiveTab('forgot-password')} className="hover:text-amber-400 transition-colors">
-                    🔑 Account Recovery & Reset Password
+                    🔑 Account Recovery & Password Reset
                   </button>
                 </li>
               </ul>
             </div>
 
             {/* Contact */}
-            <div className="space-y-2">
-              <h4 className="text-xs font-extrabold text-white uppercase tracking-wider">Nodal Helpdesk</h4>
-              <ul className="space-y-2 text-xs">
+            <div className="space-y-1.5">
+              <h4 className="text-[11px] font-extrabold text-white uppercase tracking-wider">Nodal Helpdesk</h4>
+              <ul className="space-y-1 text-[11px]">
                 <li className="flex items-center gap-2">
-                  <Mail className="w-3.5 h-3.5 text-sky-400" />
-                  <span>contact@sankalpfoundation.org</span>
+                  <Mail className="w-3.5 h-3.5 text-sky-400 shrink-0" />
+                  <span className="truncate">contact@sankalpfoundation.org</span>
                 </li>
                 <li className="flex items-center gap-2">
-                  <Phone className="w-3.5 h-3.5 text-emerald-400" />
+                  <Phone className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
                   <span>+91 7030403004</span>
                 </li>
                 <li className="flex items-center gap-2">
-                  <MapPin className="w-3.5 h-3.5 text-amber-400" />
-                  <span>Govt Admin Hub, Sector 12, Cyber City</span>
+                  <MapPin className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+                  <span className="truncate">Govt Admin Hub, Cyber City</span>
                 </li>
               </ul>
             </div>
 
           </div>
 
-          {/* Copyright bar with Secret Hidden Super Admin Entry */}
-          <div className="pt-8 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 gap-4">
+          {/* Copyright bar */}
+          <div className="pt-4 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between text-[11px] text-slate-500 gap-2">
             <div className="flex items-center gap-2">
               <span>© 2026 Sankalp Social Foundation. All Rights Reserved.</span>
               
-              {/* HIDDEN ADMIN LOGIN TRIGGER (Discrete Lock Icon) */}
+              {/* HIDDEN ADMIN LOGIN TRIGGER */}
               <button
                 onClick={() => setActiveTab('hidden-admin-login')}
                 title="Hidden Administrative Security Portal"
