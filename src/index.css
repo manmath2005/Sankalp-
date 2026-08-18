@@ -15,19 +15,23 @@
   /* Universal Input & Textarea Text Visibility Enforcement */
   input, select, textarea {
     color: #0f172a !important; /* Deep navy text in light mode */
+    background-color: #ffffff !important;
   }
   
   input::placeholder, select::placeholder, textarea::placeholder {
     color: #64748b !important; /* Crisp slate-500 placeholder */
+    opacity: 1 !important;
   }
 
+  /* Specific dark mode override */
   .dark input, .dark select, .dark textarea {
     color: #ffffff !important; /* Pure white text in dark mode */
-    background-color: #0f172a;
+    background-color: #0f172a !important;
   }
 
   .dark input::placeholder, .dark select::placeholder, .dark textarea::placeholder {
     color: #94a3b8 !important; /* Slate-400 placeholder in dark mode */
+    opacity: 1 !important;
   }
 }
 
