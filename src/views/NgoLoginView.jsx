@@ -234,7 +234,7 @@ export const NgoLoginView = ({ onNavigate }) => {
               /* NGO SIGN IN FORM */
               <form onSubmit={handleLoginSubmit} className="space-y-4">
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
+                  <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">
                     Official NGO Email
                   </label>
                   <div className="relative">
@@ -245,20 +245,20 @@ export const NgoLoginView = ({ onNavigate }) => {
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       placeholder="contact@sankalpfoundation.org"
-                      className="w-full pl-9 pr-4 py-2.5 rounded-xl border border-slate-300 text-xs font-medium focus:ring-2 focus:ring-sky-500 focus:outline-none transition-all"
+                      className="w-full pl-9 pr-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 text-xs font-bold text-slate-900 dark:text-white bg-white dark:bg-slate-900 focus:ring-2 focus:ring-sky-500 focus:outline-none transition-all placeholder:text-slate-400 dark:placeholder:text-slate-500"
                     />
                   </div>
                 </div>
 
                 <div>
                   <div className="flex items-center justify-between mb-1">
-                    <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider">
+                    <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider">
                       Password
                     </label>
                     <button
                       type="button"
                       onClick={() => onNavigate('forgot-password')}
-                      className="text-[11px] font-bold text-sky-600 hover:text-sky-700 hover:underline"
+                      className="text-[11px] font-bold text-sky-600 dark:text-sky-400 hover:text-sky-700 hover:underline"
                     >
                       Forgot Password?
                     </button>
@@ -270,12 +270,12 @@ export const NgoLoginView = ({ onNavigate }) => {
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                       placeholder="••••••••"
-                      className="w-full pl-9 pr-10 py-2.5 rounded-xl border border-slate-300 text-xs font-medium focus:ring-2 focus:ring-sky-500 focus:outline-none transition-all"
+                      className="w-full pl-9 pr-10 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 text-xs font-bold text-slate-900 dark:text-white bg-white dark:bg-slate-900 focus:ring-2 focus:ring-sky-500 focus:outline-none transition-all placeholder:text-slate-400 dark:placeholder:text-slate-500"
                     />
                     <button
                       type="button"
                       onClick={() => setShowPassword(!showPassword)}
-                      className="absolute right-3 top-3 text-slate-400 hover:text-slate-600"
+                      className="absolute right-3 top-3 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"
                     >
                       {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                     </button>
@@ -285,8 +285,8 @@ export const NgoLoginView = ({ onNavigate }) => {
                 <button
                   type="submit"
                   disabled={loading || !password}
-                  className={`w-full py-2.5 rounded-xl font-bold text-xs shadow-md transition-all ${
-                    password ? 'bg-slate-900 hover:bg-slate-800 text-white press-effect' : 'bg-slate-200 text-slate-400 cursor-not-allowed'
+                  className={`w-full py-2.5 rounded-xl font-black text-xs uppercase tracking-wider shadow-md transition-all ${
+                    password ? 'bg-gradient-to-r from-emerald-600 via-teal-600 to-sky-600 hover:from-emerald-700 hover:to-sky-700 text-white press-effect' : 'bg-slate-200 dark:bg-slate-800 text-slate-400 cursor-not-allowed'
                   }`}
                 >
                   {loading ? 'Authenticating NGO Account...' : 'Sign In with Password'}
@@ -294,8 +294,8 @@ export const NgoLoginView = ({ onNavigate }) => {
 
                 {/* Passwordless Email OTP Option */}
                 <div className="relative flex items-center justify-center pt-1">
-                  <div className="border-t border-slate-200 w-full"></div>
-                  <span className="bg-white px-3 text-[11px] font-bold text-slate-400 uppercase tracking-wider absolute">
+                  <div className="border-t border-slate-200 dark:border-slate-700 w-full"></div>
+                  <span className="bg-white dark:bg-slate-900 px-3 text-[11px] font-bold text-slate-400 uppercase tracking-wider absolute">
                     or passwordless
                   </span>
                 </div>

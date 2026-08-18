@@ -5,11 +5,29 @@
 @layer base {
   body {
     background-color: #fcfbf7;
-    color: #2b2d42;
+    color: #1e293b;
     font-family: 'Inter', sans-serif;
   }
   h1, h2, h3, h4, h5, h6 {
     font-family: 'Plus Jakarta Sans', sans-serif;
+  }
+  
+  /* Universal Input & Textarea Text Visibility Enforcement */
+  input, select, textarea {
+    color: #0f172a !important; /* Deep navy text in light mode */
+  }
+  
+  input::placeholder, select::placeholder, textarea::placeholder {
+    color: #64748b !important; /* Crisp slate-500 placeholder */
+  }
+
+  .dark input, .dark select, .dark textarea {
+    color: #ffffff !important; /* Pure white text in dark mode */
+    background-color: #0f172a;
+  }
+
+  .dark input::placeholder, .dark select::placeholder, .dark textarea::placeholder {
+    color: #94a3b8 !important; /* Slate-400 placeholder in dark mode */
   }
 }
 
