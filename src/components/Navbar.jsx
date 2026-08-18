@@ -163,19 +163,6 @@ export const Navbar = ({ activeTab, setActiveTab }) => {
             <span>About Us</span>
           </button>
 
-          {/* Certificate Verification Portal Link */}
-          <button
-            onClick={() => setActiveTab('verify-certificate')}
-            className={`flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-bold transition-all whitespace-nowrap ${
-              activeTab === 'verify-certificate' || activeTab.startsWith('verify-certificate-')
-                ? 'bg-white dark:bg-slate-900 text-emerald-700 dark:text-emerald-400 shadow-xs' 
-                : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-white/50 dark:hover:bg-slate-700/50'
-            }`}
-          >
-            <ShieldCheck className="w-3 h-3 text-emerald-600 dark:text-emerald-400" />
-            <span>Verify</span>
-          </button>
-
           {/* Admin DBMS Access (Visible if logged in or navigating) */}
           {(currentUser?.role === 'SUPER_ADMIN' || currentUser?.role === 'NGO_STAFF' || activeTab === 'dbms') && (
             <button
