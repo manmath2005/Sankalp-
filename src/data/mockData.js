@@ -1382,7 +1382,41 @@ export const INITIAL_PAST_EVENTS = [
     ],
     partnerName: "Ministry of Rural Development & District Collectorate",
     partnerFeedback: "Goonj's Cloth for Work model is a benchmark of community dignity and development.",
-    image: "https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?auto=format&fit=crop&w=800&q=80"
+    image: "https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?auto=format&fit=crop&w=800&q=80",
+    galleryImages: [
+      "https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1593113598332-cd288d649433?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1469571486292-0ba58a3f068b?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1531206715517-5c0ba140b2b8?auto=format&fit=crop&w=800&q=80"
+    ],
+    socialPosts: [
+      {
+        id: "POST-101",
+        platform: "LinkedIn",
+        platformIcon: "💼",
+        author: "CSR Lead, Tata Power Trust",
+        handle: "@tatapower_csr",
+        avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80",
+        time: "2 days ago",
+        text: "Empowered 3,400 families across Bundelkhand in collaboration with Goonj! Real infrastructure restoration with verified community participation. #DignityForAll #RuralEmpowerment #CSRImpact",
+        likes: 642,
+        shares: 88,
+        comments: 42
+      },
+      {
+        id: "POST-102",
+        platform: "X / Twitter",
+        platformIcon: "🐦",
+        author: "Aarav Sharma",
+        handle: "@aarav_volunteers",
+        avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=150&q=80",
+        time: "4 days ago",
+        text: "Participated in the Vastra Samman drive at District Collectorate! Proud to hold my QR-verified BridgeImpact certificate. 📜🤝",
+        likes: 318,
+        shares: 52,
+        comments: 19
+      }
+    ]
   },
   {
     id: "PAST-2026-002",
@@ -1404,7 +1438,41 @@ export const INITIAL_PAST_EVENTS = [
     ],
     partnerName: "Department of Primary Education & Municipal School Board",
     partnerFeedback: "Flawless nutritional execution and exemplary hygiene standards.",
-    image: "https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?auto=format&fit=crop&w=800&q=80"
+    image: "https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?auto=format&fit=crop&w=800&q=80",
+    galleryImages: [
+      "https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1577896851231-70ef18881754?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1588072432836-e10032774350?auto=format&fit=crop&w=800&q=80"
+    ],
+    socialPosts: [
+      {
+        id: "POST-201",
+        platform: "Instagram",
+        platformIcon: "📸",
+        author: "Akshaya Patra Volunteer Guild",
+        handle: "@akshayapatra_impact",
+        avatar: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=150&q=80",
+        time: "3 days ago",
+        text: "12,500 smiling faces today! 😊 Zero classroom hunger achieved across 38 government schools. Thank you to our corporate partners and volunteer leads! 🍲✨",
+        likes: 1890,
+        shares: 320,
+        comments: 114
+      },
+      {
+        id: "POST-202",
+        platform: "LinkedIn",
+        platformIcon: "💼",
+        author: "Infosys Foundation CSR",
+        handle: "@infosys_csr",
+        avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=150&q=80",
+        time: "1 week ago",
+        text: "Nutrition is the bedrock of education. Audited and proud of the seamless hot meals distribution supported under our ESG charter.",
+        likes: 920,
+        shares: 140,
+        comments: 38
+      }
+    ]
   },
   {
     id: "PAST-2026-003",
@@ -1426,7 +1494,28 @@ export const INITIAL_PAST_EVENTS = [
     ],
     partnerName: "State Women & Child Development Commission",
     partnerFeedback: "CRY volunteers demonstrated tremendous dedication and deep community empathy.",
-    image: "https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=800&q=80"
+    image: "https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=800&q=80",
+    galleryImages: [
+      "https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1577896851231-70ef18881754?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=800&q=80"
+    ],
+    socialPosts: [
+      {
+        id: "POST-301",
+        platform: "X / Twitter",
+        platformIcon: "🐦",
+        author: "Meera Sen",
+        handle: "@meera_cryvolunteer",
+        avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80",
+        time: "5 days ago",
+        text: "480 young girls re-enrolled in secondary education! Seeing mothers pledge to support their daughters' college dreams is priceless. ❤️🎓 #GirlChildEducation",
+        likes: 1420,
+        shares: 285,
+        comments: 92
+      }
+    ]
   },
   {
     id: "PAST-2026-004",
@@ -1448,7 +1537,27 @@ export const INITIAL_PAST_EVENTS = [
     ],
     partnerName: "National Blindness Control Programme & District Health Mission",
     partnerFeedback: "Restored sight and livelihood independence for hundreds of rural elders.",
-    image: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=800&q=80"
+    image: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=800&q=80",
+    galleryImages: [
+      "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1538108149393-fbbd81895907?auto=format&fit=crop&w=800&q=80"
+    ],
+    socialPosts: [
+      {
+        id: "POST-401",
+        platform: "LinkedIn",
+        platformIcon: "💼",
+        author: "Dr. Arvind Swaminathan",
+        handle: "@dr_arvind_eye",
+        avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=150&q=80",
+        time: "6 days ago",
+        text: "Over 420 cataract surgeries completed with 100% success rate. Vision is independence. Immense gratitude to Sankalp Foundation volunteer corps. 👁️🌿",
+        likes: 780,
+        shares: 110,
+        comments: 45
+      }
+    ]
   },
   {
     id: "PAST-2026-005",
@@ -1470,7 +1579,28 @@ export const INITIAL_PAST_EVENTS = [
     ],
     partnerName: "State Pollution Control Board & IT Park CSR Consortium",
     partnerFeedback: "A revolutionary ecological transformation with 96% sapling survival rate.",
-    image: "https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?auto=format&fit=crop&w=800&q=80"
+    image: "https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?auto=format&fit=crop&w=800&q=80",
+    galleryImages: [
+      "https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1518837695005-2083093ee35b?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1541252260730-0412e8e2108e?auto=format&fit=crop&w=800&q=80"
+    ],
+    socialPosts: [
+      {
+        id: "POST-501",
+        platform: "Instagram",
+        platformIcon: "📸",
+        author: "Urban Eco Warriors",
+        handle: "@saytrees_official",
+        avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80",
+        time: "1 week ago",
+        text: "6,500 trees in the ground! 🌳 In 2 years, this barren lakeside will be a dense native carbon sink. Thank you to our 85 enthusiastic volunteer leaders! 💚",
+        likes: 2150,
+        shares: 410,
+        comments: 132
+      }
+    ]
   },
   {
     id: "PAST-2026-006",
@@ -1492,7 +1622,27 @@ export const INITIAL_PAST_EVENTS = [
     ],
     partnerName: "Ministry of New and Renewable Energy (MNRE)",
     partnerFeedback: "Inspiring proof of grassroots women leadership in global clean technology.",
-    image: "https://images.unsplash.com/photo-1509391365360-2e959784a276?auto=format&fit=crop&w=800&q=80"
+    image: "https://images.unsplash.com/photo-1509391365360-2e959784a276?auto=format&fit=crop&w=800&q=80",
+    galleryImages: [
+      "https://images.unsplash.com/photo-1509391365360-2e959784a276?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1513836279014-a89f7a76ae86?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1497435334941-8c899ee9e8e9?auto=format&fit=crop&w=800&q=80"
+    ],
+    socialPosts: [
+      {
+        id: "POST-601",
+        platform: "LinkedIn",
+        platformIcon: "💼",
+        author: "Solar Energy Guild India",
+        handle: "@cleantech_india",
+        avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=150&q=80",
+        time: "2 weeks ago",
+        text: "Remarkable milestone: 48 women solar engineers trained with zero literacy barriers! Bringing decentralized solar power to 240 remote homes. ☀️⚡",
+        likes: 1100,
+        shares: 245,
+        comments: 67
+      }
+    ]
   }
 ];
 

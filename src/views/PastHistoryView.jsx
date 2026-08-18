@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useApp } from '../context/AppContext';
 import { EventCard } from '../components/EventCard';
-import { EventModal } from '../components/EventModal';
+import { AuditGalleryModal } from '../components/AuditGalleryModal';
 import { History, Award, CheckCircle2, Building2, ShieldCheck, FileCheck, Layers } from 'lucide-react';
 
 export const PastHistoryView = () => {
@@ -111,8 +111,9 @@ export const PastHistoryView = () => {
         </div>
       </div>
 
+      {/* Verified Audit, Photo Gallery & Social Media Modal */}
       {selectedEvent && (
-        <EventModal 
+        <AuditGalleryModal 
           event={selectedEvent} 
           onClose={() => setSelectedEvent(null)} 
         />
