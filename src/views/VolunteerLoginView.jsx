@@ -217,20 +217,20 @@ export const VolunteerLoginView = ({ onNavigate }) => {
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         placeholder="rohan.verma@example.com"
-                        className="w-full pl-9 pr-4 py-2.5 rounded-xl border border-slate-300 text-xs font-medium focus:ring-2 focus:ring-sky-500 focus:outline-none"
+                        className="w-full pl-9 pr-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 text-xs font-bold text-slate-900 dark:text-white bg-white dark:bg-slate-900 focus:ring-2 focus:ring-sky-500 focus:outline-none placeholder:text-slate-400 dark:placeholder:text-slate-500"
                       />
                     </div>
                   </div>
 
                   <div>
                     <div className="flex items-center justify-between mb-1">
-                      <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider">
+                      <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider">
                         Password
                       </label>
                       <button
                         type="button"
                         onClick={() => onNavigate('forgot-password')}
-                        className="text-[11px] font-bold text-sky-600 hover:text-sky-700 hover:underline"
+                        className="text-[11px] font-bold text-sky-600 dark:text-sky-400 hover:text-sky-700 hover:underline"
                       >
                         Forgot Password?
                       </button>
@@ -242,12 +242,12 @@ export const VolunteerLoginView = ({ onNavigate }) => {
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         placeholder="••••••••"
-                        className="w-full pl-9 pr-10 py-2.5 rounded-xl border border-slate-300 text-xs font-medium focus:ring-2 focus:ring-sky-500 focus:outline-none"
+                        className="w-full pl-9 pr-10 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 text-xs font-bold text-slate-900 dark:text-white bg-white dark:bg-slate-900 focus:ring-2 focus:ring-sky-500 focus:outline-none placeholder:text-slate-400 dark:placeholder:text-slate-500"
                       />
                       <button
                         type="button"
                         onClick={() => setShowPassword(!showPassword)}
-                        className="absolute right-3 top-3 text-slate-400 hover:text-slate-600"
+                        className="absolute right-3 top-3 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"
                       >
                         {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                       </button>
@@ -257,10 +257,10 @@ export const VolunteerLoginView = ({ onNavigate }) => {
                   <button
                     type="submit"
                     disabled={loading || !password}
-                    className={`w-full py-2.5 rounded-xl font-bold text-xs shadow-md transition-all flex items-center justify-center gap-2 ${
+                    className={`w-full py-2.5 rounded-xl font-black text-xs uppercase tracking-wider shadow-md transition-all flex items-center justify-center gap-2 ${
                       password
-                        ? 'bg-gradient-to-r from-sky-600 to-sky-700 hover:from-sky-700 hover:to-sky-800 text-white press-effect'
-                        : 'bg-slate-200 text-slate-400 cursor-not-allowed'
+                        ? 'bg-gradient-to-r from-emerald-600 via-teal-600 to-sky-600 hover:from-emerald-700 hover:to-sky-700 text-white press-effect'
+                        : 'bg-slate-200 dark:bg-slate-800 text-slate-400 cursor-not-allowed'
                     }`}
                   >
                     {loading ? "Authenticating..." : "Sign In with Password"}
@@ -269,8 +269,8 @@ export const VolunteerLoginView = ({ onNavigate }) => {
 
                 {/* Passwordless Email OTP Option */}
                 <div className="relative flex items-center justify-center pt-1">
-                  <div className="border-t border-slate-200 w-full"></div>
-                  <span className="bg-white px-3 text-[11px] font-bold text-slate-400 uppercase tracking-wider absolute">
+                  <div className="border-t border-slate-200 dark:border-slate-700 w-full"></div>
+                  <span className="bg-white dark:bg-slate-900 px-3 text-[11px] font-bold text-slate-400 uppercase tracking-wider absolute">
                     or passwordless
                   </span>
                 </div>
@@ -279,18 +279,18 @@ export const VolunteerLoginView = ({ onNavigate }) => {
                   type="button"
                   onClick={handleSendOtpLogin}
                   disabled={loading || !email}
-                  className="w-full py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-bold text-xs shadow-md transition-all flex items-center justify-center gap-2 press-effect"
+                  className="w-full py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-black text-xs uppercase tracking-wider shadow-md transition-all flex items-center justify-center gap-2 press-effect"
                 >
                   <Zap className="w-3.5 h-3.5 fill-current" />
                   {loading ? "Sending OTP Code..." : "Send 6-Digit Email OTP Login Code ✉️"}
                 </button>
 
-                <div className="pt-2 border-t border-slate-100 flex items-center justify-between">
+                <div className="pt-2 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
                   <span className="text-[11px] text-slate-500 font-medium">Quick Demo:</span>
                   <button
                     type="button"
                     onClick={fillVolunteerDemo}
-                    className="text-xs font-bold text-sky-700 hover:underline bg-sky-50 px-2.5 py-1 rounded-lg border border-sky-200"
+                    className="text-xs font-bold text-sky-700 dark:text-sky-300 hover:underline bg-sky-50 dark:bg-sky-950/40 px-2.5 py-1 rounded-lg border border-sky-200 dark:border-sky-800"
                   >
                     Auto-Fill Demo Volunteer ⚡
                   </button>
@@ -300,7 +300,7 @@ export const VolunteerLoginView = ({ onNavigate }) => {
               <form onSubmit={handleRegisterSubmit} className="space-y-3">
                 <div className="grid grid-cols-2 gap-2">
                   <div>
-                    <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
+                    <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">
                       Full Name
                     </label>
                     <div className="relative">
@@ -311,13 +311,13 @@ export const VolunteerLoginView = ({ onNavigate }) => {
                         value={name}
                         onChange={(e) => setName(e.target.value)}
                         placeholder="Ananya Sharma"
-                        className="w-full pl-9 pr-3 py-2 rounded-xl border border-slate-300 text-xs font-medium"
+                        className="w-full pl-9 pr-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 text-xs font-bold text-slate-900 dark:text-white bg-white dark:bg-slate-900 focus:ring-2 focus:ring-sky-500 focus:outline-none placeholder:text-slate-400 dark:placeholder:text-slate-500"
                       />
                     </div>
                   </div>
 
                   <div>
-                    <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
+                    <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">
                       Phone Number
                     </label>
                     <input
@@ -326,13 +326,13 @@ export const VolunteerLoginView = ({ onNavigate }) => {
                       value={phone}
                       onChange={(e) => setPhone(e.target.value)}
                       placeholder="+91 98000 00000"
-                      className="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs font-medium"
+                      className="w-full px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 text-xs font-bold text-slate-900 dark:text-white bg-white dark:bg-slate-900 focus:ring-2 focus:ring-sky-500 focus:outline-none placeholder:text-slate-400 dark:placeholder:text-slate-500"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
+                  <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">
                     Email Address (OTP Sent Here)
                   </label>
                   <div className="relative">
@@ -343,26 +343,26 @@ export const VolunteerLoginView = ({ onNavigate }) => {
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       placeholder="ananya@college.edu"
-                      className="w-full pl-9 pr-4 py-2 rounded-xl border border-slate-300 text-xs font-medium"
+                      className="w-full pl-9 pr-4 py-2 rounded-xl border border-slate-300 dark:border-slate-700 text-xs font-bold text-slate-900 dark:text-white bg-white dark:bg-slate-900 focus:ring-2 focus:ring-sky-500 focus:outline-none placeholder:text-slate-400 dark:placeholder:text-slate-500"
                     />
                   </div>
                 </div>
 
                 {/* VOLUNTEER QUESTIONNAIRE FIELDS: Profession, City, Age */}
-                <div className="p-3 rounded-2xl bg-sky-50/70 border border-sky-200/80 space-y-2">
-                  <p className="text-[11px] font-extrabold text-sky-900 uppercase">
+                <div className="p-3 rounded-2xl bg-sky-50/70 dark:bg-sky-950/40 border border-sky-200/80 dark:border-sky-800 space-y-2">
+                  <p className="text-[11px] font-extrabold text-sky-900 dark:text-sky-300 uppercase">
                     Volunteer Questionnaire (Analytics & Event Matching)
                   </p>
 
                   <div className="grid grid-cols-3 gap-2">
                     <div>
-                      <label className="block text-[10px] font-bold text-slate-600 uppercase mb-0.5">
+                      <label className="block text-[10px] font-bold text-slate-600 dark:text-slate-400 uppercase mb-0.5">
                         Profession
                       </label>
                       <select
                         value={profession}
                         onChange={(e) => setProfession(e.target.value)}
-                        className="w-full px-2 py-1.5 rounded-lg border border-slate-300 text-xs font-medium bg-white"
+                        className="w-full px-2 py-1.5 rounded-lg border border-slate-300 dark:border-slate-700 text-xs font-bold text-slate-900 dark:text-white bg-white dark:bg-slate-900 focus:ring-2 focus:ring-sky-500"
                       >
                         <option value="Student">Student</option>
                         <option value="Software Engineer">IT / Software</option>
@@ -374,7 +374,7 @@ export const VolunteerLoginView = ({ onNavigate }) => {
                     </div>
 
                     <div>
-                      <label className="block text-[10px] font-bold text-slate-600 uppercase mb-0.5">
+                      <label className="block text-[10px] font-bold text-slate-600 dark:text-slate-400 uppercase mb-0.5">
                         City
                       </label>
                       <input
@@ -383,12 +383,12 @@ export const VolunteerLoginView = ({ onNavigate }) => {
                         value={city}
                         onChange={(e) => setCity(e.target.value)}
                         placeholder="Mumbai"
-                        className="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 text-xs font-medium bg-white"
+                        className="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 dark:border-slate-700 text-xs font-bold text-slate-900 dark:text-white bg-white dark:bg-slate-900 focus:ring-2 focus:ring-sky-500"
                       />
                     </div>
 
                     <div>
-                      <label className="block text-[10px] font-bold text-slate-600 uppercase mb-0.5">
+                      <label className="block text-[10px] font-bold text-slate-600 dark:text-slate-400 uppercase mb-0.5">
                         Age
                       </label>
                       <input
@@ -399,14 +399,14 @@ export const VolunteerLoginView = ({ onNavigate }) => {
                         value={age}
                         onChange={(e) => setAge(e.target.value)}
                         placeholder="22"
-                        className="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 text-xs font-medium bg-white"
+                        className="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 dark:border-slate-700 text-xs font-bold text-slate-900 dark:text-white bg-white dark:bg-slate-900 focus:ring-2 focus:ring-sky-500"
                       />
                     </div>
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
+                  <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">
                     College / Institution
                   </label>
                   <input
@@ -415,12 +415,12 @@ export const VolunteerLoginView = ({ onNavigate }) => {
                     value={institution}
                     onChange={(e) => setInstitution(e.target.value)}
                     placeholder="Delhi University"
-                    className="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs font-medium"
+                    className="w-full px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 text-xs font-bold text-slate-900 dark:text-white bg-white dark:bg-slate-900 focus:ring-2 focus:ring-sky-500 focus:outline-none placeholder:text-slate-400 dark:placeholder:text-slate-500"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
+                  <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">
                     Create Password
                   </label>
                   <input
@@ -429,14 +429,14 @@ export const VolunteerLoginView = ({ onNavigate }) => {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="At least 6 characters"
-                    className="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs font-medium"
+                    className="w-full px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 text-xs font-bold text-slate-900 dark:text-white bg-white dark:bg-slate-900 focus:ring-2 focus:ring-sky-500 focus:outline-none placeholder:text-slate-400 dark:placeholder:text-slate-500"
                   />
                 </div>
 
                 <button
                   type="submit"
                   disabled={loading}
-                  className="w-full py-2.5 rounded-xl bg-gradient-to-r from-sky-600 to-sky-700 hover:from-sky-700 hover:to-sky-800 text-white font-bold text-xs shadow-md flex items-center justify-center gap-2 mt-2"
+                  className="w-full py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 via-teal-600 to-sky-600 hover:from-emerald-700 hover:to-sky-700 text-white font-black text-xs uppercase tracking-wider shadow-md flex items-center justify-center gap-2 mt-2 press-effect"
                 >
                   <Zap className="w-3.5 h-3.5 fill-current" />
                   {loading ? "Sending OTP..." : "Proceed to Email OTP Verification"}
