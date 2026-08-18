@@ -47,9 +47,6 @@ export const Navbar = ({ activeTab, setActiveTab }) => {
               <span className="font-black text-base sm:text-lg tracking-tight text-slate-900 dark:text-white font-sans">
                 SANKALP
               </span>
-              <span className="bg-sky-100 text-sky-700 dark:bg-sky-950 dark:text-sky-300 dark:border-sky-800 text-[9px] font-bold px-1.5 py-0.2 rounded-full uppercase tracking-wider border border-sky-200">
-                NGO
-              </span>
             </div>
             <p className="text-[10px] text-slate-500 dark:text-slate-400 font-medium hidden xl:block leading-none mt-0.5">
               Social Awareness & Volunteer Network
