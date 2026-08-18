@@ -234,14 +234,16 @@ export const AdminDbmsView = () => {
           <Building2 className="w-4 h-4" /> Corporate Requests & NOCs ({corporateRequests.length})
         </button>
 
-        <button
-          onClick={() => setActiveTab('users')}
-          className={`px-4 py-2 rounded-xl text-xs font-extrabold transition-all flex items-center gap-1.5 ${
-            activeTab === 'users' ? 'bg-gradient-to-r from-sky-600 to-indigo-600 text-white shadow' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
-          }`}
-        >
-          <ShieldCheck className="w-4 h-4" /> Session Audit ({users.length})
-        </button>
+        {currentUser?.role === 'SUPER_ADMIN' && (
+          <button
+            onClick={() => setActiveTab('users')}
+            className={`px-4 py-2 rounded-xl text-xs font-extrabold transition-all flex items-center gap-1.5 ${
+              activeTab === 'users' ? 'bg-gradient-to-r from-sky-600 to-indigo-600 text-white shadow' : 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200'
+            }`}
+          >
+            <ShieldCheck className="w-4 h-4" /> Session Audit & Security Logs ({users.length})
+          </button>
+        )}
       </div>
 
       {/* SEARCH BAR */}

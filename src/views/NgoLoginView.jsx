@@ -70,14 +70,14 @@ export const NgoLoginView = ({ onNavigate }) => {
           </p>
           <div className="flex justify-center gap-3">
             <button
-              onClick={() => onNavigate('dbms')}
-              className="px-6 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs shadow press-effect flex items-center gap-2"
+              onClick={() => onNavigate('events')}
+              className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-bold text-xs shadow press-effect flex items-center gap-2"
             >
-              Open Central DBMS Control Panel <ArrowRight className="w-4 h-4" />
+              Browse Awareness Drives <ArrowRight className="w-4 h-4" />
             </button>
             <button
               onClick={logoutUser}
-              className="px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs press-effect"
+              className="px-4 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 font-bold text-xs press-effect"
             >
               Logout
             </button>

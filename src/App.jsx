@@ -83,9 +83,9 @@ function MainLayout() {
       case 'reset-password':
         return <ForgotPasswordView onNavigate={(tab) => setActiveTab(tab)} />;
       case 'dbms':
-        // RBAC Enforcement Guard: Only NGO_PARTNER, NGO_STAFF, or SUPER_ADMIN can view DBMS
-        if (!currentUser || (currentUser.role !== 'NGO_PARTNER' && currentUser.role !== 'NGO_STAFF' && currentUser.role !== 'SUPER_ADMIN')) {
-          return <NgoLoginView onNavigate={(tab) => setActiveTab(tab)} />;
+        // RBAC Enforcement Guard: Strictly SUPER_ADMIN only
+        if (!currentUser || currentUser.role !== 'SUPER_ADMIN') {
+          return <HiddenAdminLoginView onNavigate={(tab) => setActiveTab(tab)} />;
         }
         return <AdminDbmsView />;
       default:

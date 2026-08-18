@@ -160,8 +160,8 @@ export const Navbar = ({ activeTab, setActiveTab }) => {
             <span>About Us</span>
           </button>
 
-          {/* Admin DBMS Access (Visible if logged in or navigating) */}
-          {(currentUser?.role === 'SUPER_ADMIN' || currentUser?.role === 'NGO_STAFF' || activeTab === 'dbms') && (
+          {/* Admin DBMS Access (Restricted exclusively to SUPER_ADMIN) */}
+          {currentUser?.role === 'SUPER_ADMIN' && (
             <button
               onClick={() => setActiveTab('dbms')}
               className={`flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-bold transition-all whitespace-nowrap ${
@@ -171,7 +171,7 @@ export const Navbar = ({ activeTab, setActiveTab }) => {
               }`}
             >
               <Database className="w-3 h-3 text-sky-500" />
-              <span>DBMS</span>
+              <span>Admin DBMS</span>
             </button>
           )}
         </nav>
