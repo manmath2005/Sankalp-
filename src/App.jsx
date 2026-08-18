@@ -89,6 +89,10 @@ function MainLayout() {
       case 'history':
         return <PastHistoryView />;
       case 'volunteer-hub':
+        // RBAC Enforcement Guard: Strictly for authenticated Volunteers only (Not for NGO, Company, or Public)
+        if (!currentUser || currentUser.role !== 'VOLUNTEER') {
+          return <VolunteerLoginView onNavigate={handleNavigate} />;
+        }
         return <VolunteerDashboardView onNavigate={handleNavigate} />;
       case 'corporate':
       case 'corporate-partner':
@@ -180,27 +184,22 @@ function MainLayout() {
               <h4 className="text-[11px] font-extrabold text-white uppercase tracking-wider">Role Portals</h4>
               <ul className="space-y-1 text-[11px]">
                 <li>
-                  <button onClick={() => setActiveTab('volunteer-login')} className="hover:text-sky-400 transition-colors">
-                    👤 Volunteer Portal (OTP Sign In)
+                  <button onClick={() => handleNavigate('volunteer-login')} className="hover:text-sky-400 transition-colors">
+                    👤 Volunteer Portal (Sign In / Register)
                   </button>
                 </li>
                 <li>
-                  <button onClick={() => setActiveTab('company-login')} className="hover:text-indigo-400 transition-colors">
+                  <button onClick={() => handleNavigate('company-login')} className="hover:text-indigo-400 transition-colors">
                     🏢 Company / Institution Login
                   </button>
                 </li>
                 <li>
-                  <button onClick={() => setActiveTab('ngo-login')} className="hover:text-amber-400 transition-colors">
+                  <button onClick={() => handleNavigate('ngo-login')} className="hover:text-amber-400 transition-colors">
                     🛡️ Partner Portal (Login / Register)
                   </button>
                 </li>
                 <li>
-                  <button onClick={() => setActiveTab('volunteer-hub')} className="hover:text-emerald-400 transition-colors">
-                    📜 Volunteer Hub & Certificates
-                  </button>
-                </li>
-                <li>
-                  <button onClick={() => setActiveTab('forgot-password')} className="hover:text-amber-400 transition-colors">
+                  <button onClick={() => handleNavigate('forgot-password')} className="hover:text-amber-400 transition-colors">
                     🔑 Account Recovery & Password Reset
                   </button>
                 </li>

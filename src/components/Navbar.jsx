@@ -134,18 +134,20 @@ export const Navbar = ({ activeTab, setActiveTab }) => {
             </>
           )}
 
-          {/* Volunteer Hub Access */}
-          <button
-            onClick={() => setActiveTab('volunteer-hub')}
-            className={`flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-bold transition-all whitespace-nowrap ${
-              activeTab === 'volunteer-hub' 
-                ? 'bg-white dark:bg-slate-900 text-sky-700 dark:text-sky-400 shadow-xs' 
-                : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-white/50 dark:hover:bg-slate-700/50'
-            }`}
-          >
-            <Award className="w-3 h-3" />
-            <span>Volunteer Hub</span>
-          </button>
+          {/* Volunteer Hub Access (Strictly for logged in Volunteers only) */}
+          {currentUser?.role === 'VOLUNTEER' && (
+            <button
+              onClick={() => setActiveTab('volunteer-hub')}
+              className={`flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-bold transition-all whitespace-nowrap ${
+                activeTab === 'volunteer-hub' 
+                  ? 'bg-white dark:bg-slate-900 text-sky-700 dark:text-sky-400 shadow-xs' 
+                  : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-white/50 dark:hover:bg-slate-700/50'
+              }`}
+            >
+              <Award className="w-3 h-3 text-sky-500" />
+              <span>Volunteer Hub</span>
+            </button>
+          )}
 
           {/* About Us Link */}
           <button
@@ -289,12 +291,15 @@ export const Navbar = ({ activeTab, setActiveTab }) => {
           >
             <Building2 className="w-4 h-4 text-indigo-600" /> Host Event (Companies & Gov)
           </button>
-          <button
-            onClick={() => { setActiveTab('volunteer-hub'); setMobileMenuOpen(false); }}
-            className="w-full flex items-center gap-3 p-2.5 rounded-xl text-xs font-semibold text-slate-700 hover:bg-sky-50"
-          >
-            <Award className="w-4 h-4 text-emerald-600" /> Volunteer Hub
-          </button>
+          {/* Volunteer Hub in Mobile Menu (Only if logged in as Volunteer) */}
+          {currentUser?.role === 'VOLUNTEER' && (
+            <button
+              onClick={() => { setActiveTab('volunteer-hub'); setMobileMenuOpen(false); }}
+              className="w-full flex items-center gap-3 p-2.5 rounded-xl text-xs font-semibold text-slate-700 hover:bg-sky-50"
+            >
+              <Award className="w-4 h-4 text-emerald-600" /> Volunteer Hub
+            </button>
+          )}
           <button
             onClick={() => { setActiveTab('about'); setMobileMenuOpen(false); }}
             className="w-full flex items-center gap-3 p-2.5 rounded-xl text-xs font-semibold text-slate-700 hover:bg-emerald-50"
