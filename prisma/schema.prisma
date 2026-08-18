@@ -1,0 +1,142 @@
+// Prisma Schema Definition for ImpactBridge Platform
+// Database: PostgreSQL with Prisma ORM
+
+datasource db {
+  provider =  postgresql
+  url      = env(DATABASE_URL)
+}
+
+generator client {
+  provider = prisma-client-js
+}
+
+enum Role {
+  VOLUNTEER
+  NGO_PARTNER
+  NGO_STAFF
+  COMPANY_PARTNER
+  SUPER_ADMIN
+}
+
+enum EventMode {
+  ONFIELD
+  ONLINE
+  HYBRID
+}
+
+enum CertificateStatus {
+  ISSUED
+  REVOKED
+  PENDING
+}
+
+model User {
+  id              String        @id @default(uuid())
+  email           String        @unique
+  name            String
+  passwordHash    String
+  role            Role          @default(VOLUNTEER)
+  phone           String?
+  city            String?
+  profession      String?
+  institution     String?
+  isEmailVerified Boolean       @default(false)
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  certificates    Certificate[]
+  volunteerRecord VolunteerProfile?
+  companyProfile  CompanyProfile?
+  ngoProfile      NgoProfile?
+
+  @@index([email])
+  @@index([role])
+}
+
+model Certificate {
+  id                String            @id @default(uuid())
+  certificateNumber String            @unique // Unique cryptographic hash (e.g. CERT-2026-X89F2A)
+  userId            String
+  user              User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  volunteerName     String
+  eventId           String
+  event             Event             @relation(fields: [eventId], references: [id])
+  ngoId             String
+  ngo               NgoProfile        @relation(fields: [ngoId], references: [id])
+  issueDate         DateTime          @default(now())
+  hoursLogged       Int               @default(4)
+  skills            String[]          // e.g. [Tree Plantation, Crowd Coordination, Civic Literacy]
+  verificationUrl   String
+  status            CertificateStatus @default(ISSUED)
+  signatureHash     String?
+  createdAt         DateTime          @default(now())
+
+  @@index([certificateNumber])
+  @@index([userId])
+  @@index([eventId])
+}
+
+model Event {
+  id                   String        @id @default(uuid())
+  title                String
+  description          String
+  category             String        // Government Office, Public Office, College, School
+  mode                 EventMode     @default(ONFIELD)
+  venue                String
+  date                 DateTime
+  time                 String
+  expectedAudience     String
+  volunteerSeats       Int           @default(30)
+  volunteersRegistered Int           @default(0)
+  isVirtual            Boolean       @default(false)
+  isMicroTask          Boolean       @default(false)
+  estimatedHours       Float         @default(4.0) // e.g. 2-5 hours
+  requiredSkills       String[]      // e.g. ["Graphic Design", "Content Writing", "Legal Aid", "Accounting", "Video Editing"]
+  isEmergency          Boolean       @default(false) // SOS Crisis Mode flag
+  urgencyLevel         String?       // "High" | "Critical"
+  requiredResources    String?       // e.g. "50 Volunteers for Flood Food Packet Packing", "O+ Blood Donors"
+  targetRadiusKm       Int           @default(50)   // Geo-radius for emergency alerts (50km)
+  emergencyDeadline    DateTime?
+  ngoId                String
+  ngo                  NgoProfile    @relation(fields: [ngoId], references: [id])
+  certificates         Certificate[]
+  createdAt            DateTime      @default(now())
+
+  @@index([isEmergency])
+}
+
+model NgoProfile {
+  id             String        @id @default(uuid())
+  userId         String        @unique
+  user           User          @relation(fields: [userId], references: [id])
+  name           String
+  darpanId       String        @unique
+  registrationNo String        @unique
+  sector         String
+  city           String
+  state          String
+  phone          String
+  email          String
+  events         Event[]
+  certificates   Certificate[]
+}
+
+model VolunteerProfile {
+  id          String   @id @default(uuid())
+  userId      String   @unique
+  user        User     @relation(fields: [userId], references: [id])
+  skills      String[]
+  totalHours  Int      @default(0)
+  bloodGroup  String?
+  bio         String?
+}
+
+model CompanyProfile {
+  id          String   @id @default(uuid())
+  userId      String   @unique
+  user        User     @relation(fields: [userId], references: [id])
+  companyName String
+  cin         String?
+  csrBudget   Decimal?
+  city        String?
+}
