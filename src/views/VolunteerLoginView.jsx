@@ -284,17 +284,6 @@ export const VolunteerLoginView = ({ onNavigate }) => {
                   <Zap className="w-3.5 h-3.5 fill-current" />
                   {loading ? "Sending OTP Code..." : "Send 6-Digit Email OTP Login Code ✉️"}
                 </button>
-
-                <div className="pt-2 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
-                  <span className="text-[11px] text-slate-500 font-medium">Quick Demo:</span>
-                  <button
-                    type="button"
-                    onClick={fillVolunteerDemo}
-                    className="text-xs font-bold text-sky-700 dark:text-sky-300 hover:underline bg-sky-50 dark:bg-sky-950/40 px-2.5 py-1 rounded-lg border border-sky-200 dark:border-sky-800"
-                  >
-                    Auto-Fill Demo Volunteer ⚡
-                  </button>
-                </div>
               </div>
             ) : (
               <form onSubmit={handleRegisterSubmit} className="space-y-3">

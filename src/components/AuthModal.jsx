@@ -198,29 +198,6 @@ export const AuthModal = () => {
               >
                 {loading ? "Authenticating..." : "Sign In to Account"}
               </button>
-
-              {/* Demo Account Shortcuts */}
-              <div className="pt-3 border-t border-slate-100 dark:border-slate-800">
-                <p className="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-2">
-                  Quick Demo One-Click Fill:
-                </p>
-                <div className="grid grid-cols-2 gap-2">
-                  <button
-                    type="button"
-                    onClick={() => fillDemoAccount('volunteer')}
-                    className="px-2.5 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 text-[11px] font-bold text-left border border-slate-200 dark:border-slate-700"
-                  >
-                    👤 Demo Volunteer
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => fillDemoAccount('admin')}
-                    className="px-2.5 py-1.5 rounded-lg bg-emerald-50 dark:bg-emerald-950/40 hover:bg-emerald-100 dark:hover:bg-emerald-900/60 text-emerald-900 dark:text-emerald-300 text-[11px] font-bold text-left border border-emerald-200 dark:border-emerald-700"
-                  >
-                    🛡️ Demo NGO Admin
-                  </button>
-                </div>
-              </div>
             </form>
           ) : (
             <form onSubmit={handleRegisterSubmit} className="space-y-3">

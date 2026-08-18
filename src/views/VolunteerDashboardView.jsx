@@ -166,11 +166,12 @@ export const VolunteerDashboardView = ({ onNavigate }) => {
       </div>
 
       {/* 2. Navigation Tabs */}
-      <div className="flex items-center gap-2 border-b border-slate-200/80 pb-3 overflow-x-auto">
+      <div className="flex items-center gap-2 border-b border-slate-200/80 dark:border-slate-800 pb-3 overflow-x-auto">
         {[
           { id: 'overview', label: 'Dashboard & Events', icon: Layers },
-          { id: 'profile', label: 'My Volunteer Profile & Demographics', icon: User },
-          { id: 'certificates', label: 'Accredited Certificates', icon: Award }
+          { id: 'profile', label: 'My Volunteer Profile', icon: User },
+          { id: 'certificates', label: 'My Certificates', icon: Award },
+          { id: 'verify', label: 'Verify Credential Studio', icon: ShieldCheck }
         ].map(tab => {
           const Icon = tab.icon;
           return (
@@ -179,8 +180,8 @@ export const VolunteerDashboardView = ({ onNavigate }) => {
               onClick={() => setActiveTab(tab.id)}
               className={`px-4 py-2 rounded-xl text-xs font-extrabold flex items-center gap-2 transition-all shrink-0 ${
                 activeTab === tab.id
-                  ? 'bg-slate-900 text-white shadow-sm'
-                  : 'bg-white/80 hover:bg-white text-slate-600 border border-slate-200/60'
+                  ? 'bg-emerald-600 text-white shadow-sm'
+                  : 'bg-white/80 dark:bg-slate-800 hover:bg-white text-slate-600 dark:text-slate-300 border border-slate-200/60 dark:border-slate-700'
               }`}
             >
               <Icon className="w-4 h-4" />
@@ -649,6 +650,93 @@ export const VolunteerDashboardView = ({ onNavigate }) => {
               </p>
             </div>
           )}
+        </div>
+      )}
+
+      {/* TAB 4: IN-HUB CERTIFICATE VERIFIER & AUDIT STUDIO */}
+      {activeTab === 'verify' && (
+        <div className="glass-panel p-6 sm:p-8 rounded-3xl border border-white/80 dark:border-slate-800 shadow-float space-y-6 animate-scale-in">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 dark:border-slate-800 pb-4">
+            <div>
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-100 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300 text-xs font-black uppercase tracking-wider mb-1 border border-emerald-300 dark:border-emerald-700">
+                <ShieldCheck className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
+                Live Cryptographic Verification Ledger
+              </div>
+              <h2 className="text-xl font-extrabold text-slate-900 dark:text-white">
+                Verify Any ImpactBridge Digital Certificate
+              </h2>
+              <p className="text-xs text-slate-500 dark:text-slate-400">
+                Input any Certificate ID or Unique Hash to verify authentic hours and Darpan NGO signatures.
+              </p>
+            </div>
+
+            <button
+              onClick={() => onNavigate('verify-certificate')}
+              className="px-4 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 dark:bg-sky-600 dark:hover:bg-sky-500 text-white text-xs font-bold transition-all flex items-center gap-2 self-start sm:self-auto press-effect"
+            >
+              <span>Open Public Verification Page</span>
+              <ShieldCheck className="w-3.5 h-3.5" />
+            </button>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-6">
+            {/* Left: Quick Search Tool */}
+            <div className="p-6 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-4">
+              <h3 className="text-sm font-black text-slate-900 dark:text-white flex items-center gap-2">
+                <FileText className="w-4 h-4 text-sky-600 dark:text-sky-400" />
+                Instant Credential Lookup
+              </h3>
+              <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                Test and audit your earned credentials or scan volunteer certificates from partner NGOs:
+              </p>
+
+              <div className="space-y-2">
+                {totalCertificates.map(cert => (
+                  <div 
+                    key={cert.id}
+                    onClick={() => onNavigate(`verify-certificate-${cert.id}`)}
+                    className="p-3.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 flex items-center justify-between hover:border-emerald-400 dark:hover:border-emerald-500 cursor-pointer transition-all hover-lift"
+                  >
+                    <div>
+                      <p className="text-xs font-black text-slate-900 dark:text-white">{cert.eventTitle}</p>
+                      <p className="text-[10px] font-mono text-emerald-700 dark:text-emerald-400 font-bold">{cert.id} • {cert.hoursContributed || 4} Hours Logged</p>
+                    </div>
+                    <span className="text-[10px] font-extrabold text-sky-700 dark:text-sky-400 uppercase tracking-wider bg-sky-50 dark:bg-sky-950 px-2 py-1 rounded-lg border border-sky-200 dark:border-sky-800">
+                      Audit QR →
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Right: Security & Verification Guarantee */}
+            <div className="p-6 rounded-2xl bg-gradient-to-br from-emerald-50 to-teal-50 dark:from-slate-800/80 dark:to-slate-900/80 border border-emerald-200/80 dark:border-slate-700 space-y-4 text-slate-800 dark:text-slate-200">
+              <div className="flex items-center gap-2.5">
+                <div className="w-9 h-9 rounded-xl bg-emerald-600 text-white flex items-center justify-center shadow-md">
+                  <ShieldCheck className="w-5 h-5" />
+                </div>
+                <div>
+                  <h4 className="text-sm font-black">BridgeImpact Authenticity Standard</h4>
+                  <p className="text-[11px] text-slate-500 dark:text-slate-400">Section 135 & NGO Darpan Verified</p>
+                </div>
+              </div>
+
+              <ul className="space-y-2 text-xs leading-relaxed font-medium">
+                <li className="flex items-center gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
+                  <span>Immutable SHA-256 digital certificate signature hash</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
+                  <span>Direct 1-click LinkedIn Certification profile integration</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
+                  <span>Real-time QR code scannable by HRs, recruiters & institutions</span>
+                </li>
+              </ul>
+            </div>
+          </div>
         </div>
       )}
 

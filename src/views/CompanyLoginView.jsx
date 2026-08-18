@@ -240,11 +240,6 @@ export const CompanyLoginView = ({ onNavigate }) => {
                   <Zap className="w-3.5 h-3.5 fill-current" />
                   {loading ? "Sending OTP Code..." : "Send 6-Digit Email OTP Login Code ✉️"}
                 </button>
-
-                <div className="pt-2 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
-                  <span className="text-[11px] text-slate-500 font-medium">Demo Credentials:</span>
-                  <button type="button" onClick={fillCompanyDemo} className="text-xs font-bold text-indigo-700 dark:text-indigo-300 hover:underline bg-indigo-50 dark:bg-indigo-950/40 px-2.5 py-1 rounded-lg border border-indigo-200 dark:border-indigo-800 press-effect">Fill Corporate Demo ⚡</button>
-                </div>
               </div>
             ) : (
               <form onSubmit={handleRegisterSubmit} className="space-y-3">
