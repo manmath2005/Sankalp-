@@ -12,6 +12,7 @@ import { CertificateVerificationView } from './views/CertificateVerificationView
 import { AiMatchmakerView } from './views/AiMatchmakerView';
 import { SosEmergencyBanner } from './components/SosEmergencyBanner';
 import { EsgReportGeneratorView } from './views/EsgReportGeneratorView';
+import { AboutUsView } from './views/AboutUsView';
 
 // Dedicated Separate Login Views
 import { VolunteerLoginView } from './views/VolunteerLoginView';
@@ -57,6 +58,9 @@ function MainLayout() {
         return <AiMatchmakerView onNavigate={(tab) => setActiveTab(tab)} />;
       case 'verify-certificate':
         return <CertificateVerificationView onNavigate={(tab) => setActiveTab(tab)} />;
+      case 'about':
+      case 'about-us':
+        return <AboutUsView onNavigate={(tab) => setActiveTab(tab)} />;
       case 'events':
         return <EventsView />;
       case 'history':

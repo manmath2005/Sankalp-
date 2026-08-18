@@ -318,41 +318,11 @@ export const NgoLoginView = ({ onNavigate }) => {
                     }
                   }}
                   disabled={loading || !email}
-                  className="w-full py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-bold text-xs shadow-md transition-all flex items-center justify-center gap-2 press-effect"
+                  className="w-full py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-black text-xs uppercase tracking-wider shadow-md transition-all flex items-center justify-center gap-2 press-effect"
                 >
                   <Zap className="w-3.5 h-3.5 fill-current" />
                   {loading ? "Sending OTP Code..." : "Send 6-Digit Official Email OTP Login Code ✉️"}
                 </button>
-
-                {/* Quick Demo NGO Logins */}
-                <div className="pt-3 border-t border-slate-100 space-y-2">
-                  <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider block">
-                    Quick Demo NGO Credentials:
-                  </span>
-                  <div className="flex flex-wrap gap-1.5">
-                    <button
-                      type="button"
-                      onClick={() => fillDemoNgo('contact@sankalpfoundation.org', 'ngo123password')}
-                      className="text-[11px] font-bold text-sky-700 bg-sky-50 hover:bg-sky-100 px-2.5 py-1 rounded-lg border border-sky-200 press-effect"
-                    >
-                      Sankalp Foundation ⚡
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => fillDemoNgo('outreach@yuvachetna.org', 'ngo123password')}
-                      className="text-[11px] font-bold text-purple-700 bg-purple-50 hover:bg-purple-100 px-2.5 py-1 rounded-lg border border-purple-200 press-effect"
-                    >
-                      Yuva Chetna Trust ⚡
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => fillDemoNgo('contact@greenearthtrust.in', 'ngo123password')}
-                      className="text-[11px] font-bold text-emerald-700 bg-emerald-50 hover:bg-emerald-100 px-2.5 py-1 rounded-lg border border-emerald-200 press-effect"
-                    >
-                      GreenEarth Trust ⚡
-                    </button>
-                  </div>
-                </div>
               </form>
             ) : (
               /* NEW NGO REGISTRATION FORM */
