@@ -121,20 +121,58 @@ export const AdminDbmsView = () => {
     showToast("Full DBMS records exported to JSON successfully!", "success");
   };
 
-  // Analytics Computation for Volunteers Questionnaire Data
-  const professionCounts = volunteers.reduce((acc, v) => {
+  const isSuperAdmin = currentUser?.role === 'SUPER_ADMIN';
+  const currentNgoName = currentUser?.ngoName || 'Sankalp Social Foundation';
+
+  // Super Admin NGO Filter State (defaults to 'ALL' for super admin)
+  const [selectedNgoFilter, setSelectedNgoFilter] = useState('ALL');
+
+  // Determine effective NGO filter: if logged in as NGO, strictly their NGO; if Super Admin, based on selector
+  const activeNgoName = isSuperAdmin 
+    ? (selectedNgoFilter === 'ALL' ? null : selectedNgoFilter)
+    : currentNgoName;
+
+  // Scoped Events: if activeNgoName is set, filter events by that NGO (or events with matching coordinator/ngo)
+  const scopedEvents = events.filter(e => {
+    if (!activeNgoName) return true;
+    const evtNgo = e.ngoName || 'Sankalp Social Foundation';
+    return evtNgo.toLowerCase().includes(activeNgoName.toLowerCase()) || 
+           activeNgoName.toLowerCase().includes(evtNgo.toLowerCase()) ||
+           e.coordinator?.toLowerCase().includes(currentUser?.name?.toLowerCase() || '');
+  });
+
+  const scopedEventIds = new Set(scopedEvents.map(e => e.id));
+
+  // Scoped Volunteers: volunteers who registered for or participated in the scoped events (or all if super admin and ALL)
+  const scopedVolunteers = volunteers.filter(v => {
+    if (!activeNgoName) return true;
+    const hasAssignedEvent = v.assignedEventIds?.some(id => scopedEventIds.has(id));
+    const hasParticipatedEvent = v.eventsParticipated?.some(id => scopedEventIds.has(id));
+    const hasCert = v.certificates?.some(c => scopedEventIds.has(c.eventId) || c.eventTitle?.toLowerCase().includes(activeNgoName.toLowerCase()));
+    // Fallback: If newly assigned or in demo, include if assigned
+    return hasAssignedEvent || hasParticipatedEvent || hasCert || (v.assignedEventIds && v.assignedEventIds.length === 0 && !isSuperAdmin);
+  });
+
+  // Scoped Corporate Requests
+  const scopedCorporateRequests = corporateRequests.filter(r => {
+    if (!activeNgoName) return true;
+    return !r.assignedNgoName || r.assignedNgoName.toLowerCase().includes(activeNgoName.toLowerCase()) || activeNgoName.toLowerCase().includes(r.assignedNgoName?.toLowerCase() || '');
+  });
+
+  // Analytics Computation for Scoped Volunteers
+  const professionCounts = scopedVolunteers.reduce((acc, v) => {
     const prof = v.profession || 'Student';
     acc[prof] = (acc[prof] || 0) + 1;
     return acc;
   }, {});
 
-  const cityCounts = volunteers.reduce((acc, v) => {
+  const cityCounts = scopedVolunteers.reduce((acc, v) => {
     const city = v.city || 'Mumbai';
     acc[city] = (acc[city] || 0) + 1;
     return acc;
   }, {});
 
-  const ageGroups = volunteers.reduce((acc, v) => {
+  const ageGroups = scopedVolunteers.reduce((acc, v) => {
     const age = parseInt(v.age) || 22;
     if (age <= 22) acc['18-22 (Students)'] = (acc['18-22 (Students)'] || 0) + 1;
     else if (age <= 30) acc['23-30 (Young Professionals)'] = (acc['23-30 (Young Professionals)'] || 0) + 1;
@@ -142,14 +180,14 @@ export const AdminDbmsView = () => {
     return acc;
   }, {});
 
-  const filteredVolunteers = volunteers.filter(v => 
+  const filteredVolunteers = scopedVolunteers.filter(v => 
     v.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     v.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
     (v.city && v.city.toLowerCase().includes(searchTerm.toLowerCase())) ||
     (v.profession && v.profession.toLowerCase().includes(searchTerm.toLowerCase()))
   );
 
-  const filteredEvents = events.filter(e =>
+  const filteredEvents = scopedEvents.filter(e =>
     e.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
     e.venue.toLowerCase().includes(searchTerm.toLowerCase())
   );
@@ -164,37 +202,75 @@ export const AdminDbmsView = () => {
             <Database className="w-6 h-6" />
           </div>
           <div>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 flex-wrap">
               <h1 className="text-2xl font-extrabold text-white">
-                Sankalp DBMS Admin Portal
+                {isSuperAdmin ? 'Master Super Admin DBMS & Analytics' : `${currentNgoName} — Management Dashboard`}
               </h1>
               <span className="bg-sky-500/20 text-sky-300 text-[10px] font-extrabold px-2.5 py-0.5 rounded-full uppercase border border-sky-400/30">
-                Demographic Analytics & Security
+                {isSuperAdmin ? 'All-India Central View' : 'Scoped NGO Data'}
               </span>
             </div>
-            <p className="text-xs text-slate-300">
-              Real-time analytics on volunteer profession, city, age distribution, corporate permission letter NOCs, and session security.
+            <p className="text-xs text-slate-300 mt-1">
+              {isSuperAdmin 
+                ? 'Central master command ledger viewing and managing awareness drives, volunteer demographics, and corporate requests across all partner NGOs in India.'
+                : `Managing specific awareness drives, participating volunteers, participant demographics, and corporate CSR requests for ${currentNgoName}.`}
             </p>
           </div>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 shrink-0">
           <button
             onClick={exportDbToJson}
             className="px-3.5 py-2 rounded-xl bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white text-xs font-bold shadow-sm flex items-center gap-1.5"
           >
-            <Download className="w-3.5 h-3.5" /> Export Database (JSON)
+            <Download className="w-3.5 h-3.5" /> Export {isSuperAdmin ? 'Master DB' : 'NGO Records'}
           </button>
 
-          <button
-            onClick={resetSystemData}
-            title="Reset to default mock data"
-            className="px-3.5 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-bold flex items-center gap-1.5 border border-white/10"
-          >
-            <RefreshCw className="w-3.5 h-3.5" /> Reset DBMS
-          </button>
+          {isSuperAdmin && (
+            <button
+              onClick={resetSystemData}
+              title="Reset to default mock data"
+              className="px-3.5 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-bold flex items-center gap-1.5 border border-white/10"
+            >
+              <RefreshCw className="w-3.5 h-3.5" /> Reset DBMS
+            </button>
+          )}
         </div>
       </div>
+
+      {/* Super Admin NGO Selector Banner */}
+      {isSuperAdmin && (
+        <div className="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div className="flex items-center gap-2">
+            <Building2 className="w-4 h-4 text-amber-500 shrink-0" />
+            <div>
+              <p className="text-xs font-bold text-slate-900 dark:text-white">
+                Super Admin Scope Filter: Inspecting <strong>{selectedNgoFilter === 'ALL' ? 'All Partner NGOs Across India' : selectedNgoFilter}</strong>
+              </p>
+              <p className="text-[11px] text-slate-500 dark:text-slate-400">
+                Filter demographic analytics and volunteer directories for individual non-profits or view aggregated nationwide totals.
+              </p>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <span className="text-xs font-bold text-slate-600 dark:text-slate-300">Filter by NGO:</span>
+            <select
+              value={selectedNgoFilter}
+              onChange={(e) => setSelectedNgoFilter(e.target.value)}
+              className="px-3 py-1.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs font-bold text-slate-800 dark:text-slate-200"
+            >
+              <option value="ALL">🌟 All Non-Profits (Consolidated View)</option>
+              <option value="Sankalp Social Foundation">Sankalp Social Foundation</option>
+              <option value="Goonj">Goonj</option>
+              <option value="The Akshaya Patra Foundation">The Akshaya Patra Foundation</option>
+              <option value="Child Rights and You (CRY)">Child Rights and You (CRY)</option>
+              <option value="HelpAge India">HelpAge India</option>
+              <option value="Pratham Education Foundation">Pratham Education Foundation</option>
+            </select>
+          </div>
+        </div>
+      )}
 
       {/* DBMS Navigation Tabs */}
       <div className="flex flex-wrap gap-2 border-b border-slate-200 pb-2">
@@ -204,7 +280,7 @@ export const AdminDbmsView = () => {
             activeTab === 'analytics' ? 'bg-gradient-to-r from-sky-600 to-indigo-600 text-white shadow' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
           }`}
         >
-          <BarChart3 className="w-4 h-4" /> Volunteer Analytics & Demographics
+          <BarChart3 className="w-4 h-4" /> {isSuperAdmin ? 'All-NGO Demographics' : 'My Volunteer Demographics'}
         </button>
 
         <button
@@ -213,7 +289,7 @@ export const AdminDbmsView = () => {
             activeTab === 'volunteers' ? 'bg-gradient-to-r from-sky-600 to-indigo-600 text-white shadow' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
           }`}
         >
-          <Users className="w-4 h-4" /> Volunteers Directory ({volunteers.length})
+          <Users className="w-4 h-4" /> {isSuperAdmin ? 'Master Volunteers Directory' : 'Participating Volunteers'} ({scopedVolunteers.length})
         </button>
 
         <button
@@ -222,7 +298,7 @@ export const AdminDbmsView = () => {
             activeTab === 'events' ? 'bg-gradient-to-r from-sky-600 to-indigo-600 text-white shadow' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
           }`}
         >
-          <Calendar className="w-4 h-4" /> Events Manager ({events.length})
+          <Calendar className="w-4 h-4" /> {isSuperAdmin ? 'All Drives Manager' : 'My Conducted Drives'} ({scopedEvents.length})
         </button>
 
         <button
@@ -231,17 +307,17 @@ export const AdminDbmsView = () => {
             activeTab === 'requests' ? 'bg-gradient-to-r from-sky-600 to-indigo-600 text-white shadow' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
           }`}
         >
-          <Building2 className="w-4 h-4" /> Corporate Requests & NOCs ({corporateRequests.length})
+          <Building2 className="w-4 h-4" /> Corporate Requests & NOCs ({scopedCorporateRequests.length})
         </button>
 
-        {currentUser?.role === 'SUPER_ADMIN' && (
+        {isSuperAdmin && (
           <button
             onClick={() => setActiveTab('users')}
             className={`px-4 py-2 rounded-xl text-xs font-extrabold transition-all flex items-center gap-1.5 ${
               activeTab === 'users' ? 'bg-gradient-to-r from-sky-600 to-indigo-600 text-white shadow' : 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200'
             }`}
           >
-            <ShieldCheck className="w-4 h-4" /> Session Audit & Security Logs ({users.length})
+            <ShieldCheck className="w-4 h-4" /> Master Session Audit ({users.length})
           </button>
         )}
       </div>
@@ -254,7 +330,7 @@ export const AdminDbmsView = () => {
             type="text"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            placeholder="Search by name, city, profession, or title..."
+            placeholder={`Search ${isSuperAdmin ? 'all records' : 'your NGO records'} by name, city, profession, or title...`}
             className="w-full pl-9 pr-4 py-2 rounded-xl border border-slate-300 text-xs font-medium focus:ring-2 focus:ring-sky-500 focus:outline-none bg-white"
           />
         </div>
