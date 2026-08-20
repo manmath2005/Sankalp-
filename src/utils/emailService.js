@@ -7,7 +7,7 @@ export const sendRealOtpEmail = async (toEmail, userName, clientFallbackOtp, con
 
   try {
     // Primary Method: Vercel Serverless Function → Gmail SMTP (Google App Password)
-    // The serverless function runs server-side on Vercel — Nodemailer works perfectly here.
+    // Runs server-side on Vercel — Nodemailer works perfectly.
     // Gmail-to-Gmail delivery lands in Primary Inbox instantly (no spam, no delay).
     const response = await fetch('/api/send-otp', {
       method: 'POST',
@@ -47,7 +47,6 @@ export const sendRealOtpEmail = async (toEmail, userName, clientFallbackOtp, con
   };
 };
 
-
 /**
  * Validates OTP with Backend Server API
  */
@@ -56,11 +55,9 @@ export const verifyOtpWithBackend = async (email, otp) => {
   const cleanOtp = (otp || '').toString().trim();
 
   try {
-    const response = await fetch(`${BACKEND_API_URL}/verify-otp`, {
+    const response = await fetch('/api/verify-otp', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email: cleanEmail, otp: cleanOtp })
     });
     const data = await response.json();
@@ -80,224 +77,309 @@ export const verifyOtpWithBackend = async (email, otp) => {
   }
 };
 
-/**
- * Automation 1: Send Volunteer Successful Drive Registration Confirmation Email
- */
-export const sendVolunteerDriveRegistrationEmail = async ({ volunteerEmail, volunteerName, eventTitle, eventDate, eventLocation, organizerNgoName }) => {
-  const cleanEmail = (volunteerEmail || '').trim().toLowerCase();
-  const apiKey = 'am_us_inbox_5ccad543b1ee9681a51d93d404eb1e4d8c2227aca1882de12fd4d72682e6c561';
-  const inbox = 'social_sankalp@agentmail.to';
+// ─────────────────────────────────────────────────────────────────────────────
+// Shared AgentMail config for all automation emails
+// ─────────────────────────────────────────────────────────────────────────────
+const AGENTMAIL_API_KEY = 'am_us_inbox_5ccad543b1ee9681a51d93d404eb1e4d8c2227aca1882de12fd4d72682e6c561';
+const AGENTMAIL_INBOX   = 'social_sankalp@agentmail.to';
 
-  const htmlBody = `
-    <div style="font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;max-width:560px;margin:0 auto;background:#ffffff;border-radius:20px;border:1px solid #e2e8f0;overflow:hidden;box-shadow:0 10px 25px rgba(0,0,0,0.06);">
-      <div style="background:linear-gradient(135deg, #0284c7 0%, #0369a1 50%, #0f172a 100%);padding:32px 25px;text-align:center;">
-        <div style="display:inline-block;background:rgba(255,255,255,0.15);padding:6px 14px;border-radius:10px;color:#bae6fd;font-size:11px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:8px;">
-          Sankalp Volunteer Network
-        </div>
-        <h1 style="color:#ffffff;font-size:22px;margin:0;font-weight:800;">Drive Registration Confirmed! 🎉</h1>
-      </div>
-      <div style="padding:30px 25px;">
-        <p style="font-size:15px;color:#1e293b;font-weight:700;margin-top:0;">Hello ${volunteerName || 'Valued Volunteer'},</p>
-        <p style="font-size:13px;color:#475569;line-height:1.6;">
-          You have successfully registered for the upcoming social awareness drive organized by <strong>${organizerNgoName || 'Sankalp Partner NGO'}</strong>.
-        </p>
+const sendViaAgentMail = async ({ to, subject, text, html }) => {
+  const res = await fetch(
+    `https://api.agentmail.to/v0/inboxes/${encodeURIComponent(AGENTMAIL_INBOX)}/messages/send`,
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${AGENTMAIL_API_KEY}`
+      },
+      body: JSON.stringify({ to: [to], subject, text, html })
+    }
+  );
+  if (!res.ok) {
+    const err = await res.text();
+    throw new Error(`AgentMail error (${res.status}): ${err}`);
+  }
+  return res.json();
+};
 
-        <div style="background:#f0f9ff;border:1px solid #bae6fd;border-radius:16px;padding:20px;margin:20px 0;">
-          <h3 style="margin:0 0 12px 0;font-size:16px;color:#0369a1;font-weight:800;">${eventTitle}</h3>
-          <table style="width:100%;font-size:12px;color:#334155;border-collapse:collapse;">
-            <tr>
-              <td style="padding:4px 0;font-weight:700;width:90px;">📅 Date:</td>
-              <td style="padding:4px 0;">${eventDate || 'Upcoming Schedule'}</td>
-            </tr>
-            <tr>
-              <td style="padding:4px 0;font-weight:700;">📍 Location:</td>
-              <td style="padding:4px 0;">${eventLocation || 'On-ground Sector'}</td>
-            </tr>
-            <tr>
-              <td style="padding:4px 0;font-weight:700;">🛡️ Partner:</td>
-              <td style="padding:4px 0;">${organizerNgoName || 'Accredited NGO Partner'}</td>
-            </tr>
-          </table>
-        </div>
+// ─────────────────────────────────────────────────────────────────────────────
+// AUTOMATION 1 — Volunteer: Drive Registration Confirmed
+// ─────────────────────────────────────────────────────────────────────────────
+export const sendVolunteerDriveRegistrationEmail = async ({
+  volunteerEmail, volunteerName, eventTitle, eventDate, eventLocation, organizerNgoName
+}) => {
+  const to = (volunteerEmail || '').trim().toLowerCase();
 
-        <div style="background:#f8fafc;border-left:4px solid #0284c7;padding:12px 16px;border-radius:8px;margin-bottom:20px;">
-          <p style="font-size:12px;color:#475569;margin:0;line-height:1.5;">
-            ⭐ <strong>Certificate Notice:</strong> Upon completing this drive, your digital accredited certificate with verifiable QR seal will be issued to your Volunteer Hub.
-          </p>
-        </div>
+  const html = `<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"></head>
+<body style="margin:0;padding:0;background:#f1f5f9;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background:#f1f5f9;padding:32px 0;">
+    <tr><td align="center">
+      <table width="560" cellpadding="0" cellspacing="0" style="background:#ffffff;border-radius:20px;overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,0.10);">
+        <tr>
+          <td style="background:linear-gradient(135deg,#0ea5e9 0%,#0284c7 40%,#0f172a 100%);padding:36px 32px;text-align:center;">
+            <div style="display:inline-block;background:rgba(255,255,255,0.18);padding:5px 14px;border-radius:20px;color:#bae6fd;font-size:10px;font-weight:800;letter-spacing:2px;text-transform:uppercase;margin-bottom:14px;">Sankalp Volunteer Network</div>
+            <div style="font-size:40px;margin-bottom:8px;">🎉</div>
+            <h1 style="color:#ffffff;font-size:24px;font-weight:800;margin:0;">Registration Confirmed!</h1>
+            <p style="color:#bae6fd;font-size:13px;margin:8px 0 0 0;">You're officially part of this drive.</p>
+          </td>
+        </tr>
+        <tr>
+          <td style="padding:32px 32px 0 32px;">
+            <p style="font-size:16px;color:#1e293b;font-weight:700;margin:0 0 8px 0;">Hello ${volunteerName || 'Valued Volunteer'},</p>
+            <p style="font-size:13px;color:#475569;line-height:1.7;margin:0 0 24px 0;">
+              You have <strong>successfully registered</strong> for an upcoming social awareness drive organized by
+              <strong style="color:#0284c7;">${organizerNgoName || 'Sankalp Partner NGO'}</strong>.
+              We're thrilled to have your commitment!
+            </p>
+            <table width="100%" cellpadding="0" cellspacing="0" style="background:#f0f9ff;border:1.5px solid #bae6fd;border-radius:16px;margin-bottom:24px;">
+              <tr><td style="padding:20px 22px;">
+                <p style="font-size:11px;font-weight:800;color:#0369a1;letter-spacing:1.5px;text-transform:uppercase;margin:0 0 6px 0;">Drive Details</p>
+                <h2 style="font-size:18px;color:#0f172a;font-weight:800;margin:0 0 18px 0;">${eventTitle || 'Awareness Drive'}</h2>
+                <table width="100%" cellpadding="0" cellspacing="0">
+                  <tr>
+                    <td style="padding:6px 0;font-size:12px;color:#64748b;font-weight:700;width:110px;">📅 Date</td>
+                    <td style="padding:6px 0;font-size:13px;color:#1e293b;font-weight:600;">${eventDate || 'As per schedule'}</td>
+                  </tr>
+                  <tr>
+                    <td style="padding:6px 0;font-size:12px;color:#64748b;font-weight:700;">📍 Location</td>
+                    <td style="padding:6px 0;font-size:13px;color:#1e293b;font-weight:600;">${eventLocation || 'On-ground sector'}</td>
+                  </tr>
+                  <tr>
+                    <td style="padding:6px 0;font-size:12px;color:#64748b;font-weight:700;">🤝 Partner NGO</td>
+                    <td style="padding:6px 0;font-size:13px;color:#1e293b;font-weight:600;">${organizerNgoName || 'Accredited NGO Partner'}</td>
+                  </tr>
+                </table>
+              </td></tr>
+            </table>
+            <table width="100%" cellpadding="0" cellspacing="0" style="background:#fffbeb;border-left:4px solid #f59e0b;border-radius:0 10px 10px 0;margin-bottom:24px;">
+              <tr><td style="padding:14px 16px;">
+                <p style="font-size:12px;color:#92400e;margin:0;line-height:1.6;">
+                  ⭐ <strong>Certificate Notice:</strong> Upon successful completion of this drive, your accredited digital certificate with a verifiable QR seal will be issued to your Volunteer Hub profile.
+                </p>
+              </td></tr>
+            </table>
+            <table width="100%" cellpadding="0" cellspacing="0" style="background:#f8fafc;border-radius:12px;margin-bottom:28px;">
+              <tr><td style="padding:18px 20px;">
+                <p style="font-size:12px;font-weight:800;color:#334155;margin:0 0 10px 0;text-transform:uppercase;letter-spacing:1px;">What's Next?</p>
+                <p style="font-size:12px;color:#64748b;margin:0 0 6px 0;">✅ Keep an eye on your email for drive updates.</p>
+                <p style="font-size:12px;color:#64748b;margin:0 0 6px 0;">✅ Visit your Volunteer Hub on Sankalp Portal for attendance details.</p>
+                <p style="font-size:12px;color:#64748b;margin:0;">✅ Arrive 15 minutes early on the drive day.</p>
+              </td></tr>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td style="background:#f8fafc;padding:20px 32px;border-top:1px solid #e2e8f0;text-align:center;">
+            <p style="font-size:12px;color:#94a3b8;margin:0 0 4px 0;">Thank you for contributing to public welfare and civic awareness.</p>
+            <p style="font-size:12px;font-weight:800;color:#64748b;margin:0;">Sankalp Social Foundation Network</p>
+          </td>
+        </tr>
+      </table>
+    </td></tr>
+  </table>
+</body>
+</html>`;
 
-        <p style="font-size:12px;color:#94a3b8;margin:0;border-top:1px solid #f1f5f9;padding-top:16px;">
-          Thank you for dedicating your time to public welfare and civic awareness.<br/>
-          <strong>Sankalp Social Foundation Network</strong>
-        </p>
-      </div>
-    </div>
-  `;
+  const text = `Hello ${volunteerName || 'Volunteer'},\n\nYou have successfully registered for: ${eventTitle}\nDate: ${eventDate}\nLocation: ${eventLocation}\nOrganised by: ${organizerNgoName}\n\nUpon completion, your certificate will be issued to your Volunteer Hub.\n\n— Sankalp Social Network`;
 
   try {
-    await fetch(`https://api.agentmail.to/v0/inboxes/${encodeURIComponent(inbox)}/messages/send`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${apiKey}` },
-      body: JSON.stringify({
-        to: [cleanEmail],
-        subject: `Registration Confirmed: ${eventTitle} (Sankalp NGO Network)`,
-        text: `Hello ${volunteerName},\n\nYou are successfully registered for: ${eventTitle} on ${eventDate}.\nLocation: ${eventLocation}.\n\nThank you for volunteering with Sankalp NGO!`,
-        html: htmlBody
-      })
-    });
-    console.log(`[AUTOMATION] Volunteer drive registration email dispatched to ${cleanEmail}`);
+    await sendViaAgentMail({ to, subject: `🎉 Confirmed: You're registered for "${eventTitle}" — Sankalp NGO`, text, html });
+    console.log(`[AUTOMATION 1] Volunteer registration email sent → ${to}`);
   } catch (err) {
-    console.warn('[AUTOMATION ERROR] Volunteer registration mail failed:', err);
+    console.warn('[AUTOMATION 1 ERROR] Volunteer registration email failed:', err.message);
   }
 };
 
-/**
- * Automation 2: Send Email to NGO when a Company Requests a Drive
- */
-export const sendCompanyDriveRequestedEmail = async ({ ngoEmail, ngoName, companyName, cause, targetLocation, expectedVolunteers, proposedDate, contactPerson, contactPhone, contactEmail }) => {
-  const cleanNgoEmail = (ngoEmail || '').trim().toLowerCase();
-  const apiKey = 'am_us_inbox_5ccad543b1ee9681a51d93d404eb1e4d8c2227aca1882de12fd4d72682e6c561';
-  const inbox = 'social_sankalp@agentmail.to';
+// ─────────────────────────────────────────────────────────────────────────────
+// AUTOMATION 2 — NGO: New Drive Request Received from Company
+// ─────────────────────────────────────────────────────────────────────────────
+export const sendCompanyDriveRequestedEmail = async ({
+  ngoEmail, ngoName, companyName, cause, targetLocation,
+  expectedVolunteers, proposedDate, contactPerson, contactPhone, contactEmail
+}) => {
+  const to = (ngoEmail || '').trim().toLowerCase();
 
-  const htmlBody = `
-    <div style="font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;max-width:560px;margin:0 auto;background:#ffffff;border-radius:20px;border:1px solid #e2e8f0;overflow:hidden;box-shadow:0 10px 25px rgba(0,0,0,0.06);">
-      <div style="background:linear-gradient(135deg, #4338ca 0%, #3730a3 50%, #0f172a 100%);padding:32px 25px;text-align:center;">
-        <div style="display:inline-block;background:rgba(255,255,255,0.15);padding:6px 14px;border-radius:10px;color:#c7d2fe;font-size:11px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:8px;">
-          Sankalp Corporate Partnership
-        </div>
-        <h1 style="color:#ffffff;font-size:22px;margin:0;font-weight:800;">New Drive Hosting Request! 🏢</h1>
-      </div>
-      <div style="padding:30px 25px;">
-        <p style="font-size:15px;color:#1e293b;font-weight:700;margin-top:0;">Hello ${ngoName || 'Partner NGO'},</p>
-        <p style="font-size:13px;color:#475569;line-height:1.6;">
-          <strong>${companyName || 'An Institutional Partner'}</strong> has submitted a new awareness drive hosting request for your NGO.
-        </p>
+  const html = `<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"></head>
+<body style="margin:0;padding:0;background:#f1f5f9;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background:#f1f5f9;padding:32px 0;">
+    <tr><td align="center">
+      <table width="560" cellpadding="0" cellspacing="0" style="background:#ffffff;border-radius:20px;overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,0.10);">
+        <tr>
+          <td style="background:linear-gradient(135deg,#6366f1 0%,#4338ca 40%,#0f172a 100%);padding:36px 32px;text-align:center;">
+            <div style="display:inline-block;background:rgba(255,255,255,0.18);padding:5px 14px;border-radius:20px;color:#c7d2fe;font-size:10px;font-weight:800;letter-spacing:2px;text-transform:uppercase;margin-bottom:14px;">Sankalp Corporate Partnership</div>
+            <div style="font-size:40px;margin-bottom:8px;">🏢</div>
+            <h1 style="color:#ffffff;font-size:24px;font-weight:800;margin:0;">New Drive Request Received</h1>
+            <p style="color:#c7d2fe;font-size:13px;margin:8px 0 0 0;">Action required — Please review and respond.</p>
+          </td>
+        </tr>
+        <tr>
+          <td style="padding:32px 32px 0 32px;">
+            <p style="font-size:16px;color:#1e293b;font-weight:700;margin:0 0 8px 0;">Hello ${ngoName || 'Partner NGO'},</p>
+            <p style="font-size:13px;color:#475569;line-height:1.7;margin:0 0 24px 0;">
+              <strong style="color:#4338ca;">${companyName || 'A Corporate Partner'}</strong> has submitted a new
+              <strong>Awareness Drive Hosting Request</strong> for your NGO through the Sankalp Portal.
+              Please review the details below and respond at your earliest convenience.
+            </p>
+            <table width="100%" cellpadding="0" cellspacing="0" style="background:#f5f3ff;border:1.5px solid #ddd6fe;border-radius:16px;margin-bottom:24px;">
+              <tr><td style="padding:20px 22px;">
+                <p style="font-size:11px;font-weight:800;color:#4338ca;letter-spacing:1.5px;text-transform:uppercase;margin:0 0 6px 0;">Request Summary</p>
+                <h2 style="font-size:17px;color:#0f172a;font-weight:800;margin:0 0 18px 0;">${cause || 'Social Awareness Campaign'}</h2>
+                <table width="100%" cellpadding="0" cellspacing="0">
+                  <tr>
+                    <td style="padding:7px 0;font-size:12px;color:#64748b;font-weight:700;width:130px;">🏢 Organization</td>
+                    <td style="padding:7px 0;font-size:13px;color:#1e293b;font-weight:600;">${companyName}</td>
+                  </tr>
+                  <tr>
+                    <td style="padding:7px 0;font-size:12px;color:#64748b;font-weight:700;">🎯 Cause Theme</td>
+                    <td style="padding:7px 0;font-size:13px;color:#1e293b;font-weight:600;">${cause || 'Social Awareness'}</td>
+                  </tr>
+                  <tr>
+                    <td style="padding:7px 0;font-size:12px;color:#64748b;font-weight:700;">📍 Location</td>
+                    <td style="padding:7px 0;font-size:13px;color:#1e293b;font-weight:600;">${targetLocation || 'Institutional Premises'}</td>
+                  </tr>
+                  <tr>
+                    <td style="padding:7px 0;font-size:12px;color:#64748b;font-weight:700;">👥 Expected Turnout</td>
+                    <td style="padding:7px 0;font-size:13px;color:#1e293b;font-weight:600;">${expectedVolunteers || '25+'} participants</td>
+                  </tr>
+                  <tr>
+                    <td style="padding:7px 0;font-size:12px;color:#64748b;font-weight:700;">📅 Proposed Date</td>
+                    <td style="padding:7px 0;font-size:13px;color:#1e293b;font-weight:600;">${proposedDate || 'Mutually Agreed'}</td>
+                  </tr>
+                </table>
+              </td></tr>
+            </table>
+            <table width="100%" cellpadding="0" cellspacing="0" style="background:#fffbeb;border:1.5px solid #fde68a;border-radius:14px;margin-bottom:24px;">
+              <tr><td style="padding:18px 20px;">
+                <p style="font-size:12px;font-weight:800;color:#92400e;margin:0 0 10px 0;text-transform:uppercase;letter-spacing:1px;">👤 Company Coordinator Contact</p>
+                <p style="font-size:13px;color:#78350f;margin:0 0 5px 0;"><strong>Name:</strong> ${contactPerson || 'HR Lead'}</p>
+                <p style="font-size:13px;color:#78350f;margin:0 0 5px 0;"><strong>Phone:</strong> ${contactPhone || 'Available in portal'}</p>
+                <p style="font-size:13px;color:#78350f;margin:0;"><strong>Email:</strong> ${contactEmail || 'Available in portal'}</p>
+              </td></tr>
+            </table>
+            <table width="100%" cellpadding="0" cellspacing="0" style="background:#f0fdf4;border-left:4px solid #22c55e;border-radius:0 10px 10px 0;margin-bottom:28px;">
+              <tr><td style="padding:14px 16px;">
+                <p style="font-size:12px;color:#166534;margin:0;line-height:1.7;">
+                  🔐 Please <strong>sign in to your NGO Partner Portal</strong> on Sankalp to approve or decline this request, review sanction letters, and assign volunteer teams.
+                </p>
+              </td></tr>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td style="background:#f8fafc;padding:20px 32px;border-top:1px solid #e2e8f0;text-align:center;">
+            <p style="font-size:12px;color:#94a3b8;margin:0 0 4px 0;">This is an automated notification from the Sankalp Platform.</p>
+            <p style="font-size:12px;font-weight:800;color:#64748b;margin:0;">Sankalp Social Foundation Network</p>
+          </td>
+        </tr>
+      </table>
+    </td></tr>
+  </table>
+</body>
+</html>`;
 
-        <div style="background:#f5f3ff;border:1px solid #ddd6fe;border-radius:16px;padding:20px;margin:20px 0;">
-          <h3 style="margin:0 0 12px 0;font-size:16px;color:#4338ca;font-weight:800;">Campaign Request Summary</h3>
-          <table style="width:100%;font-size:12px;color:#334155;border-collapse:collapse;">
-            <tr>
-              <td style="padding:4px 0;font-weight:700;width:120px;">🏢 Organization:</td>
-              <td style="padding:4px 0;">${companyName}</td>
-            </tr>
-            <tr>
-              <td style="padding:4px 0;font-weight:700;">🎯 Cause Theme:</td>
-              <td style="padding:4px 0;">${cause || 'Social Awareness Campaign'}</td>
-            </tr>
-            <tr>
-              <td style="padding:4px 0;font-weight:700;">📍 Location:</td>
-              <td style="padding:4px 0;">${targetLocation || 'Institutional Premises'}</td>
-            </tr>
-            <tr>
-              <td style="padding:4px 0;font-weight:700;">👥 Expected Turnout:</td>
-              <td style="padding:4px 0;">${expectedVolunteers || '25+'} participants</td>
-            </tr>
-            <tr>
-              <td style="padding:4px 0;font-weight:700;">📅 Proposed Date:</td>
-              <td style="padding:4px 0;">${proposedDate || 'Mutually Agreed'}</td>
-            </tr>
-            <tr>
-              <td style="padding:4px 0;font-weight:700;">👤 Coordinator:</td>
-              <td style="padding:4px 0;">${contactPerson || 'HR Lead'} (${contactPhone || 'Phone available in portal'}, ${contactEmail || 'Email in portal'})</td>
-            </tr>
-          </table>
-        </div>
-
-        <p style="font-size:12px;color:#64748b;line-height:1.5;">
-          Please sign in to your <strong>Sankalp NGO Partner Portal</strong> to review the sanction letters, approve the event request, and assign volunteer teams.
-        </p>
-      </div>
-    </div>
-  `;
+  const text = `Hello ${ngoName},\n\n${companyName} has submitted a new Awareness Drive Request.\n\nCause: ${cause}\nLocation: ${targetLocation}\nExpected Participants: ${expectedVolunteers}\nProposed Date: ${proposedDate}\n\nCoordinator: ${contactPerson} | ${contactPhone} | ${contactEmail}\n\nPlease log in to your NGO Portal on Sankalp to review and approve.\n\n— Sankalp Social Network`;
 
   try {
-    await fetch(`https://api.agentmail.to/v0/inboxes/${encodeURIComponent(inbox)}/messages/send`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${apiKey}` },
-      body: JSON.stringify({
-        to: [cleanNgoEmail],
-        subject: `New Drive Request from ${companyName} (${cause || 'Social Awareness'})`,
-        text: `Hello ${ngoName},\n\n${companyName} has requested an awareness drive on ${cause}.\nLocation: ${targetLocation}\nProposed Date: ${proposedDate}.\n\nPlease log in to your NGO Portal to review and approve.`,
-        html: htmlBody
-      })
-    });
-    console.log(`[AUTOMATION] Company drive request notification dispatched to NGO ${cleanNgoEmail}`);
+    await sendViaAgentMail({ to, subject: `🏢 New Drive Request from ${companyName} — Action Required | Sankalp`, text, html });
+    console.log(`[AUTOMATION 2] Drive request notification sent to NGO → ${to}`);
   } catch (err) {
-    console.warn('[AUTOMATION ERROR] NGO notification mail failed:', err);
+    console.warn('[AUTOMATION 2 ERROR] NGO notification email failed:', err.message);
   }
 };
 
-/**
- * Automation 3: Send Email to Company when NGO Approves the Drive Request
- */
-export const sendCompanyDriveApprovedEmail = async ({ companyEmail, companyName, eventTitle, ngoName, ngoPhone, ngoEmail, scheduledDate, location }) => {
-  const cleanCompanyEmail = (companyEmail || '').trim().toLowerCase();
-  const apiKey = 'am_us_inbox_5ccad543b1ee9681a51d93d404eb1e4d8c2227aca1882de12fd4d72682e6c561';
-  const inbox = 'social_sankalp@agentmail.to';
+// ─────────────────────────────────────────────────────────────────────────────
+// AUTOMATION 3 — Company: Drive Request Approved by NGO
+// ─────────────────────────────────────────────────────────────────────────────
+export const sendCompanyDriveApprovedEmail = async ({
+  companyEmail, companyName, eventTitle, ngoName, ngoPhone, ngoEmail, scheduledDate, location
+}) => {
+  const to = (companyEmail || '').trim().toLowerCase();
 
-  const htmlBody = `
-    <div style="font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;max-width:560px;margin:0 auto;background:#ffffff;border-radius:20px;border:1px solid #e2e8f0;overflow:hidden;box-shadow:0 10px 25px rgba(0,0,0,0.06);">
-      <div style="background:linear-gradient(135deg, #059669 0%, #047857 50%, #064e3b 100%);padding:32px 25px;text-align:center;">
-        <div style="display:inline-block;background:rgba(255,255,255,0.15);padding:6px 14px;border-radius:10px;color:#a7f3d0;font-size:11px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:8px;">
-          Sankalp Sanction Approval
-        </div>
-        <h1 style="color:#ffffff;font-size:22px;margin:0;font-weight:800;">Your Drive Request is Approved! ✅</h1>
-      </div>
-      <div style="padding:30px 25px;">
-        <p style="font-size:15px;color:#1e293b;font-weight:700;margin-top:0;">Hello ${companyName || 'Institutional Partner'},</p>
-        <p style="font-size:13px;color:#475569;line-height:1.6;">
-          Great news! Your awareness drive request <strong>"${eventTitle || 'Social Impact Drive'}"</strong> has been officially approved and sanctioned by <strong>${ngoName || 'Sankalp NGO Partner'}</strong>.
-        </p>
+  const html = `<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"></head>
+<body style="margin:0;padding:0;background:#f1f5f9;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background:#f1f5f9;padding:32px 0;">
+    <tr><td align="center">
+      <table width="560" cellpadding="0" cellspacing="0" style="background:#ffffff;border-radius:20px;overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,0.10);">
+        <tr>
+          <td style="background:linear-gradient(135deg,#10b981 0%,#059669 40%,#064e3b 100%);padding:36px 32px;text-align:center;">
+            <div style="display:inline-block;background:rgba(255,255,255,0.18);padding:5px 14px;border-radius:20px;color:#a7f3d0;font-size:10px;font-weight:800;letter-spacing:2px;text-transform:uppercase;margin-bottom:14px;">Sankalp Sanction Approval</div>
+            <div style="font-size:40px;margin-bottom:8px;">✅</div>
+            <h1 style="color:#ffffff;font-size:24px;font-weight:800;margin:0;">Your Drive is Approved!</h1>
+            <p style="color:#a7f3d0;font-size:13px;margin:8px 0 0 0;">Officially sanctioned by your NGO Partner.</p>
+          </td>
+        </tr>
+        <tr>
+          <td style="padding:32px 32px 0 32px;">
+            <p style="font-size:16px;color:#1e293b;font-weight:700;margin:0 0 8px 0;">Hello ${companyName || 'Institutional Partner'},</p>
+            <p style="font-size:13px;color:#475569;line-height:1.7;margin:0 0 24px 0;">
+              Congratulations! Your awareness drive request
+              <strong style="color:#059669;">"${eventTitle || 'Social Impact Drive'}"</strong>
+              has been <strong>officially approved and sanctioned</strong> by
+              <strong style="color:#059669;">${ngoName || 'Sankalp NGO Partner'}</strong>.
+              You're all set to create a meaningful social impact!
+            </p>
+            <table width="100%" cellpadding="0" cellspacing="0" style="background:#ecfdf5;border:1.5px solid #86efac;border-radius:16px;margin-bottom:24px;">
+              <tr><td style="padding:20px 22px;">
+                <p style="font-size:11px;font-weight:800;color:#059669;letter-spacing:1.5px;text-transform:uppercase;margin:0 0 6px 0;">Sanctioned Event Details</p>
+                <h2 style="font-size:17px;color:#0f172a;font-weight:800;margin:0 0 18px 0;">${eventTitle || 'Awareness Drive'}</h2>
+                <table width="100%" cellpadding="0" cellspacing="0">
+                  <tr>
+                    <td style="padding:7px 0;font-size:12px;color:#64748b;font-weight:700;width:130px;">📅 Scheduled Date</td>
+                    <td style="padding:7px 0;font-size:13px;color:#1e293b;font-weight:600;">${scheduledDate || 'Confirmed by NGO'}</td>
+                  </tr>
+                  <tr>
+                    <td style="padding:7px 0;font-size:12px;color:#64748b;font-weight:700;">📍 Venue</td>
+                    <td style="padding:7px 0;font-size:13px;color:#1e293b;font-weight:600;">${location || 'Designated Premises'}</td>
+                  </tr>
+                  <tr>
+                    <td style="padding:7px 0;font-size:12px;color:#64748b;font-weight:700;">🤝 Sanctioning NGO</td>
+                    <td style="padding:7px 0;font-size:13px;color:#1e293b;font-weight:600;">${ngoName}</td>
+                  </tr>
+                </table>
+              </td></tr>
+            </table>
+            <table width="100%" cellpadding="0" cellspacing="0" style="background:#fffbeb;border:1.5px solid #fde68a;border-radius:14px;margin-bottom:24px;">
+              <tr><td style="padding:18px 20px;">
+                <p style="font-size:12px;font-weight:800;color:#92400e;margin:0 0 12px 0;text-transform:uppercase;letter-spacing:1px;">📞 NGO Direct Query &amp; Coordination</p>
+                <p style="font-size:13px;color:#78350f;margin:0 0 6px 0;">For any queries, logistical planning, or speaker coordination, please contact <strong>${ngoName}</strong> directly:</p>
+                <p style="font-size:14px;color:#0369a1;font-weight:800;margin:0 0 5px 0;">📱 ${ngoPhone || '+91 98201 94821'}</p>
+                <p style="font-size:13px;color:#0369a1;font-weight:600;margin:0;">✉️ ${ngoEmail || 'contact@sankalpfoundation.org'}</p>
+              </td></tr>
+            </table>
+            <table width="100%" cellpadding="0" cellspacing="0" style="background:#f8fafc;border-radius:12px;margin-bottom:28px;">
+              <tr><td style="padding:18px 20px;">
+                <p style="font-size:12px;font-weight:800;color:#334155;margin:0 0 10px 0;text-transform:uppercase;letter-spacing:1px;">Next Steps</p>
+                <p style="font-size:12px;color:#64748b;margin:0 0 6px 0;">✅ Contact the NGO to finalise logistics and speaker assignments.</p>
+                <p style="font-size:12px;color:#64748b;margin:0 0 6px 0;">✅ Coordinate with your internal HR/CSR team for employee participation.</p>
+                <p style="font-size:12px;color:#64748b;margin:0;">✅ Download your official Sanction Letter from the Sankalp Portal.</p>
+              </td></tr>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td style="background:#f8fafc;padding:20px 32px;border-top:1px solid #e2e8f0;text-align:center;">
+            <p style="font-size:12px;color:#94a3b8;margin:0 0 4px 0;">Empowering Corporate Social Responsibility through verified NGO partnerships.</p>
+            <p style="font-size:12px;font-weight:800;color:#64748b;margin:0;">Sankalp Social Foundation Network</p>
+          </td>
+        </tr>
+      </table>
+    </td></tr>
+  </table>
+</body>
+</html>`;
 
-        <div style="background:#ecfdf5;border:1px solid #a7f3d0;border-radius:16px;padding:20px;margin:20px 0;">
-          <h3 style="margin:0 0 12px 0;font-size:16px;color:#047857;font-weight:800;">Sanctioned Event Schedule</h3>
-          <table style="width:100%;font-size:12px;color:#334155;border-collapse:collapse;">
-            <tr>
-              <td style="padding:4px 0;font-weight:700;width:120px;">📅 Scheduled Date:</td>
-              <td style="padding:4px 0;">${scheduledDate || 'Confirmed by NGO'}</td>
-            </tr>
-            <tr>
-              <td style="padding:4px 0;font-weight:700;">📍 Location:</td>
-              <td style="padding:4px 0;">${location || 'Designated Premises'}</td>
-            </tr>
-            <tr>
-              <td style="padding:4px 0;font-weight:700;">🛡️ Partner NGO:</td>
-              <td style="padding:4px 0;">${ngoName}</td>
-            </tr>
-          </table>
-        </div>
-
-        <div style="background:#fffbeb;border:1px solid #fde68a;border-radius:14px;padding:16px;margin-bottom:20px;">
-          <p style="font-size:13px;color:#92400e;margin:0 0 6px 0;font-weight:800;">
-            📞 Direct Query & Coordination Contact:
-          </p>
-          <p style="font-size:12px;color:#78350f;margin:0;line-height:1.6;">
-            For any queries, logistical planning, or speaker arrangements, please contact the NGO directly at:<br/>
-            <strong>Phone / Helpline:</strong> <a href="tel:${ngoPhone || '+919820194821'}" style="color:#0369a1;font-weight:bold;">${ngoPhone || '+91 98201 94821'}</a><br/>
-            <strong>Email:</strong> <a href="mailto:${ngoEmail || 'contact@sankalpfoundation.org'}" style="color:#0369a1;font-weight:bold;">${ngoEmail || 'contact@sankalpfoundation.org'}</a>
-          </p>
-        </div>
-
-        <p style="font-size:12px;color:#94a3b8;margin:0;border-top:1px solid #f1f5f9;padding-top:16px;">
-          Sankalp NGO Network • Empowering Civic & Corporate Social Responsibility
-        </p>
-      </div>
-    </div>
-  `;
+  const text = `Hello ${companyName},\n\nGreat news! Your drive request "${eventTitle}" has been officially approved by ${ngoName}.\n\nScheduled Date: ${scheduledDate}\nVenue: ${location}\n\nFor queries, contact ${ngoName} directly:\nPhone: ${ngoPhone || '+91 98201 94821'}\nEmail: ${ngoEmail || 'contact@sankalpfoundation.org'}\n\n— Sankalp Social Network`;
 
   try {
-    await fetch(`https://api.agentmail.to/v0/inboxes/${encodeURIComponent(inbox)}/messages/send`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${apiKey}` },
-      body: JSON.stringify({
-        to: [cleanCompanyEmail],
-        subject: `Approved: Your Drive Request "${eventTitle || 'Awareness Drive'}" has been Sanctioned!`,
-        text: `Hello ${companyName},\n\nYour awareness drive request "${eventTitle}" has been approved by ${ngoName}.\n\nFor any query, contact: ${ngoPhone || '+91 98201 94821'} or ${ngoEmail || 'contact@sankalpfoundation.org'}.\n\nThank you!`,
-        html: htmlBody
-      })
-    });
-    console.log(`[AUTOMATION] Company drive approval email dispatched to ${cleanCompanyEmail}`);
+    await sendViaAgentMail({ to, subject: `✅ Approved: Your Drive "${eventTitle}" Sanctioned by ${ngoName} | Sankalp`, text, html });
+    console.log(`[AUTOMATION 3] Drive approval email sent to company → ${to}`);
   } catch (err) {
-    console.warn('[AUTOMATION ERROR] Company approval mail failed:', err);
+    console.warn('[AUTOMATION 3 ERROR] Company approval email failed:', err.message);
   }
 };
