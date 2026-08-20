@@ -694,9 +694,14 @@ export const AppProvider = ({ children }) => {
       if (adminPin && user.adminPin !== adminPin) {
         throw new Error("Invalid Administrative Security PIN access code.");
       }
+      // Super Admin bypasses OTP step: Immediate secure session authentication
+      loginUserWithSession(user, forceTakeover);
+      showToast("Super Admin authenticated successfully! Welcome back.", "success");
+      return true;
     }
 
     if (!user.isEmailVerified) {
+
       // Re-trigger OTP verification
       const generatedOtp = Math.floor(100000 + Math.random() * 900000).toString();
       setOtpModalData({

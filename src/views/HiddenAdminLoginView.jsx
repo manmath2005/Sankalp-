@@ -5,12 +5,13 @@ import { KeyRound, ShieldAlert, Lock, Mail, CheckCircle2, Eye, EyeOff, Terminal,
 export const HiddenAdminLoginView = ({ onNavigate }) => {
   const { loginUser, currentUser, logoutUser } = useApp();
 
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [adminPin, setAdminPin] = useState('');
+  const [email, setEmail] = useState('admin@sankalp.org');
+  const [password, setPassword] = useState('secretAdmin2026!');
+  const [adminPin, setAdminPin] = useState('9944');
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
+
 
   if (currentUser && currentUser.role === 'SUPER_ADMIN') {
     return (
