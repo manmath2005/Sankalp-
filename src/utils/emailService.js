@@ -33,12 +33,14 @@ export const sendRealOtpEmail = async (toEmail, userName, clientFallbackOtp, con
       return {
         success: true,
         mode: 'REAL_EMAIL_DELIVERED',
-        message: data.message || `OTP dispatched to ${cleanEmail}.`,
-        otpCode: data.otpCode || clientFallbackOtp
+        message: `OTP generated for ${cleanEmail}.`,
+        otpCode: clientFallbackOtp
       };
     }
   } catch (err) {
-    console.warn('Backend proxy failed, attempting direct fetch:', err);
+    console.warn('Backend proxy failed, attempting direct fetch or AgentMail direct dispatch:', err);
+    
+    // Direct attempt 1: Local server
     try {
       const directResponse = await fetch('http://localhost:5000/api/send-otp', {
         method: 'POST',
@@ -59,7 +61,46 @@ export const sendRealOtpEmail = async (toEmail, userName, clientFallbackOtp, con
         };
       }
     } catch (directErr) {
-      console.error('Direct backend call error:', directErr);
+      // Local server not running
+    }
+
+    // Direct attempt 2: Client-side AgentMail REST API dispatch
+    try {
+      const apiKey = 'am_us_inbox_5ccad543b1ee9681a51d93d404eb1e4d8c2227aca1882de12fd4d72682e6c561';
+      const inbox = 'social_sankalp@agentmail.to';
+      const agentRes = await fetch(`https://api.agentmail.to/v0/inboxes/${encodeURIComponent(inbox)}/messages/send`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${apiKey}`
+        },
+        body: JSON.stringify({
+          to: [cleanEmail],
+          subject: `${clientFallbackOtp} is your Sankalp Portal Verification Code`,
+          text: `Hello ${userName || 'Volunteer'},\n\nYour 6-digit verification code is: ${clientFallbackOtp}\n\nValid for 5 minutes.\n\nSankalp Social Foundation NGO`,
+          html: `<div style="font-family:sans-serif;padding:24px;border-radius:16px;background:#f8fafc;border:1px solid #e2e8f0;max-width:500px;margin:auto;">
+            <h2 style="color:#0284c7;margin-top:0;">Sankalp Portal Verification</h2>
+            <p>Hello <strong>${userName || 'Volunteer'}</strong>,</p>
+            <p>Your 6-digit verification code is:</p>
+            <div style="background:#ffffff;border:2px dashed #0284c7;padding:16px;text-align:center;border-radius:12px;margin:16px 0;">
+              <span style="font-size:32px;letter-spacing:6px;font-weight:900;color:#0284c7;font-family:monospace;">${clientFallbackOtp}</span>
+            </div>
+            <p style="font-size:12px;color:#64748b;">This code is valid for 5 minutes. Please do not share it with anyone.</p>
+          </div>`
+        })
+      });
+
+      if (agentRes.ok) {
+        console.log(`[AGENTMAIL CLIENT DISPATCH] Successfully sent OTP ${clientFallbackOtp} to ${cleanEmail}`);
+        return {
+          success: true,
+          mode: 'REAL_EMAIL_DELIVERED',
+          message: `Verification code sent to ${cleanEmail}! Please check your inbox or spam folder.`,
+          otpCode: clientFallbackOtp
+        };
+      }
+    } catch (agentErr) {
+      console.warn('AgentMail direct client dispatch error:', agentErr);
     }
 
     return {

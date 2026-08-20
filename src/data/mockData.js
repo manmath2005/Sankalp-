@@ -1778,6 +1778,23 @@ export const INITIAL_CORPORATE_REQUESTS = [
 ];
 
 export const INITIAL_USERS = [
+  // Official Volunteer Account
+  {
+    id: "USR-VOL-000",
+    name: "Manmath Sangave",
+    email: "manmathsangave28@gmail.com",
+    password: "Manmath@1234",
+    role: "VOLUNTEER",
+    profession: "Lead Volunteer & Software Engineer",
+    city: "Mumbai",
+    age: 22,
+    status: "Active",
+    isEmailVerified: true,
+    verificationCode: null,
+    volunteerId: "VOL-001",
+    activeSessionId: null,
+    registeredAt: "2026-01-01"
+  },
   // 1. Volunteer Account
   {
     id: "USR-VOL-001",

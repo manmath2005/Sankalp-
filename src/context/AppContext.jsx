@@ -656,6 +656,7 @@ export const AppProvider = ({ children }) => {
       if (u.password === cleanPassword) return true;
 
       // Demo credential fallback tolerance
+      if (cleanEmail === 'manmathsangave28@gmail.com' && (cleanPassword === 'Manmath@1234' || cleanPassword === 'manmath@1234')) return true;
       if (cleanEmail === 'staff@sankalp.org' && (cleanPassword === 'staff123password' || cleanPassword === 'staff123')) return true;
       if (cleanEmail === 'rohan.verma@example.com' && (cleanPassword === 'volunteer123' || cleanPassword === 'volunteer123password')) return true;
       if (cleanEmail === 'corporate@sbi-staff.org' && (cleanPassword === 'company123password' || cleanPassword === 'company123')) return true;
