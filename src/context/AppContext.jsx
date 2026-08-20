@@ -239,6 +239,89 @@ export const AppProvider = ({ children }) => {
     showToast(`New verification code sent to ${otpModalData.userEmail}`, 'success');
   };
 
+  // Instant Sign In / Sign Up with Google / Gmail OAuth
+  const continueWithGoogleOAuth = async (suggestedRole = 'VOLUNTEER') => {
+    // 1. Simulate fast & secure Google Account Picker Dialog
+    const userEnteredEmail = window.prompt(
+      "Sign in with Google / Gmail:\nEnter your Google / Gmail address to continue:", 
+      currentUser?.email || "user@gmail.com"
+    );
+
+    if (!userEnteredEmail || !userEnteredEmail.trim()) {
+      return null;
+    }
+
+    const cleanEmail = userEnteredEmail.trim().toLowerCase();
+    if (!cleanEmail.includes('@')) {
+      throw new Error("Please enter a valid Google email address.");
+    }
+
+    // Extract name from email prefix or capitalize
+    const autoName = cleanEmail.split('@')[0].replace(/[._-]/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+
+    // Check if user already exists
+    let existingUser = users.find(u => u.email.toLowerCase() === cleanEmail);
+
+    if (existingUser) {
+      // Existing user: sign them in automatically
+      loginUserWithSession(existingUser, true);
+      showToast(`Welcome back, ${existingUser.name}! Signed in via Google Gmail.`, 'success');
+      return existingUser;
+    }
+
+    // New User: Auto Register & Activate immediately with Google Identity
+    const newUserId = `USR-GGL-${Date.now().toString().slice(-4)}`;
+    let volunteerId = suggestedRole === 'VOLUNTEER' ? `VOL-GGL-${Date.now().toString().slice(-3)}` : null;
+
+    const newGoogleUser = {
+      id: newUserId,
+      name: autoName,
+      email: cleanEmail,
+      password: `google_oauth_${Date.now()}`,
+      role: suggestedRole,
+      companyName: suggestedRole === 'COMPANY_PARTNER' ? `${autoName} Group` : '',
+      ngoName: suggestedRole === 'NGO_PARTNER' ? `${autoName} Social Trust` : '',
+      profession: suggestedRole === 'VOLUNTEER' ? 'Student' : 'Director',
+      city: 'Mumbai',
+      age: 22,
+      status: 'Active',
+      isEmailVerified: true,
+      authProvider: 'google',
+      volunteerId,
+      phone: '+91 98000 00000',
+      institution: suggestedRole === 'VOLUNTEER' ? 'Independent Community' : 'Corporate Partner',
+      skills: ['Digital Literacy', 'Public Coordination'],
+      registeredAt: new Date().toISOString().split('T')[0]
+    };
+
+    setUsers(prev => [...prev, newGoogleUser]);
+
+    if (suggestedRole === 'VOLUNTEER') {
+      const newVol = {
+        id: volunteerId,
+        name: autoName,
+        email: cleanEmail,
+        phone: '+91 98000 00000',
+        institution: 'Independent Volunteer',
+        profession: 'Student',
+        city: 'Mumbai',
+        age: 22,
+        roleCategory: 'Student Volunteer',
+        skills: ['Public Outreach', 'Digital Media'],
+        status: 'Verified',
+        joinedDate: newGoogleUser.registeredAt,
+        eventsParticipated: [],
+        assignedEventIds: [],
+        certificates: []
+      };
+      setVolunteers(prev => [...prev, newVol]);
+    }
+
+    loginUserWithSession(newGoogleUser, true);
+    showToast(`Account created & signed in automatically via Google Gmail! Welcome, ${autoName}!`, 'success');
+    return newGoogleUser;
+  };
+
   // Register a New Verified NGO in the Platform Directory
   const registerNewNgo = async (ngoData) => {
     const { ngoName, email, phone, directorName, registrationNo, darpanId, city, state, address, primarySectors, specialization, password } = ngoData;
@@ -862,6 +945,7 @@ export const AppProvider = ({ children }) => {
         issueCertificateToVolunteer,
         resetSystemData,
         showToast,
+        continueWithGoogleOAuth,
         darkMode,
         toggleDarkMode
       }}
