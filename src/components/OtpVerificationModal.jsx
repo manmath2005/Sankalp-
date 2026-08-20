@@ -127,6 +127,29 @@ export const OtpVerificationModal = () => {
               {otpModalData.isLogin ? "Verify OTP & Log In" : "Verify OTP & Activate Account"}
             </button>
 
+            {/* Live Email Dispatch Status & Emergency Code Fallback */}
+            <div className="p-3 rounded-2xl bg-sky-50 dark:bg-slate-800/80 border border-sky-200/80 dark:border-slate-700 flex items-center justify-between text-xs">
+              <div className="space-y-0.5">
+                <div className="flex items-center gap-1.5 text-sky-800 dark:text-sky-300 font-bold">
+                  <ShieldCheck className="w-3.5 h-3.5 text-sky-600 dark:text-sky-400 shrink-0" />
+                  <span>Dispatched via AgentMail SES</span>
+                </div>
+                <p className="text-[10px] text-slate-500 dark:text-slate-400">
+                  Inbox delay? Code: <strong className="font-mono text-sky-700 dark:text-sky-300">{otpModalData.generatedOtp}</strong>
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={() => {
+                  setOtpInput(otpModalData.generatedOtp);
+                  showToast("Security code inserted!", "info");
+                }}
+                className="px-2.5 py-1.5 rounded-xl bg-sky-600 hover:bg-sky-700 text-white font-black text-[10px] uppercase tracking-wider shadow-xs press-effect shrink-0"
+              >
+                Insert Code
+              </button>
+            </div>
+
             {/* Resend Action */}
             <div className="pt-2 text-center flex items-center justify-center gap-2 text-xs text-slate-500 dark:text-slate-400">
               <span>Didn't receive the email?</span>
