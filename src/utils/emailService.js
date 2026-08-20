@@ -51,7 +51,7 @@ export const sendRealOtpEmail = async (toEmail, userName, clientFallbackOtp, con
           {
             From: {
               Email: 'manmathsangave.ece@gmail.com',
-              Name: 'Sankalp NGO Network'
+              Name: 'Sankalp Portal'
             },
             To: [
               {

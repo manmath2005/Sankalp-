@@ -203,7 +203,7 @@ app.post('/api/send-otp', async (req, res) => {
         // Dispatch via Mailjet / SMTP
         const senderEmail = process.env.MAILJET_SENDER_EMAIL || process.env.EMAIL_USER || 'manmathsangave.ece@gmail.com';
         await transporter.sendMail({
-            from: `"Sankalp NGO Network" <${senderEmail}>`,
+            from: `"Sankalp Portal" <${senderEmail}>`,
             to: cleanEmail,
             subject: `${otp} is your Sankalp Portal Verification Code`,
             text: `Your Sankalp verification OTP is: ${otp}. This code is valid for 5 minutes.`,
