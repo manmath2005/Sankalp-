@@ -203,16 +203,6 @@ function MainLayout() {
                     🔑 Account Recovery & Password Reset
                   </button>
                 </li>
-                <li>
-                  <a 
-                    href="/project-synopsis.html" 
-                    target="_blank" 
-                    rel="noreferrer"
-                    className="hover:text-emerald-400 text-emerald-300 font-bold transition-colors inline-flex items-center gap-1"
-                  >
-                    📄 Project Synopsis (Save as PDF) ↗
-                  </a>
-                </li>
               </ul>
             </div>
 

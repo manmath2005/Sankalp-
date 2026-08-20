@@ -718,8 +718,42 @@ export const AppProvider = ({ children }) => {
       return false;
     }
 
-    // Proceed to login and establish session
-    loginUserWithSession(user, forceTakeover);
+    // Proceed to 2-Step Authentication: Dispatch OTP and open verification modal
+    const generatedOtp = Math.floor(100000 + Math.random() * 900000).toString();
+
+    // Trigger OTP modal and dispatch email
+    sendRealOtpEmail(user.email, user.name, generatedOtp, 'Two-Factor Login Verification')
+      .then(emailResult => {
+        const activeOtp = emailResult?.otpCode || generatedOtp;
+        setOtpModalData({
+          userEmail: user.email,
+          userName: user.name,
+          pendingUser: user,
+          generatedOtp: activeOtp,
+          isLogin: true,
+          dispatchMode: emailResult?.mode,
+          dispatchMessage: emailResult?.message
+        });
+      })
+      .catch(() => {
+        setOtpModalData({
+          userEmail: user.email,
+          userName: user.name,
+          pendingUser: user,
+          generatedOtp,
+          isLogin: true
+        });
+      });
+
+    setOtpModalData({
+      userEmail: user.email,
+      userName: user.name,
+      pendingUser: user,
+      generatedOtp,
+      isLogin: true
+    });
+
+    showToast(`Password verified! We sent a 6-digit OTP code to ${user.email}`, 'info');
     return true;
   };
 

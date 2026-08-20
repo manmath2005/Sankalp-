@@ -115,7 +115,7 @@ export const NgoLoginView = ({ onNavigate }) => {
 
     try {
       loginUser(email, password, 'NGO_PARTNER');
-      onNavigate('dbms');
+      // OTP modal opens automatically upon entering correct password
     } catch (err) {
       setErrorMessage(err.message);
     } finally {
@@ -334,38 +334,6 @@ export const NgoLoginView = ({ onNavigate }) => {
                     <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z" />
                   </svg>
                   <span>Continue with Google / Gmail</span>
-                </button>
-
-                {/* Passwordless Email OTP Option */}
-                <div className="relative flex items-center justify-center pt-1">
-                  <div className="border-t border-slate-200 dark:border-slate-700 w-full"></div>
-                  <span className="bg-white dark:bg-slate-900 px-3 text-[11px] font-bold text-slate-400 uppercase tracking-wider absolute">
-                    or passwordless
-                  </span>
-                </div>
-
-                <button
-                  type="button"
-                  onClick={async () => {
-                    setErrorMessage('');
-                    if (!email) {
-                      setErrorMessage('Please enter your official NGO email to receive OTP.');
-                      return;
-                    }
-                    setLoading(true);
-                    try {
-                      await initiateEmailOtpLogin(email, 'NGO_PARTNER');
-                    } catch (err) {
-                      setErrorMessage(err.message);
-                    } finally {
-                      setLoading(false);
-                    }
-                  }}
-                  disabled={loading || !email}
-                  className="w-full py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-black text-xs uppercase tracking-wider shadow-md transition-all flex items-center justify-center gap-2 press-effect"
-                >
-                  <Zap className="w-3.5 h-3.5 fill-current" />
-                  {loading ? "Sending OTP Code..." : "Send 6-Digit Official Email OTP Login Code ✉️"}
                 </button>
               </form>
             ) : (
