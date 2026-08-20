@@ -8,7 +8,12 @@ import {
   INITIAL_CORPORATE_REQUESTS, 
   INITIAL_USERS 
 } from '../data/mockData';
-import { sendRealOtpEmail } from '../utils/emailService';
+import { 
+  sendRealOtpEmail, 
+  sendVolunteerDriveRegistrationEmail, 
+  sendCompanyDriveRequestedEmail, 
+  sendCompanyDriveApprovedEmail 
+} from '../utils/emailService';
 
 const AppContext = createContext();
 
@@ -860,7 +865,17 @@ export const AppProvider = ({ children }) => {
 
     setVolunteers(updatedVolunteers);
     setEvents(updatedEvents);
-    showToast(`Successfully registered for "${event.title}"!`, 'success');
+    showToast(`Successfully registered for "${event.title}"! Confirmation email dispatched.`, 'success');
+
+    // AUTOMATION 1: Send confirmation email to volunteer with drive details
+    sendVolunteerDriveRegistrationEmail({
+      volunteerEmail: volunteer.email,
+      volunteerName: volunteer.name,
+      eventTitle: event.title,
+      eventDate: event.date,
+      eventLocation: event.location,
+      organizerNgoName: event.ngoName || 'Sankalp Partner NGO'
+    }).catch(err => console.warn('Automated volunteer confirmation email failed:', err));
   };
 
   // DBMS: Admin Create New Event
@@ -894,13 +909,49 @@ export const AppProvider = ({ children }) => {
     };
 
     setCorporateRequests(prev => [newReq, ...prev]);
-    showToast("Your event hosting request was submitted to Sankalp NGO! Our team will contact you shortly.", 'success');
+    showToast("Your event hosting request was submitted to Sankalp NGO! Notification email sent.", 'success');
+
+    // AUTOMATION 2: Send email to the selected NGO when a company submits a drive request
+    const targetNgo = ngos.find(n => n.name.toLowerCase() === (requestData.ngoName || '').toLowerCase()) || ngos[0];
+    const ngoEmail = targetNgo?.email || requestData.ngoEmail || 'social_sankalp@agentmail.to';
+
+    sendCompanyDriveRequestedEmail({
+      ngoEmail,
+      ngoName: targetNgo?.name || requestData.ngoName || 'Sankalp Partner NGO',
+      companyName: requestData.companyName || requestData.organization || 'Corporate Partner',
+      cause: requestData.cause || requestData.eventTheme || 'Social Awareness Campaign',
+      targetLocation: requestData.location || requestData.targetAudience || 'Institutional Premises',
+      expectedVolunteers: requestData.volunteerCount || requestData.expectedVolunteers || '30+',
+      proposedDate: requestData.preferredDate || requestData.proposedDate || 'Mutually Agreed',
+      contactPerson: requestData.contactPerson || requestData.representativeName || 'HR Lead',
+      contactPhone: requestData.contactPhone || requestData.phone || '+91 98000 00000',
+      contactEmail: requestData.contactEmail || requestData.email || 'corporate@example.com'
+    }).catch(err => console.warn('Automated NGO drive request notification failed:', err));
   };
 
-  // DBMS: Admin Change Request Status
+  // DBMS: Admin Change Request Status & Trigger Approval Email
   const updateCorporateRequestStatus = (requestId, newStatus) => {
+    const req = corporateRequests.find(r => r.id === requestId);
+
     setCorporateRequests(prev => prev.map(r => r.id === requestId ? { ...r, status: newStatus } : r));
     showToast(`Request ${requestId} status changed to ${newStatus}`, 'info');
+
+    // AUTOMATION 3: When NGO approves the request, send approval email to the company with direct contact info
+    if (newStatus === 'Approved' && req) {
+      const targetNgo = ngos.find(n => n.name.toLowerCase() === (req.ngoName || '').toLowerCase()) || ngos[0];
+      const companyEmail = req.contactEmail || req.email || 'corporate@sbi-staff.org';
+
+      sendCompanyDriveApprovedEmail({
+        companyEmail,
+        companyName: req.companyName || req.organization || 'Corporate Partner',
+        eventTitle: `${req.cause || 'Social Awareness'} Campaign`,
+        ngoName: targetNgo?.name || req.ngoName || 'Sankalp Social Foundation',
+        ngoPhone: targetNgo?.phone || '+91 98201 94821',
+        ngoEmail: targetNgo?.email || 'contact@sankalpfoundation.org',
+        scheduledDate: req.preferredDate || req.proposedDate || 'Confirmed by NGO',
+        location: req.location || req.targetAudience || 'Corporate / Institutional Site'
+      }).catch(err => console.warn('Automated company approval email failed:', err));
+    }
   };
 
   // DBMS: Admin Issue Certificate to Volunteer
