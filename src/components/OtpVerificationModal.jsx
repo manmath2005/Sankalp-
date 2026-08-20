@@ -127,8 +127,27 @@ export const OtpVerificationModal = () => {
               {otpModalData.isLogin ? "Verify OTP & Log In" : "Verify OTP & Activate Account"}
             </button>
 
+            {/* Helpful OTP hint and quick autofill banner for smooth testing */}
+            {otpModalData.generatedOtp && (
+              <div className="p-3 rounded-xl bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800 flex items-center justify-between text-xs text-amber-900 dark:text-amber-200">
+                <div className="flex items-center gap-2">
+                  <Sparkles className="w-4 h-4 text-amber-600 shrink-0" />
+                  <span>
+                    Test / Demo OTP Code: <strong className="font-mono text-sm tracking-wider text-amber-700 dark:text-amber-300">{otpModalData.generatedOtp}</strong>
+                  </span>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setOtpInput(otpModalData.generatedOtp)}
+                  className="px-2.5 py-1 rounded-lg bg-amber-600 hover:bg-amber-700 text-white font-bold text-[10px] shadow-xs press-effect"
+                >
+                  Auto Fill
+                </button>
+              </div>
+            )}
+
             {/* Resend Action */}
-            <div className="pt-2 text-center flex items-center justify-center gap-2 text-xs text-slate-500">
+            <div className="pt-2 text-center flex items-center justify-center gap-2 text-xs text-slate-500 dark:text-slate-400">
               <span>Didn't receive the email?</span>
               <button
                 type="button"
