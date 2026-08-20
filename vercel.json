@@ -1,7 +1,11 @@
 {
   "rewrites": [
     {
-      "source": "/((?!assets/|public/|.*\\..*).*)",
+      "source": "/api/(.*)",
+      "destination": "/api/$1"
+    },
+    {
+      "source": "/((?!assets/|public/|api/|.*\\..*).*)",
       "destination": "/index.html"
     }
   ],

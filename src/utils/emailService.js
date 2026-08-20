@@ -1,107 +1,52 @@
 /**
- * Sends a real 6-digit OTP to the user's email address via AgentMail REST API & Server fallback.
+ * Sends a real 6-digit OTP via Vercel Serverless Function (/api/send-otp)
+ * which uses official Gmail SMTP (Google App Password) for instant Primary Inbox delivery.
  */
 export const sendRealOtpEmail = async (toEmail, userName, clientFallbackOtp, context = 'Account Activation') => {
   const cleanEmail = (toEmail || '').trim().toLowerCase();
-  const activeOtp = clientFallbackOtp || Math.floor(100000 + Math.random() * 900000).toString();
 
-  // Primary Method: Official AgentMail REST API (100% reliable directly from client / Vercel edge)
   try {
-    const apiKey = 'am_us_inbox_5ccad543b1ee9681a51d93d404eb1e4d8c2227aca1882de12fd4d72682e6c561';
-    const inbox = 'social_sankalp@agentmail.to';
-
-    const htmlBody = `
-      <div style="font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;max-width:540px;margin:0 auto;background:#ffffff;border-radius:20px;border:1px solid #e2e8f0;overflow:hidden;box-shadow:0 10px 25px rgba(0,0,0,0.05);">
-        <div style="background:linear-gradient(135deg, #0284c7 0%, #0369a1 50%, #0f172a 100%);padding:30px 25px;text-align:center;">
-          <div style="display:inline-block;background:rgba(255,255,255,0.15);padding:6px 14px;border-radius:10px;color:#bae6fd;font-size:11px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:8px;">
-            Sankalp Social Network
-          </div>
-          <h1 style="color:#ffffff;font-size:22px;margin:0;font-weight:800;">Verification Code</h1>
-        </div>
-        <div style="padding:30px 25px;">
-          <p style="font-size:15px;color:#1e293b;font-weight:700;margin-top:0;">Hello ${userName || 'Valued Member'},</p>
-          <p style="font-size:13px;color:#64748b;line-height:1.6;">
-            We received a request for <strong>${context}</strong>. Use the 6-digit one-time code below to verify your account:
-          </p>
-          <div style="background:#f8fafc;border:2px dashed #0284c7;border-radius:16px;padding:20px;text-align:center;margin:24px 0;">
-            <div style="font-size:11px;font-weight:800;color:#64748b;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:6px;">Your 6-Digit Code</div>
-            <div style="font-family:monospace;font-size:36px;font-weight:900;color:#0284c7;letter-spacing:8px;">${activeOtp}</div>
-          </div>
-          <div style="background:#fffbeb;border:1px solid #fde68a;border-radius:10px;padding:12px;margin-bottom:20px;">
-            <p style="font-size:12px;color:#92400e;margin:0;font-weight:600;">
-              ⏱️ Valid for <strong>5 minutes</strong>. Never share this code with anyone.
-            </p>
-          </div>
-          <p style="font-size:11px;color:#94a3b8;margin:0;">
-            If you did not initiate this request, you can safely disregard this email.
-          </p>
-        </div>
-      </div>
-    `;
-
-    const agentRes = await fetch(`https://api.agentmail.to/v0/inboxes/${encodeURIComponent(inbox)}/messages/send`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${apiKey}`
-      },
-      body: JSON.stringify({
-        to: [cleanEmail],
-        subject: `${activeOtp} is your Sankalp Portal Verification Code`,
-        text: `Hello ${userName || 'Member'},\n\nYour Sankalp verification code is: ${activeOtp}\n\nValid for 5 minutes.`,
-        html: htmlBody
-      })
-    });
-
-    if (agentRes.ok) {
-      const respData = await agentRes.json();
-      console.log(`[AGENTMAIL LIVE DISPATCH SUCCESS] Real OTP ${activeOtp} sent to ${cleanEmail}`, respData);
-      return {
-        success: true,
-        mode: 'REAL_EMAIL_DELIVERED',
-        message: `Real verification OTP email sent to ${cleanEmail}. Please check your inbox or spam folder.`,
-        otpCode: activeOtp
-      };
-    } else {
-      const errText = await agentRes.text();
-      console.warn('[AGENTMAIL LIVE ERROR]:', errText);
-    }
-  } catch (agentErr) {
-    console.warn('AgentMail direct dispatch failed, attempting backend fallback:', agentErr);
-  }
-
-  // Fallback Method: Local/Server Proxy
-  try {
-    const response = await fetch(`${BACKEND_API_URL}/send-otp`, {
+    // Primary Method: Vercel Serverless Function → Gmail SMTP (Google App Password)
+    // The serverless function runs server-side on Vercel — Nodemailer works perfectly here.
+    // Gmail-to-Gmail delivery lands in Primary Inbox instantly (no spam, no delay).
+    const response = await fetch('/api/send-otp', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ 
+      body: JSON.stringify({
         email: cleanEmail,
-        userName: userName || 'Partner',
-        purpose: context 
+        userName: userName || 'Member',
+        purpose: context
       })
     });
 
     const data = await response.json();
-    if (response.ok && data.success !== false) {
+
+    if (response.ok && data.success) {
+      console.log(`[GMAIL SERVERLESS SUCCESS] OTP sent to ${cleanEmail} via Gmail SMTP`);
       return {
         success: true,
         mode: 'REAL_EMAIL_DELIVERED',
-        message: `Verification OTP has been sent to ${cleanEmail}.`,
-        otpCode: data.otpCode || activeOtp
+        message: `Verification code sent to ${cleanEmail}. Please check your inbox.`,
+        otpCode: data.otpCode
       };
+    } else {
+      console.warn('[SERVERLESS OTP ERROR]:', data?.error || 'Unknown error');
     }
-  } catch {
-    // Offline fallback
+  } catch (err) {
+    console.warn('[SERVERLESS FETCH FAILED]:', err.message);
   }
 
+  // Fallback: Generate OTP client-side so the modal still works even if API is unreachable
+  const activeOtp = clientFallbackOtp || Math.floor(100000 + Math.random() * 900000).toString();
+  console.warn('[OTP FALLBACK] Could not reach /api/send-otp. Using client-generated OTP.');
   return {
     success: true,
-    mode: 'REAL_EMAIL_DELIVERED',
-    message: `OTP generated for ${cleanEmail}.`,
+    mode: 'CLIENT_FALLBACK',
+    message: `Could not send email. Please contact support.`,
     otpCode: activeOtp
   };
 };
+
 
 /**
  * Validates OTP with Backend Server API
