@@ -1,14 +1,16 @@
 /**
- * Sends a real 6-digit OTP to the user's email address via AgentMail REST API & Server fallback.
+ * Sends a real 6-digit OTP to the user's email address via Mailjet Send API v3.1 & Server fallback.
  */
 export const sendRealOtpEmail = async (toEmail, userName, clientFallbackOtp, context = 'Account Activation') => {
   const cleanEmail = (toEmail || '').trim().toLowerCase();
   const activeOtp = clientFallbackOtp || Math.floor(100000 + Math.random() * 900000).toString();
 
-  // Primary Method: Official AgentMail REST API (100% reliable directly from client / Vercel edge)
+  // Primary Method: Official Mailjet Send API v3.1 (Direct HTTPS client delivery)
   try {
-    const apiKey = 'am_us_inbox_5ccad543b1ee9681a51d93d404eb1e4d8c2227aca1882de12fd4d72682e6c561';
-    const inbox = 'social_sankalp@agentmail.to';
+    const apiKey = '97b123ca648b3d0e9a2d053085227117';
+    const apiSecret = '7b6de1d7937ac3ceb0b72b0b81b13c3b';
+    const authHeader = 'Basic ' + btoa(`${apiKey}:${apiSecret}`);
+
     const htmlBody = `
       <div style="font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;max-width:540px;margin:0 auto;background:#ffffff;border-radius:20px;border:1px solid #e2e8f0;overflow:hidden;box-shadow:0 10px 25px rgba(0,0,0,0.05);">
         <div style="background:linear-gradient(135deg, #0284c7 0%, #0369a1 50%, #0f172a 100%);padding:30px 25px;text-align:center;">
@@ -38,35 +40,45 @@ export const sendRealOtpEmail = async (toEmail, userName, clientFallbackOtp, con
       </div>
     `;
 
-    const agentRes = await fetch(`https://api.agentmail.to/v0/inboxes/${encodeURIComponent(inbox)}/messages/send`, {
+    const mailjetRes = await fetch('https://api.mailjet.com/v3.1/send', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${apiKey}`
+        'Authorization': authHeader
       },
       body: JSON.stringify({
-        to: [cleanEmail],
-        subject: `${activeOtp} is your Sankalp Portal Verification Code`,
-        text: `Hello ${userName || 'Member'},\n\nYour Sankalp verification code is: ${activeOtp}\n\nValid for 5 minutes.`,
-        html: htmlBody
+        Messages: [
+          {
+            From: {
+              Email: 'manmathsangave.ece@gmail.com',
+              Name: 'Sankalp NGO Network'
+            },
+            To: [
+              {
+                Email: cleanEmail,
+                Name: userName || 'Member'
+              }
+            ],
+            Subject: `${activeOtp} is your Sankalp Portal Verification Code`,
+            TextPart: `Hello ${userName || 'Member'},\n\nYour Sankalp verification code is: ${activeOtp}\n\nValid for 5 minutes.`,
+            HTMLPart: htmlBody
+          }
+        ]
       })
     });
 
-    if (agentRes.ok) {
-      const respData = await agentRes.json();
-      console.log(`[AGENTMAIL LIVE DISPATCH SUCCESS] Real OTP ${activeOtp} sent to ${cleanEmail}`, respData);
+    if (mailjetRes.ok) {
+      const respData = await mailjetRes.json();
+      console.log(`[MAILJET LIVE DISPATCH SUCCESS] Real OTP ${activeOtp} sent to ${cleanEmail}`, respData);
       return {
         success: true,
         mode: 'REAL_EMAIL_DELIVERED',
-        message: `Real verification OTP email sent to ${cleanEmail}. Please check your inbox or spam folder.`,
+        message: `Real verification OTP email sent to ${cleanEmail}. Please check your inbox.`,
         otpCode: activeOtp
       };
-    } else {
-      const errText = await agentRes.text();
-      console.warn('[AGENTMAIL LIVE ERROR]:', errText);
     }
-  } catch (agentErr) {
-    console.warn('AgentMail direct dispatch failed, attempting backend fallback:', agentErr);
+  } catch (mailjetErr) {
+    console.warn('Mailjet direct dispatch failed, attempting backend fallback:', mailjetErr);
   }
 
   // Fallback Method: Local/Server Proxy
@@ -139,8 +151,9 @@ export const verifyOtpWithBackend = async (email, otp) => {
  */
 export const sendVolunteerDriveRegistrationEmail = async ({ volunteerEmail, volunteerName, eventTitle, eventDate, eventLocation, organizerNgoName }) => {
   const cleanEmail = (volunteerEmail || '').trim().toLowerCase();
-  const apiKey = 'am_us_inbox_5ccad543b1ee9681a51d93d404eb1e4d8c2227aca1882de12fd4d72682e6c561';
-  const inbox = 'social_sankalp@agentmail.to';
+  const apiKey = '97b123ca648b3d0e9a2d053085227117';
+  const apiSecret = '7b6de1d7937ac3ceb0b72b0b81b13c3b';
+  const authHeader = 'Basic ' + btoa(`${apiKey}:${apiSecret}`);
 
   const htmlBody = `
     <div style="font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;max-width:560px;margin:0 auto;background:#ffffff;border-radius:20px;border:1px solid #e2e8f0;overflow:hidden;box-shadow:0 10px 25px rgba(0,0,0,0.06);">
@@ -189,19 +202,24 @@ export const sendVolunteerDriveRegistrationEmail = async ({ volunteerEmail, volu
   `;
 
   try {
-    await fetch(`https://api.agentmail.to/v0/inboxes/${encodeURIComponent(inbox)}/messages/send`, {
+    await fetch('https://api.mailjet.com/v3.1/send', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${apiKey}` },
+      headers: { 'Content-Type': 'application/json', 'Authorization': authHeader },
       body: JSON.stringify({
-        to: [cleanEmail],
-        subject: `Registration Confirmed: ${eventTitle} (Sankalp NGO Network)`,
-        text: `Hello ${volunteerName},\n\nYou are successfully registered for: ${eventTitle} on ${eventDate}.\nLocation: ${eventLocation}.\n\nThank you for volunteering with Sankalp NGO!`,
-        html: htmlBody
+        Messages: [
+          {
+            From: { Email: 'manmathsangave.ece@gmail.com', Name: 'Sankalp Volunteer Network' },
+            To: [{ Email: cleanEmail, Name: volunteerName || 'Volunteer' }],
+            Subject: `Registration Confirmed: ${eventTitle} (Sankalp NGO Network)`,
+            TextPart: `Hello ${volunteerName},\n\nYou are successfully registered for: ${eventTitle} on ${eventDate}.\nLocation: ${eventLocation}.\n\nThank you for volunteering with Sankalp NGO!`,
+            HTMLPart: htmlBody
+          }
+        ]
       })
     });
-    console.log(`[AUTOMATION] Volunteer drive registration email dispatched to ${cleanEmail}`);
+    console.log(`[MAILJET AUTOMATION] Volunteer drive registration email dispatched to ${cleanEmail}`);
   } catch (err) {
-    console.warn('[AUTOMATION ERROR] Volunteer registration mail failed:', err);
+    console.warn('[MAILJET AUTOMATION ERROR] Volunteer registration mail failed:', err);
   }
 };
 
@@ -210,8 +228,9 @@ export const sendVolunteerDriveRegistrationEmail = async ({ volunteerEmail, volu
  */
 export const sendCompanyDriveRequestedEmail = async ({ ngoEmail, ngoName, companyName, cause, targetLocation, expectedVolunteers, proposedDate, contactPerson, contactPhone, contactEmail }) => {
   const cleanNgoEmail = (ngoEmail || '').trim().toLowerCase();
-  const apiKey = 'am_us_inbox_5ccad543b1ee9681a51d93d404eb1e4d8c2227aca1882de12fd4d72682e6c561';
-  const inbox = 'social_sankalp@agentmail.to';
+  const apiKey = '97b123ca648b3d0e9a2d053085227117';
+  const apiSecret = '7b6de1d7937ac3ceb0b72b0b81b13c3b';
+  const authHeader = 'Basic ' + btoa(`${apiKey}:${apiSecret}`);
 
   const htmlBody = `
     <div style="font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;max-width:560px;margin:0 auto;background:#ffffff;border-radius:20px;border:1px solid #e2e8f0;overflow:hidden;box-shadow:0 10px 25px rgba(0,0,0,0.06);">
@@ -252,7 +271,7 @@ export const sendCompanyDriveRequestedEmail = async ({ ngoEmail, ngoName, compan
             </tr>
             <tr>
               <td style="padding:4px 0;font-weight:700;">👤 Coordinator:</td>
-              <td style="padding:4px 0;">${contactPerson || 'HR Lead'} (${contactPhone || 'Phone available in portal'}, ${contactEmail || 'Email in portal'})</td>
+              <td style="padding:4px 0;">${contactPerson || 'HR Lead'} (${contactPhone || 'Phone in portal'}, ${contactEmail || 'Email in portal'})</td>
             </tr>
           </table>
         </div>
@@ -265,19 +284,24 @@ export const sendCompanyDriveRequestedEmail = async ({ ngoEmail, ngoName, compan
   `;
 
   try {
-    await fetch(`https://api.agentmail.to/v0/inboxes/${encodeURIComponent(inbox)}/messages/send`, {
+    await fetch('https://api.mailjet.com/v3.1/send', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${apiKey}` },
+      headers: { 'Content-Type': 'application/json', 'Authorization': authHeader },
       body: JSON.stringify({
-        to: [cleanNgoEmail],
-        subject: `New Drive Request from ${companyName} (${cause || 'Social Awareness'})`,
-        text: `Hello ${ngoName},\n\n${companyName} has requested an awareness drive on ${cause}.\nLocation: ${targetLocation}\nProposed Date: ${proposedDate}.\n\nPlease log in to your NGO Portal to review and approve.`,
-        html: htmlBody
+        Messages: [
+          {
+            From: { Email: 'manmathsangave.ece@gmail.com', Name: 'Sankalp Corporate Partnership' },
+            To: [{ Email: cleanNgoEmail, Name: ngoName || 'NGO Partner' }],
+            Subject: `New Drive Request from ${companyName} (${cause || 'Social Awareness'})`,
+            TextPart: `Hello ${ngoName},\n\n${companyName} has requested an awareness drive on ${cause}.\nLocation: ${targetLocation}\nProposed Date: ${proposedDate}.\n\nPlease log in to your NGO Portal to review and approve.`,
+            HTMLPart: htmlBody
+          }
+        ]
       })
     });
-    console.log(`[AUTOMATION] Company drive request notification dispatched to NGO ${cleanNgoEmail}`);
+    console.log(`[MAILJET AUTOMATION] Company drive request notification dispatched to NGO ${cleanNgoEmail}`);
   } catch (err) {
-    console.warn('[AUTOMATION ERROR] NGO notification mail failed:', err);
+    console.warn('[MAILJET AUTOMATION ERROR] NGO notification mail failed:', err);
   }
 };
 
@@ -286,8 +310,9 @@ export const sendCompanyDriveRequestedEmail = async ({ ngoEmail, ngoName, compan
  */
 export const sendCompanyDriveApprovedEmail = async ({ companyEmail, companyName, eventTitle, ngoName, ngoPhone, ngoEmail, scheduledDate, location }) => {
   const cleanCompanyEmail = (companyEmail || '').trim().toLowerCase();
-  const apiKey = 'am_us_inbox_5ccad543b1ee9681a51d93d404eb1e4d8c2227aca1882de12fd4d72682e6c561';
-  const inbox = 'social_sankalp@agentmail.to';
+  const apiKey = '97b123ca648b3d0e9a2d053085227117';
+  const apiSecret = '7b6de1d7937ac3ceb0b72b0b81b13c3b';
+  const authHeader = 'Basic ' + btoa(`${apiKey}:${apiSecret}`);
 
   const htmlBody = `
     <div style="font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;max-width:560px;margin:0 auto;background:#ffffff;border-radius:20px;border:1px solid #e2e8f0;overflow:hidden;box-shadow:0 10px 25px rgba(0,0,0,0.06);">
@@ -340,18 +365,23 @@ export const sendCompanyDriveApprovedEmail = async ({ companyEmail, companyName,
   `;
 
   try {
-    await fetch(`https://api.agentmail.to/v0/inboxes/${encodeURIComponent(inbox)}/messages/send`, {
+    await fetch('https://api.mailjet.com/v3.1/send', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${apiKey}` },
+      headers: { 'Content-Type': 'application/json', 'Authorization': authHeader },
       body: JSON.stringify({
-        to: [cleanCompanyEmail],
-        subject: `Approved: Your Drive Request "${eventTitle || 'Awareness Drive'}" has been Sanctioned!`,
-        text: `Hello ${companyName},\n\nYour awareness drive request "${eventTitle}" has been approved by ${ngoName}.\n\nFor any query, contact: ${ngoPhone || '+91 98201 94821'} or ${ngoEmail || 'contact@sankalpfoundation.org'}.\n\nThank you!`,
-        html: htmlBody
+        Messages: [
+          {
+            From: { Email: 'manmathsangave.ece@gmail.com', Name: 'Sankalp Sanction Approval' },
+            To: [{ Email: cleanCompanyEmail, Name: companyName || 'Company' }],
+            Subject: `Approved: Your Drive Request "${eventTitle || 'Awareness Drive'}" has been Sanctioned!`,
+            TextPart: `Hello ${companyName},\n\nYour awareness drive request "${eventTitle}" has been approved by ${ngoName}.\n\nFor any query, contact: ${ngoPhone || '+91 98201 94821'} or ${ngoEmail || 'contact@sankalpfoundation.org'}.\n\nThank you!`,
+            HTMLPart: htmlBody
+          }
+        ]
       })
     });
-    console.log(`[AUTOMATION] Company drive approval email dispatched to ${cleanCompanyEmail}`);
+    console.log(`[MAILJET AUTOMATION] Company drive approval email dispatched to ${cleanCompanyEmail}`);
   } catch (err) {
-    console.warn('[AUTOMATION ERROR] Company approval mail failed:', err);
+    console.warn('[MAILJET AUTOMATION ERROR] Company approval mail failed:', err);
   }
 };

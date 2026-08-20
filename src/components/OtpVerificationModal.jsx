@@ -132,7 +132,7 @@ export const OtpVerificationModal = () => {
               <div className="space-y-0.5">
                 <div className="flex items-center gap-1.5 text-sky-800 dark:text-sky-300 font-bold">
                   <ShieldCheck className="w-3.5 h-3.5 text-sky-600 dark:text-sky-400 shrink-0" />
-                  <span>Dispatched via AgentMail SES</span>
+                  <span>Dispatched via Mailjet Cloud</span>
                 </div>
                 <p className="text-[10px] text-slate-500 dark:text-slate-400">
                   Inbox delay? Code: <strong className="font-mono text-sky-700 dark:text-sky-300">{otpModalData.generatedOtp}</strong>
