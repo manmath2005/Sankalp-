@@ -28,25 +28,24 @@ setInterval(() => {
   }
 }, 5 * 60 * 1000);
 
-const isAgentMail = (process.env.EMAIL_USER || '').toLowerCase().includes('@agentmail.to');
+const isMailjet = Boolean(process.env.MAILJET_API_KEY && process.env.MAILJET_SECRET_KEY);
 
-// Configure transporter dynamically based on provider (AgentMail SMTP or standard)
+// Configure transporter dynamically for Mailjet SMTP or standard
 const transporter = nodemailer.createTransport(
-  isAgentMail
+  isMailjet
     ? {
-        host: process.env.SMTP_HOST || 'smtp.agentmail.to',
-        port: parseInt(process.env.SMTP_PORT || '587', 10),
-        secure: false, // true for 465, false for 587 (STARTTLS)
+        host: 'in-v3.mailjet.com',
+        port: 587,
+        secure: false,
         auth: {
-          user: process.env.EMAIL_USER,
-          pass: process.env.AGENTMAIL_API_KEY || process.env.EMAIL_PASS
-        },
-        tls: {
-          rejectUnauthorized: false
+          user: process.env.MAILJET_API_KEY,
+          pass: process.env.MAILJET_SECRET_KEY
         }
       }
     : {
-        service: 'gmail',
+        host: 'in-v3.mailjet.com',
+        port: 587,
+        secure: false,
         auth: {
           user: process.env.EMAIL_USER,
           pass: process.env.EMAIL_PASS
@@ -201,17 +200,17 @@ app.post('/api/send-otp', async (req, res) => {
         }
 
         // Method 2: If REST API wasn't used or failed, use standard Nodemailer / SMTP
-        if (!dispatchSuccess) {
-          await transporter.sendMail({
-              from: `"Sankalp NGO Network" <${process.env.EMAIL_USER}>`,
-              to: cleanEmail,
-              subject: `${otp} is your Sankalp Portal Verification Code`,
-              text: `Your Sankalp verification OTP is: ${otp}. This code is valid for 5 minutes.`,
-              html: htmlTemplate
-          });
-          dispatchSuccess = true;
-          dispatchMethod = isAgentMail ? 'AgentMail SMTP' : 'Gmail SMTP';
-        }
+        // Dispatch via Mailjet / SMTP
+        const senderEmail = process.env.MAILJET_SENDER_EMAIL || process.env.EMAIL_USER || 'manmathsangave.ece@gmail.com';
+        await transporter.sendMail({
+            from: `"Sankalp NGO Network" <${senderEmail}>`,
+            to: cleanEmail,
+            subject: `${otp} is your Sankalp Portal Verification Code`,
+            text: `Your Sankalp verification OTP is: ${otp}. This code is valid for 5 minutes.`,
+            html: htmlTemplate
+        });
+        dispatchSuccess = true;
+        dispatchMethod = 'Mailjet SMTP';
         
         console.log(`[DISPATCH SUCCESS via ${dispatchMethod}] Real OTP ${otp} dispatched to ${cleanEmail}`);
         res.status(200).json({ 
