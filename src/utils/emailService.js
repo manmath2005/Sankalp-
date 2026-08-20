@@ -112,3 +112,35 @@ export const sendCompanyDriveApprovedEmail = async ({
     companyName, eventTitle, ngoName, ngoPhone, ngoEmail, scheduledDate, location
   });
 };
+
+// ─────────────────────────────────────────────────────────────────────────────
+// ADMIN ONLY — Urgent SOS Broadcast to ALL Registered Volunteers
+// ─────────────────────────────────────────────────────────────────────────────
+export const sendSosBroadcast = async (volunteerEmails, eventData) => {
+  if (!volunteerEmails || volunteerEmails.length === 0) {
+    console.warn('[SOS] No volunteer emails provided.');
+    return { success: false, error: 'No emails provided.' };
+  }
+
+  try {
+    const response = await fetch('/api/send-sos', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ volunteerEmails, eventData })
+    });
+
+    const result = await response.json();
+
+    if (response.ok && result.success) {
+      console.log(`[SOS BROADCAST] ✅ Sent to ${result.sentCount} volunteers. Failed: ${result.failedCount}`);
+      return result;
+    }
+
+    console.warn('[SOS BROADCAST ERROR]:', result?.error);
+    return { success: false, error: result?.error };
+  } catch (err) {
+    console.error('[SOS BROADCAST FETCH FAILED]:', err.message);
+    return { success: false, error: err.message };
+  }
+};
+

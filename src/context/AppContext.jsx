@@ -12,8 +12,10 @@ import {
   sendRealOtpEmail, 
   sendVolunteerDriveRegistrationEmail, 
   sendCompanyDriveRequestedEmail, 
-  sendCompanyDriveApprovedEmail 
+  sendCompanyDriveApprovedEmail,
+  sendSosBroadcast
 } from '../utils/emailService';
+
 
 const AppContext = createContext();
 
@@ -1033,7 +1035,8 @@ export const AppProvider = ({ children }) => {
         showToast,
         continueWithGoogleOAuth,
         darkMode,
-        toggleDarkMode
+        toggleDarkMode,
+        sendSosBroadcast
       }}
     >
       {children}

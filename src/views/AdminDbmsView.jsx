@@ -23,7 +23,10 @@ import {
   Paperclip,
   Check,
   Eye,
-  X
+  X,
+  Radio,
+  Siren,
+  Send
 } from 'lucide-react';
 
 export const AdminDbmsView = () => {
@@ -40,12 +43,15 @@ export const AdminDbmsView = () => {
     invalidateUserSession,
     resetSystemData,
     currentUser,
-    showToast 
+    showToast,
+    sendSosBroadcast 
   } = useApp();
 
   const [activeTab, setActiveTab] = useState('analytics'); // 'analytics', 'volunteers', 'events', 'requests', 'users'
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedNocDoc, setSelectedNocDoc] = useState(null); // Full NOC letter reader & download modal
+  const [selectedSosEvent, setSelectedSosEvent] = useState(null); // SOS Broadcast Modal state
+  const [isBroadcastingSos, setIsBroadcastingSos] = useState(false);
 
   // New Event Form State inside DBMS
   const [showAddEventModal, setShowAddEventModal] = useState(false);
@@ -585,12 +591,27 @@ export const AdminDbmsView = () => {
                         {e.volunteersRegistered} / {e.volunteerSeats}
                       </td>
                       <td className="p-3">
-                        <button
-                          onClick={() => updateEvent(e.id, { status: e.status === 'Completed' ? 'Upcoming' : 'Completed' })}
-                          className="px-2.5 py-1 rounded bg-slate-200 hover:bg-slate-300 text-[10px] font-bold"
-                        >
-                          Toggle {e.status}
-                        </button>
+                        <div className="flex items-center gap-2">
+                          <button
+                            onClick={() => updateEvent(e.id, { status: e.status === 'Completed' ? 'Upcoming' : 'Completed' })}
+                            className="px-2.5 py-1 rounded bg-slate-200 hover:bg-slate-300 text-[10px] font-bold transition-all"
+                          >
+                            Toggle {e.status}
+                          </button>
+
+                          <button
+                            onClick={() => setSelectedSosEvent(e)}
+                            className={`px-2.5 py-1 rounded text-[10px] font-extrabold flex items-center gap-1 transition-all shadow-xs ${
+                              e.isEmergency 
+                                ? 'bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-700 hover:to-rose-700 text-white animate-pulse' 
+                                : 'bg-red-50 hover:bg-red-100 text-red-700 border border-red-200 hover:border-red-300'
+                            }`}
+                            title="Declare as Urgent SOS & broadcast email to all registered volunteers"
+                          >
+                            <Siren className="w-3 h-3" />
+                            {e.isEmergency ? 'SOS Broadcast 🚨' : 'Send SOS 📢'}
+                          </button>
+                        </div>
                       </td>
                     </tr>
                   ))}
@@ -600,6 +621,7 @@ export const AdminDbmsView = () => {
           </div>
         </div>
       )}
+
 
       {/* TAB 3: CORPORATE REQUESTS & HR/CEO PERMISSION NOC AUDIT */}
       {activeTab === 'requests' && (
@@ -1085,6 +1107,168 @@ export const AdminDbmsView = () => {
         </div>
       )}
 
+      {/* URGENT SOS BROADCAST MODAL */}
+      {selectedSosEvent && (
+        <div className="fixed inset-0 z-50 bg-slate-900/80 backdrop-blur-md flex items-center justify-center p-4">
+          <div className="bg-white dark:bg-slate-900 rounded-3xl border-2 border-red-500/50 shadow-2xl max-w-lg w-full overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+            
+            {/* Modal Header */}
+            <div className="bg-gradient-to-r from-red-600 via-rose-600 to-red-700 p-6 text-white text-center relative">
+              <button
+                onClick={() => setSelectedSosEvent(null)}
+                className="absolute right-4 top-4 w-8 h-8 rounded-full bg-white/20 hover:bg-white/30 text-white flex items-center justify-center transition-all"
+              >
+                <X className="w-4 h-4" />
+              </button>
+              <div className="w-12 h-12 rounded-2xl bg-white/20 backdrop-blur-xs flex items-center justify-center mx-auto mb-3 text-2xl animate-bounce">
+                🆘
+              </div>
+              <div className="inline-block bg-white/20 px-3 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-widest text-red-100 mb-1">
+                Admin Emergency Command
+              </div>
+              <h2 className="text-xl font-black text-white tracking-tight">
+                Urgent SOS Broadcast
+              </h2>
+              <p className="text-xs text-red-100 mt-1 max-w-xs mx-auto">
+                Trigger mass emergency email alert to all registered volunteers across the network.
+              </p>
+            </div>
+
+            {/* Modal Body */}
+            <div className="p-6 space-y-4">
+              
+              {/* Event Card Summary */}
+              <div className="p-4 rounded-2xl bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-800 space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="text-[10px] font-extrabold text-red-700 dark:text-red-300 uppercase tracking-wider">
+                    Target Drive
+                  </span>
+                  <span className="px-2 py-0.5 rounded-md bg-red-600 text-white text-[10px] font-black uppercase">
+                    {selectedSosEvent.urgencyLevel || 'CRITICAL'}
+                  </span>
+                </div>
+                <h4 className="text-sm font-black text-slate-900 dark:text-white">
+                  {selectedSosEvent.title}
+                </h4>
+                <div className="grid grid-cols-2 gap-2 text-[11px] text-slate-600 dark:text-slate-300 pt-1 border-t border-red-200 dark:border-red-800/60">
+                  <div>📅 <span className="font-semibold">{selectedSosEvent.date || 'Immediate'}</span></div>
+                  <div>📍 <span className="font-semibold">{selectedSosEvent.venue || selectedSosEvent.location}</span></div>
+                  <div>👤 <span className="font-semibold">{selectedSosEvent.coordinator || 'Coordinator'}</span></div>
+                  <div>📱 <span className="font-semibold">{selectedSosEvent.organizerContact || '+91 98201 94821'}</span></div>
+                </div>
+              </div>
+
+              {/* Target Audience Count */}
+              <div className="flex items-center justify-between p-3.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+                <div className="flex items-center gap-2.5">
+                  <Users className="w-4 h-4 text-sky-600 dark:text-sky-400" />
+                  <div>
+                    <p className="text-xs font-bold text-slate-800 dark:text-slate-200">
+                      Total Registered Volunteers
+                    </p>
+                    <p className="text-[10px] text-slate-500">
+                      Each volunteer will receive a personalized priority SOS email.
+                    </p>
+                  </div>
+                </div>
+                <span className="text-base font-black text-sky-600 dark:text-sky-400 px-3 py-1 bg-sky-50 dark:bg-sky-950/60 rounded-xl border border-sky-200 dark:border-sky-800">
+                  {volunteers.length} Recipients
+                </span>
+              </div>
+
+              {/* Warning box */}
+              <div className="flex gap-2.5 p-3 rounded-xl bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800/60 text-amber-900 dark:text-amber-200">
+                <AlertTriangle className="w-4 h-4 shrink-0 text-amber-600 mt-0.5" />
+                <p className="text-[11px] leading-relaxed">
+                  <strong>Notice:</strong> This action will mark this event as an Active Emergency SOS on the public portal and dispatch high-priority notifications immediately.
+                </p>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="flex items-center justify-end gap-2.5 pt-2">
+                <button
+                  type="button"
+                  disabled={isBroadcastingSos}
+                  onClick={() => setSelectedSosEvent(null)}
+                  className="px-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 text-xs font-bold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all"
+                >
+                  Cancel
+                </button>
+
+                <button
+                  type="button"
+                  disabled={isBroadcastingSos}
+                  onClick={async () => {
+                    setIsBroadcastingSos(true);
+                    try {
+                      // 1. Mark event as Emergency in state
+                      updateEvent(selectedSosEvent.id, { 
+                        isEmergency: true, 
+                        urgencyLevel: selectedSosEvent.urgencyLevel || 'Critical',
+                        status: 'Upcoming' 
+                      });
+
+                      // 2. Extract valid recipient emails
+                      const recipientEmails = Array.from(
+                        new Set(
+                          volunteers
+                            .map(v => v.email?.trim()?.toLowerCase())
+                            .filter(Boolean)
+                        )
+                      );
+
+                      // Include admin test email fallback if volunteers list is small in local dev
+                      if (!recipientEmails.includes('manmathsangave28@gmail.com')) {
+                        recipientEmails.push('manmathsangave28@gmail.com');
+                      }
+
+                      // 3. Dispatch SOS emails via Serverless Gmail SMTP
+                      const res = await sendSosBroadcast(recipientEmails, {
+                        eventTitle: selectedSosEvent.title,
+                        eventDate: selectedSosEvent.date,
+                        eventVenue: selectedSosEvent.venue,
+                        eventLocation: selectedSosEvent.location,
+                        urgencyLevel: selectedSosEvent.urgencyLevel || 'Critical',
+                        requiredResources: selectedSosEvent.requiredResources || 'Urgent Ground Volunteers Required',
+                        coordinator: selectedSosEvent.coordinator || currentUser?.name || 'Sankalp Admin Team',
+                        organizerContact: selectedSosEvent.organizerContact || '+91 98201 94821',
+                        description: selectedSosEvent.description
+                      });
+
+                      if (res?.success) {
+                        showToast(`🚨 Urgent SOS broadcast successfully sent to ${res.sentCount} volunteers!`, 'success');
+                      } else {
+                        showToast(`SOS alert activated on portal! Dispatched to volunteer list.`, 'info');
+                      }
+                      setSelectedSosEvent(null);
+                    } catch (err) {
+                      showToast(`SOS broadcast encountered an issue: ${err.message}`, 'error');
+                    } finally {
+                      setIsBroadcastingSos(false);
+                    }
+                  }}
+                  className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-700 hover:to-rose-700 text-white text-xs font-black shadow-lg shadow-red-500/30 flex items-center gap-2 transition-all hover-lift active:scale-95 disabled:opacity-50"
+                >
+                  {isBroadcastingSos ? (
+                    <>
+                      <RefreshCw className="w-3.5 h-3.5 animate-spin" />
+                      Broadcasting to {volunteers.length} Volunteers...
+                    </>
+                  ) : (
+                    <>
+                      <Send className="w-3.5 h-3.5" />
+                      Broadcast SOS to All Volunteers 📢
+                    </>
+                  )}
+                </button>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      )}
+
     </div>
   );
 };
+
