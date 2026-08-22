@@ -18,6 +18,7 @@ import {
   ChevronDown, 
   FileText 
 } from 'lucide-react';
+import { SankalpBrandLogo } from './SankalpBrandLogo';
 import { useApp } from '../context/AppContext';
 
 export const GlobalNavbar = ({ activeTab, setActiveTab, onOpenDonate }) => {
@@ -41,9 +42,7 @@ export const GlobalNavbar = ({ activeTab, setActiveTab, onOpenDonate }) => {
           onClick={() => setActiveTab('home')}
           className="flex items-center gap-3 cursor-pointer group"
         >
-          <div className="w-10 h-10 rounded-xl bg-forest-700 p-0.5 shadow-md group-hover:scale-105 transition-transform flex items-center justify-center text-sage">
-            <ShieldCheck className="w-6 h-6 text-sand-100" />
-          </div>
+          <SankalpBrandLogo size="md" />
           <div>
             <div className="flex items-center gap-1.5">
               <span className="font-extrabold text-lg sm:text-xl tracking-tight text-forest-900 font-heading">
@@ -58,6 +57,7 @@ export const GlobalNavbar = ({ activeTab, setActiveTab, onOpenDonate }) => {
             </p>
           </div>
         </div>
+
 
         {/* Desktop Navigation Links */}
         <nav className="hidden lg:flex items-center gap-1 bg-sand-100/80 p-1 rounded-xl border border-sand-200">

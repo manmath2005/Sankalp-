@@ -25,9 +25,12 @@ import { ForgotPasswordView } from './views/ForgotPasswordView';
 import { OtpVerificationModal } from './components/OtpVerificationModal';
 import { DuplicateLoginModal } from './components/DuplicateLoginModal';
 import { ToastNotification } from './components/ToastNotification';
+import { SankalpBrandLogo } from './components/SankalpBrandLogo';
 import { ShieldCheck, Heart, Mail, Phone, MapPin, Lock, ArrowLeft } from 'lucide-react';
 
 import { useApp } from './context/AppContext';
+
+
 
 function MainLayout() {
   const [activeTab, setActiveTab] = useState(() => {
@@ -163,11 +166,9 @@ function MainLayout() {
             
             {/* Brand info */}
             <div className="space-y-2 md:col-span-2">
-              <div className="flex items-center gap-2">
-                <div className="w-7 h-7 rounded-lg bg-sky-600 flex items-center justify-center text-white">
-                  <ShieldCheck className="w-4 h-4" />
-                </div>
-                <span className="font-extrabold text-base text-white tracking-tight">
+              <div className="flex items-center gap-2.5">
+                <SankalpBrandLogo size="sm" />
+                <span className="font-black text-base text-white tracking-tight">
                   SANKALP FOUNDATION
                 </span>
               </div>
@@ -178,6 +179,7 @@ function MainLayout() {
                 Reg No: MAH/2018/094821 • 80G & 12A Certified
               </div>
             </div>
+
 
             {/* Separate Login Portals Links */}
             <div className="space-y-1.5">

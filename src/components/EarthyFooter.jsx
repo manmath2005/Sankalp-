@@ -14,6 +14,7 @@ import {
   BookOpen, 
   Globe 
 } from 'lucide-react';
+import { SankalpBrandLogo } from './SankalpBrandLogo';
 import { useApp } from '../context/AppContext';
 
 export const EarthyFooter = ({ onNavigate, onOpenDonate }) => {
@@ -92,11 +93,10 @@ export const EarthyFooter = ({ onNavigate, onOpenDonate }) => {
           {/* Col 1: Organization Overview */}
           <div className="lg:col-span-2 space-y-4">
             <div className="flex items-center gap-2.5">
-              <div className="w-9 h-9 rounded-xl bg-forest-700 text-sage flex items-center justify-center font-bold">
-                <ShieldCheck className="w-5 h-5 text-sand-100" />
-              </div>
+              <SankalpBrandLogo size="md" />
               <span className="font-heading font-extrabold text-lg text-white">SANKALP FOUNDATION</span>
             </div>
+
 
             <p className="text-xs text-sage/80 max-w-sm leading-relaxed font-sans">
               A national social & environmental NGO conducting verified awareness events and restoration campaigns across government offices, public sectors, universities, and schools.

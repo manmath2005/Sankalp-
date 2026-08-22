@@ -54,13 +54,14 @@ export const Hero = ({ onExploreEvents, onHostEvent }) => {
               <span>India's Unified CSR Ecosystem • 80G & Darpan Verified</span>
             </div>
 
-            {/* Main Punchy Headline */}
-            <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight leading-[1.15]">
-              Connecting Purpose with Action: <br className="hidden sm:inline" />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-sky-400 via-teal-300 to-emerald-400">
-                Bridge Companies, NGOs & Volunteers
+            {/* Main Punchy Headline - Smaller & Sleek */}
+            <h1 className="text-2xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight leading-[1.2]">
+              Catalyzing Grassroots Impact: <br className="hidden sm:inline" />
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-sky-400 via-teal-300 to-emerald-400 font-black">
+                Unified Ecosystem for CSR, NGOs & Volunteers
               </span>
             </h1>
+
 
             {/* Subtitle */}
             <p className="text-sm sm:text-lg text-slate-200 font-normal leading-relaxed max-w-2xl drop-shadow-sm">

@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { 
-  ShieldCheck, 
   Calendar, 
   History, 
   Award, 
@@ -22,6 +21,7 @@ import {
   Flame
 } from 'lucide-react';
 import { useApp } from '../context/AppContext';
+import { SankalpBrandLogo } from './SankalpBrandLogo';
 
 export const Navbar = ({ activeTab, setActiveTab }) => {
   const { currentUser, logoutUser, darkMode, toggleDarkMode } = useApp();
@@ -37,15 +37,14 @@ export const Navbar = ({ activeTab, setActiveTab }) => {
           onClick={() => setActiveTab('home')}
           className="flex items-center gap-2.5 cursor-pointer group shrink-0"
         >
-          <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-gradient-to-tr from-sky-600 via-sky-500 to-emerald-400 p-0.5 shadow-md group-hover:scale-105 transition-transform">
-            <div className="w-full h-full bg-slate-900 rounded-[10px] flex items-center justify-center">
-              <ShieldCheck className="w-4 h-4 text-sky-400" />
-            </div>
-          </div>
+          <SankalpBrandLogo size="md" />
           <div>
-            <div className="flex items-center gap-1">
+            <div className="flex items-center gap-1.5">
               <span className="font-black text-base sm:text-lg tracking-tight text-slate-900 dark:text-white font-sans">
                 SANKALP
+              </span>
+              <span className="text-[9px] font-extrabold px-1.5 py-0.5 rounded-full bg-sky-500/10 dark:bg-sky-400/20 text-sky-600 dark:text-sky-300 border border-sky-500/20">
+                ECOSYSTEM
               </span>
             </div>
             <p className="text-[10px] text-slate-500 dark:text-slate-400 font-medium hidden xl:block leading-none mt-0.5">
