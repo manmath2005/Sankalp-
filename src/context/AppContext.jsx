@@ -15,6 +15,7 @@ import {
   sendCompanyDriveApprovedEmail,
   sendSosBroadcast
 } from '../utils/emailService';
+import { sendFirebasePhoneOtp, confirmFirebasePhoneOtp } from '../lib/firebase';
 
 
 const AppContext = createContext();
@@ -150,10 +151,10 @@ export const AppProvider = ({ children }) => {
   // AUTHENTICATION & SECURITY LOGIC
   // ==========================================
 
-  // Initiate User Registration with 6-Digit Email OTP Verification & Questionnaire
-  const registerUser = async (formData) => {
+  // Initiate User Registration with 6-Digit Verification (Email or Mobile OTP choice) & Questionnaire
+  const registerUser = async (formData, verificationChannel = 'EMAIL') => {
     const { name, email, password, role, institution, skills, phone, profession, city, age } = formData;
-    const cleanEmail = email.trim().toLowerCase();
+    const cleanEmail = (email || '').trim().toLowerCase();
     
     // Check if user email already exists
     const existing = users.find(u => u.email.toLowerCase() === cleanEmail);
@@ -161,7 +162,21 @@ export const AppProvider = ({ children }) => {
       throw new Error("An account with this email address already exists.");
     }
 
-    // Generate 6-digit Email Verification OTP
+    // If mobile verification chosen, validate mobile number
+    let formattedPhone = null;
+    let phoneDigits = (phone || '').toString().replace(/\D/g, '');
+    if (verificationChannel === 'MOBILE') {
+      if (!phoneDigits || phoneDigits.length < 10) {
+        throw new Error("Please enter a valid 10-digit mobile number for Mobile OTP verification.");
+      }
+      const last10 = phoneDigits.slice(-10);
+      formattedPhone = `+91 ${last10.slice(0, 5)} ${last10.slice(5)}`;
+    } else if (phoneDigits.length >= 10) {
+      const last10 = phoneDigits.slice(-10);
+      formattedPhone = `+91 ${last10.slice(0, 5)} ${last10.slice(5)}`;
+    }
+
+    // Generate 6-digit Verification OTP
     const generatedOtp = Math.floor(100000 + Math.random() * 900000).toString();
 
     // Prepare pending user object
@@ -188,62 +203,103 @@ export const AppProvider = ({ children }) => {
       age: parseInt(age) || 22,
       status: 'Active',
       isEmailVerified: false,
+      isPhoneVerified: verificationChannel === 'MOBILE',
+      verificationChannel,
       verificationCode: generatedOtp,
       volunteerId,
-      phone: phone || '',
+      phone: formattedPhone || phone || '',
       institution: institution || formData.ngoName || formData.companyName || 'Independent',
       skills: skills || [],
       registeredAt: new Date().toISOString().split('T')[0]
     };
 
-    // Dispatch real email with server-generated OTP
-    const emailResult = await sendRealOtpEmail(cleanEmail, name, generatedOtp, `${role.replace('_', ' ')} Registration`);
-    const activeOtp = emailResult.otpCode || generatedOtp;
+    // Dispatch OTP according to selected verification channel
+    let confirmationResult = null;
+    let activeOtp = generatedOtp;
+    let dispatchMode = 'EMAIL';
+    let dispatchMessage = '';
+
+    if (verificationChannel === 'MOBILE') {
+      try {
+        const phoneResult = await sendFirebasePhoneOtp(formattedPhone);
+        confirmationResult = phoneResult.confirmationResult;
+        if (phoneResult.simulatedOtp) {
+          activeOtp = phoneResult.simulatedOtp;
+        }
+        dispatchMode = phoneResult.isMock ? 'SIMULATED_SMS' : 'FIREBASE_SMS_DISPATCHED';
+        dispatchMessage = `SMS verification code dispatched via Firebase to ${formattedPhone}`;
+      } catch (err) {
+        console.warn("Firebase Phone OTP dispatch notice:", err);
+        // Fallback to email dispatch
+        const emailFallback = await sendRealOtpEmail(cleanEmail, name, generatedOtp, `Mobile Registration (+91 ${last10})`);
+        activeOtp = emailFallback.otpCode || generatedOtp;
+        dispatchMode = emailFallback.mode;
+        dispatchMessage = emailFallback.message;
+      }
+    } else {
+      // Dispatch real email OTP via Gmail backend
+      const emailResult = await sendRealOtpEmail(cleanEmail, name, generatedOtp, `${(role || 'User').replace('_', ' ')} Email Registration`);
+      activeOtp = emailResult.otpCode || generatedOtp;
+      dispatchMode = emailResult.mode;
+      dispatchMessage = emailResult.message;
+    }
 
     pendingUser.verificationCode = activeOtp;
 
-    // Trigger OTP modal step
+    // Trigger OTP modal step with 5-minute countdown
     setOtpModalData({
+      userPhone: verificationChannel === 'MOBILE' ? formattedPhone : null,
       userEmail: cleanEmail,
       userName: name,
       pendingUser,
+      verificationChannel,
+      confirmationResult,
       generatedOtp: activeOtp,
-      dispatchMode: emailResult.mode,
-      dispatchMessage: emailResult.message
+      expiresAt: Date.now() + 5 * 60 * 1000,
+      isLogin: false,
+      dispatchMode,
+      dispatchMessage
     });
 
-    showToast(`Verification code generated for ${cleanEmail}!`, 'info');
-    return { pendingUser, generatedOtp, emailResult };
+    const targetMsg = verificationChannel === 'MOBILE' ? formattedPhone : cleanEmail;
+    showToast(`Verification code generated for ${targetMsg}! Valid for 5 minutes.`, 'info');
+    return { pendingUser, generatedOtp: activeOtp, confirmationResult, verificationChannel };
   };
 
-  // Resend OTP to user's email
+  // Resend OTP to user's email or phone
   const resendEmailOtp = async () => {
     if (!otpModalData) return;
     const newOtp = Math.floor(100000 + Math.random() * 900000).toString();
-    const updatedPendingUser = {
+    const updatedPendingUser = otpModalData.pendingUser ? {
       ...otpModalData.pendingUser,
       verificationCode: newOtp
-    };
+    } : null;
 
     const emailResult = await sendRealOtpEmail(
-      otpModalData.userEmail,
-      otpModalData.userName || otpModalData.pendingUser.name,
+      otpModalData.userEmail || (otpModalData.pendingUser && otpModalData.pendingUser.email),
+      otpModalData.userName || (otpModalData.pendingUser && otpModalData.pendingUser.name) || 'Sankalp Member',
       newOtp,
-      'Email OTP Resend'
+      otpModalData.verificationChannel === 'MOBILE' ? 'Mobile OTP Resend' : 'Email OTP Resend'
     );
 
     const activeOtp = emailResult.otpCode || newOtp;
-    updatedPendingUser.verificationCode = activeOtp;
+    if (updatedPendingUser) {
+      updatedPendingUser.verificationCode = activeOtp;
+    }
 
     setOtpModalData({
       ...otpModalData,
       generatedOtp: activeOtp,
-      pendingUser: updatedPendingUser,
+      expiresAt: Date.now() + 5 * 60 * 1000,
+      pendingUser: updatedPendingUser || otpModalData.pendingUser,
       dispatchMode: emailResult.mode,
       dispatchMessage: emailResult.message
     });
 
-    showToast(`New verification code sent to ${otpModalData.userEmail}`, 'success');
+    const targetDesc = otpModalData.verificationChannel === 'MOBILE' && otpModalData.userPhone 
+      ? otpModalData.userPhone 
+      : (otpModalData.userEmail || 'registered destination');
+    showToast(`New verification code delivered to ${targetDesc}! Valid for 5 minutes.`, 'success');
   };
 
   // Instant Sign In / Sign Up with Google / Gmail OAuth
@@ -330,7 +386,7 @@ export const AppProvider = ({ children }) => {
   };
 
   // Register a New Verified NGO in the Platform Directory
-  const registerNewNgo = async (ngoData) => {
+  const registerNewNgo = async (ngoData, verificationChannel = 'EMAIL') => {
     const { ngoName, email, phone, directorName, registrationNo, darpanId, city, state, address, primarySectors, specialization, password } = ngoData;
     const cleanEmail = email.trim().toLowerCase();
 
@@ -372,7 +428,7 @@ export const AppProvider = ({ children }) => {
       pastHistorySummary: `Newly onboarded verified NGO authorized to conduct onfield and virtual drives in ${primarySectors.join(', ')}.`
     };
 
-    // Register user account for NGO
+    // Register user account for NGO with selected verification channel
     return await registerUser({
       name: `${directorName} (${ngoName})`,
       email: cleanEmail,
@@ -387,7 +443,7 @@ export const AppProvider = ({ children }) => {
       institution: ngoName,
       profession: 'NGO Director / Lead',
       age: 35
-    });
+    }, verificationChannel);
   };
 
   // Complete OTP Verification & Activate/Authenticate Account (Registration or Login)
@@ -399,13 +455,27 @@ export const AppProvider = ({ children }) => {
 
     // Check with backend API first, fallback to state
     let isMatch = cleanInputOtp === expectedOtp;
-    try {
-      const backendCheck = await verifyOtpWithBackend(otpModalData.userEmail, cleanInputOtp);
-      if (backendCheck?.success) {
+    
+    // If Firebase confirmationResult is present (for Mobile Phone OTP registration)
+    if (otpModalData.confirmationResult) {
+      try {
+        await confirmFirebasePhoneOtp(otpModalData.confirmationResult, cleanInputOtp);
         isMatch = true;
+      } catch (err) {
+        console.warn("Firebase confirmation check:", err);
+        if (cleanInputOtp !== expectedOtp) {
+          throw err;
+        }
       }
-    } catch {
-      // Offline fallback
+    } else {
+      try {
+        const backendCheck = await verifyOtpWithBackend(otpModalData.userEmail, cleanInputOtp);
+        if (backendCheck?.success) {
+          isMatch = true;
+        }
+      } catch {
+        // Offline fallback
+      }
     }
 
     if (isMatch) {
@@ -417,7 +487,8 @@ export const AppProvider = ({ children }) => {
         }
         setOtpModalData(null);
         loginUserWithSession(user, true);
-        showToast(`Welcome back, ${user.name}! Authenticated securely via Email OTP.`, "success");
+        const channelName = otpModalData.userPhone ? 'Mobile OTP' : 'Email OTP';
+        showToast(`Welcome back, ${user.name}! Authenticated securely via ${channelName}.`, "success");
         return true;
       }
 
@@ -425,6 +496,7 @@ export const AppProvider = ({ children }) => {
       const activatedUser = {
         ...otpModalData.pendingUser,
         isEmailVerified: true,
+        isPhoneVerified: true,
         verificationCode: null
       };
 
@@ -494,10 +566,11 @@ export const AppProvider = ({ children }) => {
       
       // Auto log-in newly verified user
       loginUserWithSession(activatedUser, true);
-      showToast("Email verified successfully! Welcome to the Sankalp NGO Network.", "success");
+      const verifiedChannelDesc = otpModalData.verificationChannel === 'MOBILE' ? 'Mobile number' : 'Email';
+      showToast(`${verifiedChannelDesc} verified successfully! Welcome to the Sankalp NGO Network.`, "success");
       return true;
     } else {
-      throw new Error("Invalid verification code. Please check your email or test inbox.");
+      throw new Error("Invalid verification code. Please check your verification code and retry.");
     }
   };
 
@@ -540,14 +613,154 @@ export const AppProvider = ({ children }) => {
       userName: user.name,
       pendingUser: user,
       generatedOtp: activeOtp,
+      expiresAt: Date.now() + 5 * 60 * 1000,
       isLogin: true,
       dispatchMode: emailResult.mode,
       dispatchMessage: emailResult.message
     });
 
-    showToast(`Login OTP sent to ${cleanEmail}!`, 'info');
+    showToast(`Login OTP sent to ${cleanEmail}! Valid for 5 minutes.`, 'info');
     return { user, generatedOtp, emailResult };
   };
+
+  // Initiate Passwordless Mobile Phone Number OTP Login
+  const initiateMobileOtpLogin = async (phoneInput, expectedRole = null) => {
+    const rawDigits = (phoneInput || '').toString().replace(/\D/g, '');
+    if (!rawDigits || rawDigits.length < 10) {
+      throw new Error("Please enter a valid 10-digit mobile number.");
+    }
+
+    const last10 = rawDigits.slice(-10);
+
+    // Look for matching user in users directory by phone digits or email
+    const user = users.find(u => {
+      const uPhoneDigits = (u.phone || '').toString().replace(/\D/g, '');
+      return uPhoneDigits.endsWith(last10);
+    });
+
+    if (!user) {
+      throw new Error(`No registered account found with mobile number ending in ${last10}. Please register or check your number.`);
+    }
+
+    // Role check if expectedRole is specified
+    if (expectedRole && user.role !== expectedRole) {
+      const isNgoRole = (expectedRole === 'NGO_PARTNER' || expectedRole === 'NGO_STAFF') && (user.role === 'NGO_PARTNER' || user.role === 'NGO_STAFF' || user.role === 'SUPER_ADMIN');
+      if (!isNgoRole && !(expectedRole === 'NGO_STAFF' && user.role === 'SUPER_ADMIN')) {
+        throw new Error(`This portal is for ${expectedRole.replace('_', ' ')} accounts only. Your account is registered as ${user.role.replace('_', ' ')}.`);
+      }
+    }
+
+    // Generate real 6-digit OTP with 5-min expiration
+    const generatedOtp = Math.floor(100000 + Math.random() * 900000).toString();
+    const formattedPhone = `+91 ${last10.slice(0, 5)} ${last10.slice(5)}`;
+
+    // Deliver OTP via real serverless email to user's registered email
+    const emailResult = await sendRealOtpEmail(
+      user.email,
+      user.name,
+      generatedOtp,
+      `Mobile Phone Login Verification (+91 ${last10})`
+    );
+
+    const activeOtp = emailResult.otpCode || generatedOtp;
+
+    // Open OTP Verification Modal configured for Mobile Login
+    setOtpModalData({
+      userPhone: formattedPhone,
+      userEmail: user.email,
+      userName: user.name,
+      pendingUser: user,
+      generatedOtp: activeOtp,
+      expiresAt: Date.now() + 5 * 60 * 1000,
+      isLogin: true,
+      dispatchMode: emailResult.mode,
+      dispatchMessage: emailResult.message
+    });
+
+    showToast(`6-Digit OTP generated & dispatched for ${formattedPhone}! Valid for 5 minutes.`, 'info');
+    return { user, generatedOtp, formattedPhone, emailResult };
+  };
+
+  // Authenticate User via Firebase Phone OTP Verification Result
+  const loginWithFirebasePhone = async (firebaseUser, phoneInput, expectedRole = null) => {
+    const rawDigits = (phoneInput || (firebaseUser && firebaseUser.phoneNumber) || '').toString().replace(/\D/g, '');
+    const last10 = rawDigits.slice(-10);
+    const formattedPhone = `+91 ${last10.slice(0, 5)} ${last10.slice(5)}`;
+
+    // Look for matching user in platform directory
+    let matchedUser = users.find(u => {
+      const uPhoneDigits = (u.phone || '').toString().replace(/\D/g, '');
+      return uPhoneDigits.endsWith(last10);
+    });
+
+    if (!matchedUser) {
+      // If user doesn't exist yet, auto-provision user profile with Firebase UID
+      const newUserId = `USR-FB-${(firebaseUser?.uid || Date.now().toString()).slice(-6)}`;
+      const volunteerId = (expectedRole === 'VOLUNTEER' || !expectedRole) ? `VOL-${Date.now().toString().slice(-3)}` : null;
+      
+      matchedUser = {
+        id: newUserId,
+        firebaseUid: firebaseUser?.uid || null,
+        name: firebaseUser?.displayName || `Verified Member (+91 ${last10})`,
+        email: firebaseUser?.email || `phone.${last10}@sankalp.org`,
+        phone: formattedPhone,
+        role: expectedRole || 'VOLUNTEER',
+        companyName: expectedRole === 'COMPANY_PARTNER' ? `Corporate Partner (+91 ${last10})` : '',
+        ngoName: expectedRole === 'NGO_PARTNER' ? `NGO Partner (+91 ${last10})` : '',
+        profession: 'Volunteer',
+        city: 'Mumbai',
+        age: 24,
+        status: 'Active',
+        isPhoneVerified: true,
+        isEmailVerified: true,
+        authProvider: 'firebase_phone',
+        volunteerId,
+        institution: 'Independent Member',
+        skills: ['Public Outreach', 'Community Action'],
+        registeredAt: new Date().toISOString().split('T')[0]
+      };
+
+      setUsers(prev => [...prev, matchedUser]);
+
+      if (matchedUser.role === 'VOLUNTEER') {
+        const newVol = {
+          id: volunteerId,
+          name: matchedUser.name,
+          email: matchedUser.email,
+          phone: formattedPhone,
+          institution: 'Independent Volunteer',
+          profession: 'Volunteer',
+          city: 'Mumbai',
+          age: 24,
+          roleCategory: 'Student Volunteer',
+          skills: ['Public Outreach'],
+          status: 'Verified',
+          joinedDate: matchedUser.registeredAt,
+          eventsParticipated: [],
+          assignedEventIds: [],
+          certificates: []
+        };
+        setVolunteers(prev => [...prev, newVol]);
+      }
+    } else {
+      // Role enforcement if user already exists
+      if (expectedRole && matchedUser.role !== expectedRole) {
+        const isNgoRole = (expectedRole === 'NGO_PARTNER' || expectedRole === 'NGO_STAFF') && (matchedUser.role === 'NGO_PARTNER' || matchedUser.role === 'NGO_STAFF' || matchedUser.role === 'SUPER_ADMIN');
+        if (!isNgoRole && !(expectedRole === 'NGO_STAFF' && matchedUser.role === 'SUPER_ADMIN')) {
+          throw new Error(`This portal is for ${expectedRole.replace('_', ' ')} accounts only. Your account is registered as ${matchedUser.role.replace('_', ' ')}.`);
+        }
+      }
+
+      // Update firebaseUid if present
+      if (firebaseUser?.uid && !matchedUser.firebaseUid) {
+        setUsers(prev => prev.map(u => u.id === matchedUser.id ? { ...u, firebaseUid: firebaseUser.uid, isPhoneVerified: true } : u));
+      }
+    }
+
+    loginUserWithSession(matchedUser, true);
+    return matchedUser;
+  };
+
 
   // Request 6-digit OTP for Password Reset
   const requestPasswordResetOtp = async (email) => {
@@ -1024,7 +1237,10 @@ export const AppProvider = ({ children }) => {
         verifyEmailOtp,
         resendEmailOtp,
         initiateEmailOtpLogin,
+        initiateMobileOtpLogin,
+        loginWithFirebasePhone,
         requestPasswordResetOtp,
+
         completePasswordReset,
         updateVolunteerProfile,
         loginUser,
