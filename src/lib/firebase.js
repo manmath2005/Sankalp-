@@ -184,7 +184,9 @@ export const formatFirebaseError = (error) => {
     case 'auth/user-disabled':
       return "This account has been disabled by the administrator.";
     case 'auth/operation-not-allowed':
-      return "Phone authentication is not enabled in the Firebase Console. Please enable Phone provider in Firebase.";
+      return "Phone provider is not enabled or saved in Firebase. In Firebase Console → Authentication → Sign-in method, ensure 'Phone' is toggled Enable and click 'Save'. You can also add '+91 9876543210' under 'Phone numbers for testing' with code '123456'.";
+    case 'auth/billing-not-enabled':
+      return "Firebase SMS limit reached. In Firebase Console, add test phone numbers under Authentication → Sign-in method → Phone → 'Phone numbers for testing'.";
     default:
       if (msg.includes("reCAPTCHA")) {
         return "Security verification failed. Please refresh and try again.";
