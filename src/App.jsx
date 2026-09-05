@@ -99,6 +99,11 @@ function MainLayout() {
         return <VolunteerDashboardView onNavigate={handleNavigate} />;
       case 'corporate':
       case 'corporate-partner':
+      case 'request-drive':
+      case 'request_drive':
+      case 'host-drive':
+      case 'host_drive':
+      case 'drive-request':
         return <CorporatePartnerView onNavigate={handleNavigate} />;
       case 'volunteer-login':
         return <VolunteerLoginView onNavigate={handleNavigate} />;
@@ -113,6 +118,10 @@ function MainLayout() {
       case 'reset-password':
         return <ForgotPasswordView onNavigate={handleNavigate} />;
       case 'dbms':
+      case 'admin-dbms':
+      case 'admin_dbms':
+      case 'admin':
+      case 'ngo-manager':
         // RBAC Enforcement: NGO_PARTNER, NGO_STAFF, and SUPER_ADMIN can manage campaigns, volunteers & NOCs
         if (!currentUser || (currentUser.role !== 'NGO_PARTNER' && currentUser.role !== 'NGO_STAFF' && currentUser.role !== 'SUPER_ADMIN')) {
           return <NgoLoginView onNavigate={handleNavigate} />;

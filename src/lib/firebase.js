@@ -48,12 +48,16 @@ export const initRecaptchaVerifier = (containerId = 'recaptcha-container', onSol
       window.recaptchaVerifier = null;
     }
 
-    const containerElem = document.getElementById(containerId);
+    // Ensure container exists in DOM to prevent Firebase null DOM exceptions
+    let containerElem = document.getElementById(containerId);
     if (!containerElem) {
-      console.warn(`reCAPTCHA container #${containerId} not found in DOM yet.`);
+      containerElem = document.createElement('div');
+      containerElem.id = containerId;
+      containerElem.style.display = 'none';
+      document.body.appendChild(containerElem);
     }
 
-    const verifier = new RecaptchaVerifier(auth, containerId, {
+    const verifier = new RecaptchaVerifier(auth, containerElem, {
       size: 'invisible',
       callback: (response) => {
         if (onSolved) onSolved(response);

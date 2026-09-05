@@ -39,52 +39,7 @@ export const CorporatePartnerView = ({ onNavigate }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedNgoDetail, setSelectedNgoDetail] = useState(null);
 
-  // GATE: Must be logged in as COMPANY_PARTNER
-  if (!currentUser || currentUser.role !== 'COMPANY_PARTNER') {
-    return (
-      <div className="max-w-2xl mx-auto px-4 py-16 text-center space-y-6 page-enter">
-        <div className="glass-panel p-10 rounded-3xl border border-indigo-200 shadow-float space-y-5">
-          <div className="w-20 h-20 rounded-3xl bg-gradient-to-tr from-indigo-500 to-sky-400 text-white flex items-center justify-center mx-auto shadow-lg animate-bounce-soft">
-            <Shield className="w-10 h-10" />
-          </div>
-
-          <h2 className="text-2xl font-extrabold text-slate-900">
-            Institutional Login Required
-          </h2>
-          
-          <p className="text-sm text-slate-600 max-w-md mx-auto leading-relaxed">
-            Companies, government offices, colleges, and schools must <strong>register or sign in</strong> to their Institutional Partner account before browsing verified NGO profiles, inspecting track records, and submitting awareness drive requests.
-          </p>
-
-          <div className="flex justify-center gap-3 pt-2">
-            <button
-              onClick={() => onNavigate('company-login')}
-              className="px-6 py-3 rounded-xl bg-gradient-to-r from-indigo-600 to-sky-600 hover:from-indigo-700 hover:to-sky-700 text-white font-bold text-xs shadow-lg press-effect flex items-center gap-2"
-            >
-              <Building2 className="w-4 h-4" />
-              Go to Company Login / Register Portal
-            </button>
-          </div>
-
-          <div className="pt-4 border-t border-slate-200 space-y-2 text-left max-w-sm mx-auto">
-            <p className="text-[11px] font-extrabold text-slate-400 uppercase tracking-widest text-center">Why Registration is Required:</p>
-            <div className="flex items-start gap-2 text-xs text-slate-600">
-              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 mt-0.5 shrink-0" />
-              <span>Browse National Directory of 80G/12A accredited partner NGOs</span>
-            </div>
-            <div className="flex items-start gap-2 text-xs text-slate-600">
-              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 mt-0.5 shrink-0" />
-              <span>Select specific NGOs to conduct tailored onfield/online drives</span>
-            </div>
-            <div className="flex items-start gap-2 text-xs text-slate-600">
-              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 mt-0.5 shrink-0" />
-              <span>Upload HR/CEO sanction letters with end-to-end audit tracking</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
+  const isCompanyUser = currentUser && currentUser.role === 'COMPANY_PARTNER';
 
   // Filter NGOs
   const filteredNgos = (ngos || []).filter(ngo => {
@@ -104,23 +59,39 @@ export const CorporatePartnerView = ({ onNavigate }) => {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8 text-left page-enter">
       
-      {/* Welcome Banner */}
-      <div className="glass-panel p-6 rounded-3xl border border-indigo-200 shadow-sm bg-gradient-to-r from-indigo-50 via-sky-50 to-emerald-50 flex flex-col md:flex-row md:items-center justify-between gap-4 animate-float-up">
+      {/* Welcome / Header Banner */}
+      <div className="glass-panel p-6 rounded-3xl border border-indigo-200 dark:border-indigo-800 shadow-sm bg-gradient-to-r from-indigo-50 via-sky-50 to-emerald-50 dark:from-slate-900 dark:via-indigo-950/40 dark:to-slate-900 flex flex-col md:flex-row md:items-center justify-between gap-4 animate-float-up">
         <div className="flex items-center gap-4">
           <div className="w-14 h-14 rounded-2xl bg-gradient-to-tr from-indigo-600 to-sky-500 text-white flex items-center justify-center font-bold text-xl shadow-lg">
-            {currentUser.name.charAt(0)}
+            {isCompanyUser ? (currentUser.name.charAt(0)) : <Building2 className="w-7 h-7" />}
           </div>
           <div>
-            <div className="flex items-center gap-2">
-              <h1 className="text-xl font-extrabold text-slate-900">{currentUser.companyName || currentUser.name}</h1>
-              <span className="px-2.5 py-0.5 rounded-full bg-indigo-100 text-indigo-800 text-[10px] font-extrabold border border-indigo-200">
-                Verified Institutional Partner
+            <div className="flex items-center gap-2 flex-wrap">
+              <h1 className="text-xl font-extrabold text-slate-900 dark:text-white">
+                {isCompanyUser ? (currentUser.companyName || currentUser.name) : "Host an Institutional Awareness Drive"}
+              </h1>
+              <span className="px-2.5 py-0.5 rounded-full bg-indigo-100 dark:bg-indigo-950/80 text-indigo-800 dark:text-indigo-300 text-[10px] font-extrabold border border-indigo-200 dark:border-indigo-800">
+                {isCompanyUser ? "Verified Institutional Partner" : "Govt Offices • MNCs • Colleges • Schools"}
               </span>
             </div>
-            <p className="text-xs text-slate-600 mt-0.5">{currentUser.email} • Select an accredited NGO below to conduct awareness drives</p>
+            <p className="text-xs text-slate-600 dark:text-slate-300 mt-0.5">
+              {isCompanyUser 
+                ? `${currentUser.email} • Select an accredited NGO below to conduct awareness drives`
+                : "Browse verified 80G/12A accredited NGOs, inspect past audit tracks, and submit event drive requests with official HR/CEO sanction letters."
+              }
+            </p>
           </div>
         </div>
         <div className="flex items-center gap-2 shrink-0 flex-wrap">
+          {!isCompanyUser && (
+            <button
+              onClick={() => onNavigate('company-login')}
+              className="px-4 py-2.5 rounded-xl bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-800 dark:text-white font-bold text-xs border border-slate-300 dark:border-slate-700 shadow-xs press-effect flex items-center gap-1.5"
+            >
+              <Building2 className="w-4 h-4 text-indigo-600" /> Sign In as Institution
+            </button>
+          )}
+
           <button
             onClick={() => onNavigate('esg-report')}
             className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-black text-xs shadow-md press-effect flex items-center gap-1.5"
