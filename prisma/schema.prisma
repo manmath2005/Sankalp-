@@ -1,4 +1,4 @@
-// Prisma Schema Definition for ImpactBridge Platform
+// Prisma Schema Definition for Sankalp Platform
 // Database: PostgreSQL with Prisma ORM
 
 datasource db {

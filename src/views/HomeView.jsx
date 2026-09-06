@@ -108,7 +108,7 @@ export const HomeView = ({ onNavigate }) => {
             A Unified Tri-Party Ecosystem
           </span>
           <h2 className="text-2xl sm:text-4xl font-black text-slate-900 tracking-tight">
-            How ImpactBridge Powers Seamless Social Action
+            How Sankalp Powers Seamless Social Action
           </h2>
           <p className="text-xs sm:text-sm text-slate-600 font-medium leading-relaxed">
             Connecting companies with mandated CSR budgets, verified non-profit executors, and impassioned citizen volunteers under one authenticated roof.

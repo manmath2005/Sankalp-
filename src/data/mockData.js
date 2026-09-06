@@ -1411,7 +1411,7 @@ export const INITIAL_PAST_EVENTS = [
         handle: "@aarav_volunteers",
         avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=150&q=80",
         time: "4 days ago",
-        text: "Participated in the Vastra Samman drive at District Collectorate! Proud to hold my QR-verified BridgeImpact certificate. 📜🤝",
+        text: "Participated in the Vastra Samman drive at District Collectorate! Proud to hold my QR-verified Sankalp certificate. 📜🤝",
         likes: 318,
         shares: 52,
         comments: 19

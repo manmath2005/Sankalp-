@@ -81,15 +81,15 @@ export const AboutUsView = ({ onNavigate }) => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-500/20 border border-emerald-400/40 text-emerald-300 text-xs font-black tracking-wide uppercase shadow-sm">
             <Compass className="w-4 h-4 text-emerald-400" />
-            About BridgeImpact Platform
+            About Sankalp Platform
           </div>
 
           <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight text-white leading-tight max-w-4xl">
-            Bridging Purpose, Corporate Capital & Authentic Grassroots Change.
+            🤝 Sankalp: Connecting Help to Hope.
           </h1>
 
           <p className="text-base sm:text-lg text-slate-200 font-medium max-w-3xl leading-relaxed">
-            BridgeImpact is India's next-generation unified CSR ecosystem connecting companies, verified non-profits, and dedicated volunteers under a single transparent, technology-driven platform.
+            Sankalp is a centralized, high-availability disaster relief coordination platform designed to bridge the gap between active crisis zones and those eager to help by connecting verified ground-level NGOs with corporate partners and volunteers.
           </p>
 
           {/* Quick Metrics Bar */}
@@ -117,14 +117,14 @@ export const AboutUsView = ({ onNavigate }) => {
                 <div className="relative w-72 sm:w-80 h-96 sm:h-[420px] rounded-2xl overflow-hidden border-2 border-white/80 dark:border-slate-800 shadow-2xl bg-slate-900">
                   <img 
                     src={founderImg} 
-                    alt="Mr. Manmath N. Sangave - Founder, BridgeImpact" 
+                    alt="Mr. Manmath N. Sangave - Founder, Sankalp" 
                     className="w-full h-full object-cover object-top hover:scale-105 transition-transform duration-500"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent" />
                   <div className="absolute bottom-4 left-4 right-4 text-white">
                     <p className="text-sm font-black">Mr. Manmath N. Sangave</p>
                     <p className="text-[11px] text-emerald-300 font-bold uppercase tracking-wider">Founder & Executive Director</p>
-                    <p className="text-[10px] text-slate-300">BridgeImpact Social Awareness Network</p>
+                    <p className="text-[10px] text-slate-300">Sankalp Social Awareness Network</p>
                   </div>
                 </div>
               </div>
@@ -142,23 +142,23 @@ export const AboutUsView = ({ onNavigate }) => {
                   Meet the Founder: Mr. Manmath N. Sangave
                 </h2>
                 <p className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest mt-1">
-                  Founder & Chief Architect, BridgeImpact
+                  Founder & Chief Architect, Sankalp
                 </p>
               </div>
 
               <div className="space-y-4 text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed font-medium">
                 <p>
-                  Driven by a deep conviction to revolutionize social awareness, institutional collaboration, and grassroots philanthropy, <strong>Mr. Manmath N. Sangave</strong> conceived <strong>BridgeImpact</strong> to eliminate friction between corporate CSR resources and genuine community needs.
+                  Dedicated to leveraging software engineering for scalable humanitarian impact. <strong>Mr. Manmath N. Sangave</strong> conceptualized and engineered <strong>Sankalp</strong> out of the necessity to eliminate logistical bottlenecks and establish transparent, verifiable coordination during critical disaster response windows.
                 </p>
                 <p>
-                  Under his visionary guidance, BridgeImpact has engineered cutting-edge digital infrastructure — incorporating cryptographic digital certificates, AI-assisted CSR partner matchmaking, and rapid SOS disaster mobilization — ensuring every volunteer hour is valued and every rupee of CSR capital creates measurable social change.
+                  Under his visionary guidance, Sankalp has engineered high-availability digital infrastructure — incorporating cryptographic digital certificates, AI-assisted CSR partner matchmaking, and rapid SOS disaster mobilization — ensuring every volunteer hour is valued and every rupee of CSR capital creates measurable social change.
                 </p>
               </div>
 
               {/* Founder Quote Card */}
               <div className="p-4 sm:p-5 rounded-2xl bg-emerald-50/80 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800/60 text-slate-800 dark:text-emerald-100">
                 <p className="text-xs sm:text-sm italic leading-relaxed font-semibold">
-                  “Real social impact shouldn't be trapped in paperwork. By leveraging transparent technology, verified credentials, and real-time community mobilization, BridgeImpact turns intent into quantifiable action.”
+                  “Technology is only as powerful as the impact it creates on the ground.”
                 </p>
                 <p className="text-[11px] font-black text-emerald-700 dark:text-emerald-300 mt-2">
                   — Mr. Manmath N. Sangave
@@ -178,7 +178,7 @@ export const AboutUsView = ({ onNavigate }) => {
                   className="px-5 py-2.5 rounded-xl bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 font-bold text-xs border border-slate-300 dark:border-slate-700 shadow-sm transition-all flex items-center gap-2 press-effect"
                 >
                   <Building2 className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
-                  <span>Partner With Us</span>
+                  <span>Host Corporate / Govt Drive</span>
                 </button>
               </div>
             </div>
@@ -187,57 +187,58 @@ export const AboutUsView = ({ onNavigate }) => {
         </div>
       </section>
 
-      {/* 3. Core Operating Pillars */}
+      {/* 3. Core Pillars Section */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
         <div className="text-center max-w-2xl mx-auto space-y-2">
-          <span className="text-xs font-extrabold text-emerald-600 dark:text-emerald-400 uppercase tracking-widest bg-emerald-50 dark:bg-emerald-950/60 px-3.5 py-1 rounded-full border border-emerald-200 dark:border-emerald-800">
-            Platform Capabilities
-          </span>
           <h2 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white">
-            6 Core Pillars Powering BridgeImpact
+            6 Core Pillars Powering Sankalp
           </h2>
-          <p className="text-xs text-slate-500 dark:text-slate-400">
-            A comprehensive suite of institutional tools for modern non-profit governance.
+          <p className="text-xs text-slate-600 dark:text-slate-400">
+            Engineered with modern architecture to deliver verified social impact at enterprise scale.
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {pillars.map((p, idx) => (
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {pillars.map((pillar, idx) => (
             <div 
-              key={idx}
-              className="glass-panel p-6 rounded-3xl border border-slate-200/80 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 shadow-sm hover:shadow-lg transition-all space-y-3"
+              key={idx} 
+              className="p-6 rounded-3xl glass-panel border border-slate-200/80 dark:border-slate-800 bg-white/80 dark:bg-slate-900/80 space-y-3 hover-lift transition-all"
             >
               <div className="p-3 rounded-2xl bg-slate-100 dark:bg-slate-800 w-fit">
-                {p.icon}
+                {pillar.icon}
               </div>
-              <h3 className="text-base font-black text-slate-900 dark:text-white">{p.title}</h3>
-              <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed font-medium">{p.desc}</p>
+              <h3 className="text-sm font-black text-slate-900 dark:text-white">
+                {pillar.title}
+              </h3>
+              <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed font-medium">
+                {pillar.desc}
+              </p>
             </div>
           ))}
         </div>
       </section>
 
-      {/* 4. Ready to Collaborate CTA */}
+      {/* 4. Bottom CTA Section */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="p-8 sm:p-12 rounded-3xl bg-gradient-to-r from-emerald-600 via-teal-600 to-sky-700 text-white shadow-2xl flex flex-col md:flex-row items-center justify-between gap-6">
-          <div className="space-y-2 max-w-xl">
-            <h3 className="text-2xl sm:text-3xl font-black">Ready to Amplify Your Social Impact?</h3>
-            <p className="text-xs sm:text-sm text-emerald-100 font-medium leading-relaxed">
-              Join 50+ verified non-profits, leading corporate CSR teams, and thousands of citizen volunteers on BridgeImpact today.
-            </p>
-          </div>
-          <div className="flex flex-wrap items-center gap-3">
+        <div className="p-8 sm:p-12 rounded-3xl bg-gradient-to-r from-sky-600 via-indigo-600 to-emerald-600 text-white text-center space-y-4 shadow-xl">
+          <h2 className="text-2xl sm:text-3xl font-black">
+            Ready to Connect Help to Hope?
+          </h2>
+          <p className="text-xs sm:text-sm text-slate-100 max-w-xl mx-auto leading-relaxed font-medium">
+            Join 50+ verified non-profits, leading corporate CSR teams, and thousands of citizen volunteers on Sankalp today.
+          </p>
+          <div className="pt-2 flex justify-center gap-3">
             <button
               onClick={() => onNavigate('volunteer-login')}
-              className="px-6 py-3 rounded-xl bg-white text-emerald-800 hover:bg-emerald-50 font-black text-xs uppercase tracking-wider shadow-lg press-effect"
+              className="px-6 py-3 rounded-2xl bg-white text-slate-900 font-black text-xs shadow-lg hover:bg-slate-100 transition press-effect"
             >
-              Volunteer Now
+              Join as Volunteer
             </button>
             <button
-              onClick={() => onNavigate('company-login')}
-              className="px-6 py-3 rounded-xl bg-slate-900 text-white hover:bg-slate-800 font-black text-xs uppercase tracking-wider shadow-lg press-effect"
+              onClick={() => onNavigate('corporate')}
+              className="px-6 py-3 rounded-2xl bg-slate-900/80 text-white font-black text-xs border border-white/20 hover:bg-slate-900 transition press-effect"
             >
-              Corporate Portal
+              Partner as Institution
             </button>
           </div>
         </div>

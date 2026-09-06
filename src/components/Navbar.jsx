@@ -47,8 +47,8 @@ export const Navbar = ({ activeTab, setActiveTab }) => {
                 ECOSYSTEM
               </span>
             </div>
-            <p className="text-[10px] text-slate-500 dark:text-slate-400 font-medium hidden xl:block leading-none mt-0.5">
-              Social Awareness & Volunteer Network
+            <p className="text-[10px] text-slate-500 dark:text-slate-400 font-bold hidden xl:block leading-none mt-0.5">
+              Connecting Help to Hope
             </p>
           </div>
         </div>
@@ -365,7 +365,7 @@ export const Navbar = ({ activeTab, setActiveTab }) => {
               activeTab === 'about' ? 'bg-emerald-50 dark:bg-emerald-950/80 text-emerald-700 dark:text-emerald-300' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800'
             }`}
           >
-            <Sparkles className="w-4 h-4 text-emerald-600" /> About BridgeImpact & Founder
+            <Sparkles className="w-4 h-4 text-emerald-600" /> About Sankalp & Founder
           </button>
 
           {/* If NOT Logged in: Show Separate Login Buttons */}

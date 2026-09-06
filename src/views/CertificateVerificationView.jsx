@@ -64,7 +64,7 @@ export const CertificateVerificationView = ({ certificateId, onNavigate }) => {
   const verificationUrl = window.location.origin + `/?verify=${encodeURIComponent(matchedCert.id)}`;
 
   // Official LinkedIn Add Certification Schema URL
-  const linkedInUrl = `https://www.linkedin.com/profile/add?startTask=CERTIFICATION_NAME&name=${encodeURIComponent(matchedCert.eventTitle)}&organizationName=${encodeURIComponent(matchedCert.ngoName || 'ImpactBridge & Sankalp Foundation')}&issueYear=${issueYear}&issueMonth=${issueMonth}&certUrl=${encodeURIComponent(verificationUrl)}&certId=${encodeURIComponent(matchedCert.certificateNumber || matchedCert.id)}`;
+  const linkedInUrl = `https://www.linkedin.com/profile/add?startTask=CERTIFICATION_NAME&name=${encodeURIComponent(matchedCert.eventTitle)}&organizationName=${encodeURIComponent(matchedCert.ngoName || 'Sankalp Social Network & Foundation')}&issueYear=${issueYear}&issueMonth=${issueMonth}&certUrl=${encodeURIComponent(verificationUrl)}&certId=${encodeURIComponent(matchedCert.certificateNumber || matchedCert.id)}`;
 
   const qrSvg = generateQRCodeSVG(verificationUrl, 140);
 
@@ -88,7 +88,7 @@ export const CertificateVerificationView = ({ certificateId, onNavigate }) => {
           className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-500 hover:text-slate-900 transition-colors"
         >
           <ArrowLeft className="w-4 h-4" />
-          Back to ImpactBridge Home
+          Back to Sankalp Home
         </button>
 
         <div className="flex items-center gap-2.5">
@@ -131,7 +131,7 @@ export const CertificateVerificationView = ({ certificateId, onNavigate }) => {
           <div className="space-y-1.5">
             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 text-xs font-extrabold border border-emerald-400/30">
               <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-              <span>Verified Authentic by ImpactBridge Network</span>
+              <span>Verified Authentic by Sankalp Network</span>
             </div>
             <h1 className="text-2xl sm:text-3xl font-black text-white">
               Official Digital Credential Audit
@@ -164,7 +164,7 @@ export const CertificateVerificationView = ({ certificateId, onNavigate }) => {
             {/* Header Text */}
             <div className="space-y-1 mb-6">
               <span className="text-xs font-black tracking-[0.3em] uppercase text-sky-800">
-                ImpactBridge • National Non-Profit Verification Registry
+                Sankalp • National Non-Profit Verification Registry
               </span>
               <p className="text-[11px] text-slate-500 font-medium">
                 Issued in partnership with NITI Aayog Darpan & 80G Certified Non-Profits
@@ -230,7 +230,7 @@ export const CertificateVerificationView = ({ certificateId, onNavigate }) => {
                   Dr. R. K. Saxena
                 </div>
                 <p className="text-[10px] font-extrabold text-slate-500 uppercase tracking-wider block">
-                  Authorizing Director • Sankalp / ImpactBridge
+                  Authorizing Director • Sankalp Platform
                 </p>
               </div>
 

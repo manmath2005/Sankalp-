@@ -46,7 +46,7 @@ export const CertificateStudio = ({ certificate, volunteerName, onClose }) => {
 
           <div className="flex items-center gap-2">
             <a
-              href={`https://www.linkedin.com/profile/add?startTask=CERTIFICATION_NAME&name=${encodeURIComponent(certificate.eventTitle)}&organizationName=${encodeURIComponent(ngoInfo.name || 'ImpactBridge & Sankalp Foundation')}&issueYear=${new Date(certificate.issuedDate || Date.now()).getFullYear()}&issueMonth=${new Date(certificate.issuedDate || Date.now()).getMonth() + 1}&certUrl=${encodeURIComponent(verificationUrl)}&certId=${encodeURIComponent(certificate.certificateNumber || certificate.id)}`}
+              href={`https://www.linkedin.com/profile/add?startTask=CERTIFICATION_NAME&name=${encodeURIComponent(certificate.eventTitle)}&organizationName=${encodeURIComponent(ngoInfo.name || 'Sankalp Social Network & Foundation')}&issueYear=${new Date(certificate.issuedDate || Date.now()).getFullYear()}&issueMonth=${new Date(certificate.issuedDate || Date.now()).getMonth() + 1}&certUrl=${encodeURIComponent(verificationUrl)}&certId=${encodeURIComponent(certificate.certificateNumber || certificate.id)}`}
               target="_blank"
               rel="noopener noreferrer"
               className="px-3.5 py-1.5 rounded-xl bg-[#0A66C2] hover:bg-[#004182] text-white text-xs font-bold shadow transition-all flex items-center gap-1.5 press-effect"

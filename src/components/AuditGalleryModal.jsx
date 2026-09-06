@@ -354,7 +354,7 @@ export const AuditGalleryModal = ({ event, onClose }) => {
         {/* Modal Footer */}
         <div className="p-4 bg-slate-50 dark:bg-slate-800/60 border-t border-slate-200 dark:border-slate-700 flex items-center justify-between">
           <span className="text-xs text-slate-500 dark:text-slate-400 font-mono">
-            Audited & Certified by BridgeImpact Platform
+            Audited & Certified by Sankalp Platform
           </span>
           <button
             onClick={onClose}

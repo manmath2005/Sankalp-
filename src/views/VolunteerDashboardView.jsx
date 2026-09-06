@@ -624,7 +624,7 @@ export const VolunteerDashboardView = ({ onNavigate }) => {
                 const issueYear = new Date(cert.issuedDate || Date.now()).getFullYear();
                 const issueMonth = new Date(cert.issuedDate || Date.now()).getMonth() + 1;
                 const verifyLink = `${window.location.origin}/?verify=${encodeURIComponent(cert.id)}`;
-                const linkedInAddUrl = `https://www.linkedin.com/profile/add?startTask=CERTIFICATION_NAME&name=${encodeURIComponent(cert.eventTitle)}&organizationName=${encodeURIComponent('ImpactBridge & Sankalp NGO Network')}&issueYear=${issueYear}&issueMonth=${issueMonth}&certUrl=${encodeURIComponent(verifyLink)}&certId=${encodeURIComponent(cert.certificateNumber || cert.id)}`;
+                const linkedInAddUrl = `https://www.linkedin.com/profile/add?startTask=CERTIFICATION_NAME&name=${encodeURIComponent(cert.eventTitle)}&organizationName=${encodeURIComponent('Sankalp Social NGO Network')}&issueYear=${issueYear}&issueMonth=${issueMonth}&certUrl=${encodeURIComponent(verifyLink)}&certId=${encodeURIComponent(cert.certificateNumber || cert.id)}`;
 
                 return (
                   <div key={cert.id} className="p-6 rounded-3xl bg-white border border-amber-200/90 shadow-sm hover:shadow-md transition-all space-y-4 text-left">
@@ -708,7 +708,7 @@ export const VolunteerDashboardView = ({ onNavigate }) => {
                 Live Cryptographic Verification Ledger
               </div>
               <h2 className="text-xl font-extrabold text-slate-900 dark:text-white">
-                Verify Any ImpactBridge Digital Certificate
+                Verify Any Sankalp Digital Certificate
               </h2>
               <p className="text-xs text-slate-500 dark:text-slate-400">
                 Input any Certificate ID or Unique Hash to verify authentic hours and Darpan NGO signatures.
@@ -761,7 +761,7 @@ export const VolunteerDashboardView = ({ onNavigate }) => {
                   <ShieldCheck className="w-5 h-5" />
                 </div>
                 <div>
-                  <h4 className="text-sm font-black">BridgeImpact Authenticity Standard</h4>
+                  <h4 className="text-sm font-black">Sankalp Authenticity Standard</h4>
                   <p className="text-[11px] text-slate-500 dark:text-slate-400">Section 135 & NGO Darpan Verified</p>
                 </div>
               </div>
