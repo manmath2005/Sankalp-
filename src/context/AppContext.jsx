@@ -966,6 +966,20 @@ export const AppProvider = ({ children }) => {
       return false;
     }
 
+    // Check if the user used a "demo password" fallback
+    const isDemoPassword = 
+      (cleanEmail === 'manmathsangave28@gmail.com' && (cleanPassword === 'Manmath@1234' || cleanPassword === 'manmath@1234')) ||
+      (cleanEmail === 'staff@sankalp.org' && (cleanPassword === 'staff123password' || cleanPassword === 'staff123')) ||
+      (cleanEmail === 'rohan.verma@example.com' && (cleanPassword === 'volunteer123' || cleanPassword === 'volunteer123password')) ||
+      (cleanEmail === 'corporate@sbi-staff.org' && (cleanPassword === 'company123password' || cleanPassword === 'company123'));
+
+    if (isDemoPassword) {
+      // Bypass OTP completely for Demo Credentials
+      loginUserWithSession(user, forceTakeover);
+      showToast("Demo login successful! (OTP bypassed)", "success");
+      return true;
+    }
+
     // Proceed to 2-Step Authentication: Dispatch OTP and open verification modal
     const generatedOtp = Math.floor(100000 + Math.random() * 900000).toString();
 
