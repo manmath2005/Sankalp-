@@ -24,7 +24,7 @@ Dedicated to leveraging software engineering for scalable humanitarian impact. S
 - **Focus:** Engineering high-availability systems for social good, corporate ESG compliance, and secure data verification.
 - **Email:** [manmathsangave.ece@gmail.com](mailto:manmathsangave.ece@gmail.com)
 - **Mobile / Phone:** [+91 7030403004](tel:+917030403004)
-- **Live Website:** [https://sankalp-app.vercel.app](https://sankalp-app.vercel.app)
+- **Live Website:** [https://sankalp-zeta.vercel.app/](https://sankalp-zeta.vercel.app/)
 - **GitHub Profile:** [https://github.com/manmath2005](https://github.com/manmath2005)
 - **Repository:** [https://github.com/manmath2005/Sankalp-](https://github.com/manmath2005/Sankalp-)
 
