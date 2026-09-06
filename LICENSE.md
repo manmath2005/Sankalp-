@@ -22,6 +22,10 @@ Dedicated to leveraging software engineering for scalable humanitarian impact. S
 
 - **Role:** Full-Stack Development, AI Integration & System Architecture.
 - **Focus:** Engineering high-availability systems for social good, corporate ESG compliance, and secure data verification.
+- **Email:** [manmathsangave.ece@gmail.com](mailto:manmathsangave.ece@gmail.com)
+- **Mobile / Phone:** [+91 7030403004](tel:+917030403004)
+- **Live Website:** [https://sankalp-app.vercel.app](https://sankalp-app.vercel.app)
+- **GitHub Profile:** [https://github.com/manmath2005](https://github.com/manmath2005)
 - **Repository:** [https://github.com/manmath2005/Sankalp-](https://github.com/manmath2005/Sankalp-)
 
 For partnership inquiries, licensing requests, or corporate CSR onboarding, please contact the maintainer directly.

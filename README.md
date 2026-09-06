@@ -3,11 +3,16 @@
   <h1>🤝 Sankalp: Connecting Help to Hope</h1>
 
   <p>
+    <a href="https://sankalp-app.vercel.app"><img src="https://img.shields.io/badge/Live_Website-sankalp--app.vercel.app-emerald?style=flat&logo=vercel" alt="Live Website" /></a>
     <a href="#"><img src="https://img.shields.io/badge/Status-Active-success.svg" alt="Status: Active" /></a>
     <a href="#"><img src="https://img.shields.io/badge/Version-1.0.0-blue.svg" alt="Version: 1.0.0" /></a>
     <a href="#"><img src="https://img.shields.io/badge/Compliance-MCA_Sec_135-orange.svg" alt="Compliance: MCA Sec 135" /></a>
     <a href="#"><img src="https://img.shields.io/badge/Security-Cryptographic_QR-purple.svg" alt="Security: Cryptographic QR" /></a>
     <a href="#-license--copyright"><img src="https://img.shields.io/badge/License-Proprietary-red.svg" alt="License: Proprietary" /></a>
+  </p>
+
+  <p>
+    🌐 <strong>Live Platform Website:</strong> <a href="https://sankalp-app.vercel.app">https://sankalp-app.vercel.app</a>
   </p>
 </div>
 
@@ -19,6 +24,9 @@
 
 - **Founder & Executive Director:** **Mr. Manmath N. Sangave**
 - **Platform Initiative:** **Sankalp Social Awareness Network**
+- **Contact Email:** [manmathsangave.ece@gmail.com](mailto:manmathsangave.ece@gmail.com)
+- **Contact Number:** [+91 7030403004](tel:+917030403004)
+- **Live Platform:** [https://sankalp-app.vercel.app](https://sankalp-app.vercel.app)
 - **Vision:** Eliminating administrative friction between corporate CSR resources, NITI Aayog Darpan-verified non-profits, and passionate citizen volunteers through immutable digital certification and real-time community mobilization.
 
 ---
@@ -143,6 +151,10 @@ Dedicated to leveraging software engineering for scalable humanitarian impact. S
 
 - **Role:** Full-Stack Development, AI Integration & System Architecture.
 - **Focus:** Engineering high-availability systems for social good, corporate ESG compliance, and secure data verification.
+- **Email:** [manmathsangave.ece@gmail.com](mailto:manmathsangave.ece@gmail.com)
+- **Mobile / Phone:** [+91 7030403004](tel:+917030403004)
+- **Live Website:** [https://sankalp-app.vercel.app](https://sankalp-app.vercel.app)
+- **GitHub Profile:** [https://github.com/manmath2005](https://github.com/manmath2005)
 - **Repository:** [https://github.com/manmath2005/Sankalp-](https://github.com/manmath2005/Sankalp-)
 
 ---
