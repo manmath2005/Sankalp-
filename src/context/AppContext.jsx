@@ -220,6 +220,9 @@ export const AppProvider = ({ children }) => {
     let dispatchMode = 'EMAIL';
     let dispatchMessage = '';
 
+    // Compute last10 once so it's accessible in both try and catch blocks
+    const last10Digits = phoneDigits.slice(-10) || '';
+
     if (verificationChannel === 'MOBILE') {
       try {
         const phoneResult = await sendFirebasePhoneOtp(formattedPhone);
@@ -230,12 +233,15 @@ export const AppProvider = ({ children }) => {
         dispatchMode = phoneResult.isMock ? 'SIMULATED_SMS' : 'FIREBASE_SMS_DISPATCHED';
         dispatchMessage = `SMS verification code dispatched via Firebase to ${formattedPhone}`;
       } catch (err) {
-        console.warn("Firebase Phone OTP dispatch notice:", err);
-        // Fallback to email dispatch
-        const emailFallback = await sendRealOtpEmail(cleanEmail, name, generatedOtp, `Mobile Registration (+91 ${last10})`);
+        console.warn("Firebase Phone OTP dispatch notice (falling back to email):", err);
+        // Fallback: deliver OTP to registered email since Firebase SMS failed
+        const emailFallback = await sendRealOtpEmail(
+          cleanEmail, name, generatedOtp,
+          `Mobile Registration — OTP via Email (+91 ${last10Digits})`
+        );
         activeOtp = emailFallback.otpCode || generatedOtp;
-        dispatchMode = emailFallback.mode;
-        dispatchMessage = emailFallback.message;
+        dispatchMode = emailFallback.mode || 'EMAIL_FALLBACK';
+        dispatchMessage = `SMS delivery failed. OTP sent to your email ${cleanEmail} instead.`;
       }
     } else {
       // Dispatch real email OTP via Gmail backend
@@ -262,8 +268,13 @@ export const AppProvider = ({ children }) => {
       dispatchMessage
     });
 
-    const targetMsg = verificationChannel === 'MOBILE' ? formattedPhone : cleanEmail;
-    showToast(`Verification code generated for ${targetMsg}! Valid for 5 minutes.`, 'info');
+    const targetMsg = (verificationChannel === 'MOBILE' && dispatchMode === 'FIREBASE_SMS_DISPATCHED')
+      ? formattedPhone
+      : cleanEmail;
+    const toastMsg = dispatchMode === 'EMAIL_FALLBACK'
+      ? `SMS unavailable — OTP sent to ${cleanEmail} instead. Check your inbox!`
+      : `Verification code sent to ${targetMsg}! Valid for 5 minutes.`;
+    showToast(toastMsg, 'info');
     return { pendingUser, generatedOtp: activeOtp, confirmationResult, verificationChannel };
   };
 
