@@ -45,7 +45,10 @@ export const AppProvider = ({ children }) => {
   
   const [events, setEvents] = useState(() => {
     const saved = localStorage.getItem('sankalp_events');
-    return saved ? JSON.parse(saved) : INITIAL_EVENTS;
+    try {
+      const parsed = saved ? JSON.parse(saved) : null;
+      return Array.isArray(parsed) ? parsed : INITIAL_EVENTS;
+    } catch { return INITIAL_EVENTS; }
   });
 
   const [pastEvents, setPastEvents] = useState(() => {
@@ -53,6 +56,7 @@ export const AppProvider = ({ children }) => {
     if (!saved) return INITIAL_PAST_EVENTS;
     try {
       const parsed = JSON.parse(saved);
+      if (!Array.isArray(parsed)) return INITIAL_PAST_EVENTS;
       const merged = [...INITIAL_PAST_EVENTS];
       parsed.forEach(p => {
         if (!merged.some(m => m.id === p.id)) {
@@ -67,12 +71,18 @@ export const AppProvider = ({ children }) => {
 
   const [volunteers, setVolunteers] = useState(() => {
     const saved = localStorage.getItem('sankalp_volunteers');
-    return saved ? JSON.parse(saved) : INITIAL_VOLUNTEERS;
+    try {
+      const parsed = saved ? JSON.parse(saved) : null;
+      return Array.isArray(parsed) ? parsed : INITIAL_VOLUNTEERS;
+    } catch { return INITIAL_VOLUNTEERS; }
   });
 
   const [corporateRequests, setCorporateRequests] = useState(() => {
     const saved = localStorage.getItem('sankalp_corporate_requests');
-    return saved ? JSON.parse(saved) : INITIAL_CORPORATE_REQUESTS;
+    try {
+      const parsed = saved ? JSON.parse(saved) : null;
+      return Array.isArray(parsed) ? parsed : INITIAL_CORPORATE_REQUESTS;
+    } catch { return INITIAL_CORPORATE_REQUESTS; }
   });
 
   const [users, setUsers] = useState(() => {

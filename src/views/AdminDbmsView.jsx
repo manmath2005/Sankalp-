@@ -190,15 +190,15 @@ export const AdminDbmsView = () => {
   }, {});
 
   const filteredVolunteers = scopedVolunteers.filter(v => 
-    v.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    v.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    v.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    v.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
     (v.city && v.city.toLowerCase().includes(searchTerm.toLowerCase())) ||
     (v.profession && v.profession.toLowerCase().includes(searchTerm.toLowerCase()))
   );
 
   const filteredEvents = scopedEvents.filter(e =>
-    e.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    e.venue.toLowerCase().includes(searchTerm.toLowerCase())
+    e.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    e.venue?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
