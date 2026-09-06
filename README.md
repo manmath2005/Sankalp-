@@ -1,17 +1,24 @@
-# 🌟 BridgeImpact (Sankalp Social Awareness Network)
+<div align="center">
+  <img src="public/sankalp_logo.png" width="220" alt="Sankalp Logo" />
+  <h1>🤝 Sankalp: Connecting Help to Hope</h1>
 
-> **Democratizing Corporate CSR Capital, Verified Grassroots Impact & Citizen Volunteering across India.**
+  <p>
+    <a href="#"><img src="https://img.shields.io/badge/Status-Active-success.svg" alt="Status: Active" /></a>
+    <a href="#"><img src="https://img.shields.io/badge/Version-1.0.0-blue.svg" alt="Version: 1.0.0" /></a>
+    <a href="#"><img src="https://img.shields.io/badge/Compliance-MCA_Sec_135-orange.svg" alt="Compliance: MCA Sec 135" /></a>
+    <a href="#"><img src="https://img.shields.io/badge/Security-Cryptographic_QR-purple.svg" alt="Security: Cryptographic QR" /></a>
+    <a href="#-license--copyright"><img src="https://img.shields.io/badge/License-Proprietary-red.svg" alt="License: Proprietary" /></a>
+  </p>
+</div>
 
-[![Vercel Deployment](https://img.shields.io/badge/Deployed%20with-Vercel-black?style=for-the-badge&logo=vercel)](https://vercel.com)
-[![React 18](https://img.shields.io/badge/Frontend-React%2018%20%7C%20Vite%20%7C%20TailwindCSS-blue?style=for-the-badge&logo=react)](https://reactjs.org/)
-[![License: Proprietary](https://img.shields.io/badge/License-Proprietary-red.svg?style=for-the-badge)](#-license--copyright)
+**Sankalp** is a centralized, high-availability disaster relief coordination platform designed to bridge the gap between active crisis zones and those eager to help. By eliminating fragmented communication, the platform seamlessly connects verified ground-level NGOs with corporate partners and institutions ready to conduct targeted relief drives.
 
 ---
 
 ## 🏛️ Executive Leadership
 
 - **Founder & Executive Director:** **Mr. Manmath N. Sangave**
-- **Platform Initiative:** **BridgeImpact Network**
+- **Platform Initiative:** **Sankalp Social Awareness Network**
 - **Vision:** Eliminating administrative friction between corporate CSR resources, NITI Aayog Darpan-verified non-profits, and passionate citizen volunteers through immutable digital certification and real-time community mobilization.
 
 ---
@@ -44,13 +51,17 @@
 
 ## 🛠️ Technology Stack
 
-| Layer | Technologies |
-| :--- | :--- |
-| **Frontend UI** | React 18, Vite 5, TailwindCSS 3, Lucide Icons, Canvas Confetti |
-| **Styling & Theme** | Modern Glassmorphism 2.0, Dark/Light Mode Sync, Plus Jakarta Sans |
-| **Backend & APIs** | Node.js, Express 5, Nodemailer, Rate Limiting, CORS |
-| **Database & ORM** | PostgreSQL & Prisma ORM Schema (`prisma/schema.prisma`) |
-| **Deployment** | Vercel (SPA Routing Fallbacks & Rewrites), Netlify Support |
+Sankalp leverages a modern, decoupled architecture designed for high availability during sudden traffic spikes.
+
+| Layer | Technology | Primary Purpose |
+| :--- | :--- | :--- |
+| **Frontend Framework** | ⚛️ React 18 / Vite | Rapid HMR, optimized builds, and component state management. |
+| **Styling & UI** | 🎨 Tailwind CSS | Utility-first responsive design and high-contrast accessibility. |
+| **Routing** | 🧭 React Router v6 | Client-side SPA navigation and protected route boundaries. |
+| **Database ORM** | 🗄️ Prisma | Type-safe database access and PostgreSQL schema management. |
+| **Backend / API** | 🟢 Node.js / Express | RESTful endpoints, OTP dispatch, and webhook handling. |
+| **Security & Auth** | 🔐 JWT / Crypto | Stateless RBAC authentication and pure SVG QR code generation. |
+| **Deployment** | ☁️ Vercel / Netlify | Edge-network hosting for static assets and serverless functions. |
 
 ---
 
