@@ -60,7 +60,7 @@ export const SosEmergencyBanner = ({ onSelectEvent }) => {
   const handleBroadcastAlert = async () => {
     setIsBroadcasting(true);
     try {
-      const response = await fetch('http://localhost:5000/api/sos/broadcast', {
+      const response = await fetch('/api/sos/broadcast', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

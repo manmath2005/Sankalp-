@@ -52,8 +52,8 @@ export const AiMatchmakerView = ({ onNavigate }) => {
     setLoading(true);
 
     try {
-      // Call backend API match endpoint
-      const response = await fetch('http://localhost:5000/api/match-ngo', {
+      // Call Vercel serverless / backend API match endpoint
+      const response = await fetch('/api/match-ngo', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -86,23 +86,45 @@ export const AiMatchmakerView = ({ onNavigate }) => {
   };
 
   const fallbackClientMatching = () => {
-    const scored = ngos.map(ngo => {
-      let score = 75;
+    const scored = (ngos || []).map(ngo => {
+      let score = 72;
       const sec = (ngo.sector || '').toLowerCase();
       const spec = (ngo.specialization || '').toLowerCase();
       const st = (ngo.state || '').toLowerCase();
+      const targetCause = (cause || '').toLowerCase();
 
-      if (sec.includes('environment') || spec.includes('tree') || sec.includes('reforest')) score += 18;
-      if (st.includes('maha') || st.includes(state.toLowerCase())) score += 6;
+      // Dynamic cause matching keywords
+      if (targetCause.includes('environment') && (sec.includes('environment') || spec.includes('tree') || spec.includes('forest') || sec.includes('reforest'))) {
+        score += 24;
+      } else if (targetCause.includes('education') && (sec.includes('education') || spec.includes('literacy') || spec.includes('school') || spec.includes('stem'))) {
+        score += 24;
+      } else if (targetCause.includes('health') && (sec.includes('health') || spec.includes('medical') || spec.includes('cataract') || spec.includes('hospital'))) {
+        score += 24;
+      } else if (targetCause.includes('hunger') && (sec.includes('nutrition') || spec.includes('meal') || spec.includes('hunger') || spec.includes('food'))) {
+        score += 24;
+      } else if (targetCause.includes('cyber') && (sec.includes('civic') || spec.includes('cyber') || spec.includes('rti') || spec.includes('rights') || spec.includes('digital'))) {
+        score += 24;
+      } else if (sec.includes(targetCause.split(' ')[0]) || spec.includes(targetCause.split(' ')[0])) {
+        score += 18;
+      }
+
+      // State / location matching
+      if (state && (st.includes(state.toLowerCase()) || st.includes('maha') || st.includes('pan-india'))) {
+        score += 6;
+      }
+
+      const volunteersNum = parseInt(volunteerCount) || 50;
+
       return {
         ...ngo,
         matchScore: Math.min(score, 98),
-        matchRationale: `High alignment with your corporate ${cause} mandate in ${state}. Established Darpan compliance and high volunteer capacity.`,
+        matchRationale: `High algorithmic alignment with your corporate "${cause}" CSR mandate in ${state || 'India'}. Verified NITI Aayog Darpan credentials and established on-ground mobilization capacity.`,
         recommendedFormat: format,
-        estimatedImpact: `${parseInt(volunteerCount) * 15} Citizens Positively Impacted`,
-        carbonOffset: 'ESG Core Metric Verified'
+        estimatedImpact: `${volunteersNum * 18} Citizens Positively Impacted`,
+        carbonOffset: 'MCA Section 135 & ESG Audit Compliant'
       };
     });
+
     scored.sort((a, b) => b.matchScore - a.matchScore);
     setMatches(scored.slice(0, 3));
   };

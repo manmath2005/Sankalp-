@@ -67,7 +67,7 @@ export const VolunteerLoginView = ({ onNavigate }) => {
             <CheckCircle2 className="w-8 h-8" />
           </div>
           <h2 className="text-2xl font-extrabold text-slate-900">Signed In as Verified Volunteer</h2>
-          <p className="text-xs text-slate-600">Welcome, <strong>{currentUser.name}</strong> ({currentUser.email}). You are currently logged into the Volunteer Portal.</p>
+          <p className="text-xs text-slate-600">Welcome, <strong>{currentUser?.name || currentUser?.email}</strong> ({currentUser?.email}). You are currently logged into the Volunteer Portal.</p>
           <div className="flex justify-center gap-3">
             <button
               onClick={() => onNavigate('volunteer-hub')}

@@ -176,12 +176,12 @@ export const GlobalNavbar = ({ activeTab, setActiveTab, onOpenDonate }) => {
                 currentUser.role === 'COMPANY_PARTNER' ? 'bg-forest-800 text-sand-100' :
                 'bg-forest-600 text-white'
               }`}>
-                {currentUser.name.charAt(0)}
+                {((currentUser.companyName || currentUser.name || currentUser.email || 'U')).charAt(0).toUpperCase()}
               </div>
               <div className="text-left leading-tight">
                 <div className="flex items-center gap-1.5">
                   <span className="text-xs font-bold text-charcoal-800 truncate max-w-[110px]">
-                    {currentUser.name}
+                    {currentUser.companyName || currentUser.name || currentUser.email}
                   </span>
                   <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
                 </div>

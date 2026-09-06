@@ -99,6 +99,10 @@ function MainLayout() {
         return <VolunteerDashboardView onNavigate={handleNavigate} />;
       case 'corporate':
       case 'corporate-partner':
+      case 'conduct':
+      case 'conduct-drive':
+      case 'conduct_drive':
+      case 'conduct-corporate-drive':
       case 'request-drive':
       case 'request_drive':
       case 'host-drive':

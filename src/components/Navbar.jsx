@@ -200,12 +200,12 @@ export const Navbar = ({ activeTab, setActiveTab }) => {
                   currentUser.role === 'COMPANY_PARTNER' ? 'bg-indigo-600 text-white' :
                   'bg-emerald-600 text-white'
                 }`}>
-                  {currentUser.name.charAt(0)}
+                  {((currentUser.companyName || currentUser.name || currentUser.email || 'U')).charAt(0).toUpperCase()}
                 </div>
                 <div className="text-left leading-tight hidden xl:block">
                   <div className="flex items-center gap-1">
                     <span className="text-[11px] font-bold text-slate-800 dark:text-white truncate max-w-[100px]">
-                      {currentUser.name}
+                      {currentUser.companyName || currentUser.name || currentUser.email}
                     </span>
                     <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
                   </div>
@@ -277,11 +277,11 @@ export const Navbar = ({ activeTab, setActiveTab }) => {
                   currentUser.role === 'COMPANY_PARTNER' ? 'bg-indigo-600 text-white' :
                   'bg-emerald-600 text-white'
                 }`}>
-                  {currentUser.name.charAt(0)}
+                  {((currentUser.companyName || currentUser.name || currentUser.email || 'U')).charAt(0).toUpperCase()}
                 </div>
                 <div className="leading-tight">
                   <p className="text-xs font-bold text-slate-900 dark:text-white truncate max-w-[170px]">
-                    {currentUser.name}
+                    {currentUser.companyName || currentUser.name || currentUser.email}
                   </p>
                   <p className="text-[10px] font-extrabold text-sky-600 dark:text-sky-400 uppercase tracking-wider">
                     {currentUser.role.replace('_', ' ')}

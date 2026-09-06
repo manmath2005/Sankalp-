@@ -164,11 +164,11 @@ export const VolunteerDashboardView = ({ onNavigate }) => {
       <div className="glass-panel p-6 sm:p-8 rounded-3xl border border-white/80 dark:border-slate-800 shadow-float flex flex-col md:flex-row md:items-center justify-between gap-6 relative overflow-hidden">
         <div className="flex items-center gap-5">
           <div className="w-18 h-18 sm:w-20 sm:h-20 rounded-3xl bg-gradient-to-tr from-sky-600 via-indigo-600 to-emerald-500 text-white font-black text-3xl flex items-center justify-center shadow-lg shadow-sky-500/20 shrink-0">
-            {currentUser.name.charAt(0)}
+            {((currentUser?.name || currentUser?.email || 'V')).charAt(0).toUpperCase()}
           </div>
           <div>
             <div className="flex flex-wrap items-center gap-2.5">
-              <h1 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white tracking-tight">{currentUser.name}</h1>
+              <h1 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white tracking-tight">{currentUser?.name || currentUser?.email || 'Volunteer Member'}</h1>
               <span className={`border text-[10px] font-extrabold px-3 py-1 rounded-full flex items-center gap-1 uppercase tracking-wider ${
                 currentUser.role === 'SUPER_ADMIN' ? 'bg-amber-50 text-amber-800 border-amber-200 dark:bg-amber-950/60 dark:text-amber-300' :
                 currentUser.role === 'NGO_PARTNER' || currentUser.role === 'NGO_STAFF' ? 'bg-sky-50 text-sky-800 border-sky-200 dark:bg-sky-950/60 dark:text-sky-300' :
