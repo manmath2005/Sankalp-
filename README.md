@@ -26,9 +26,9 @@
 ## 🚀 Key Platform Capabilities
 
 ### 1. 🤝 Unified Tri-Party Operating Model
-- **For Corporates & PSUs:** Fulfill MCA Section 135 mandates, browse verified 80G non-profit profiles, upload official HR/CEO sanction letters (NOC), and export automated ESG impact dossiers.
-- **For Non-Profit Partners:** Centralized DBMS to manage awareness campaigns across Government Offices, Public Sectors, Colleges, and Schools; issue verifiable digital credentials with QR code validation.
-- **For Volunteers:** Explore on-ground community drives or quick 2–5 hour micro-tasks (legal, design, content, coding), log authentic service hours, and download tamper-proof certificates.
+- **For Corporates & Companies:** Easily fulfill corporate CSR mandates, discover verified non-profit partners, submit drive requests with official sanction letters, and generate instant ESG impact reports.
+- **For Non-Profit Partners (NGOs):** Use a unified management dashboard to organize awareness campaigns across government offices, colleges, and public institutions, while issuing verifiable digital credentials.
+- **For Volunteers:** Discover nearby on-ground drives or short 2–5 hour micro-tasks (content, design, outreach, coding), track verified volunteer hours, and receive authentic certificates for resumes and LinkedIn.
 
 ### 2. 📜 Cryptographic Digital QR Certificate Studio
 - Immutable SHA-256 digital signature hashes embedded in every issued certificate.
@@ -37,7 +37,12 @@
 - Integrated **Verify Credential Studio** inside the logged-in Volunteer Hub.
 
 ### 3. 🤖 AI-Assisted Corporate-NGO Matchmaker
-- Algorithmic matching scoring non-profits by cause alignment, district proximity, volunteer capacity, and 80G tax exemption records.
+The **AI Matchmaker** bridges the gap between corporate CSR funding and grassroots non-profits through an automated, intelligent compatibility algorithm:
+- 🎯 **Cause & Focus Alignment:** Automatically pairs corporate social priorities (e.g., Digital Literacy, Healthcare, Disaster Relief, Women Empowerment) with specialized NGOs having proven track records in those domains.
+- 📍 **Geographic & District Proximity:** Analyzes location coordinates to connect institutional branches with active on-ground NGOs in the same region, reducing logistical overhead.
+- 👥 **Audience & Volunteer Capacity Matching:** Calibrates expected attendee turnout (100 to 1,000+ people) with the NGO's volunteer manpower to ensure smooth execution.
+- 🛡️ **Automated Compliance Verification:** Pre-screens non-profits for active 80G tax-exempt status, 12A registration, and NITI Aayog Darpan credentials.
+- 📊 **Instant Match Score & Proposal:** Delivers a transparent compatibility score (e.g., 96% Match) along with recommended campaign topics, enabling 1-click booking and coordination.
 
 ### 4. 🚨 SOS Rapid Disaster & Crisis Response
 - Geo-radius (50km) emergency dispatch banner for immediate resource mobilization during floods, crises, and urgent relief operations.
@@ -71,26 +76,30 @@ Sankalp leverages a modern, decoupled architecture designed for high availabilit
 Sankalp/
 ├── public/                      # Static assets & routing redirects
 │   ├── _redirects              # Netlify SPA fallback
+│   ├── sankalp_logo.png        # Official platform logo
 │   └── favicon.svg             # Application brand favicon
 ├── prisma/
 │   └── schema.prisma           # Prisma ORM PostgreSQL schema
 ├── src/
 │   ├── assets/
-│   │   └── images/             # Photographic evidence & founder profile assets
+│   │   └── images/             # Photographic evidence & brand assets
 │   ├── components/             # Reusable UI components & modals
 │   │   ├── AuthModal.jsx       # Security gateway & OTP authentication
 │   │   ├── CertificateStudio.jsx # Accredited PDF/Print certificate studio
 │   │   ├── CorporateRequestModal.jsx # HR/CEO NOC sanction upload modal
 │   │   ├── EventCard.jsx       # Interactive event drive card
+│   │   ├── FirebasePhoneAuth.jsx # Firebase real-time Phone OTP component
 │   │   ├── Navbar.jsx          # Compact horizontal navigation & theme toggle
 │   │   ├── SosEmergencyBanner.jsx # SOS crisis dispatch alert
 │   │   └── ToastNotification.jsx # Real-time reactive feedback toast
 │   ├── context/
 │   │   └── AppContext.jsx      # Global state, authentication, and DBMS store
+│   ├── lib/
+│   │   └── firebase.js         # Firebase Auth & invisible reCAPTCHA client
 │   ├── utils/
 │   │   └── qrCodeGenerator.js  # Pure SVG QR code generation engine
 │   ├── views/                  # Primary full-page views
-│   │   ├── AboutUsView.jsx     # Founder spotlight (Mr. Manmath N. Sangave) & BridgeImpact
+│   │   ├── AboutUsView.jsx     # Founder spotlight & Sankalp mission
 │   │   ├── AdminDbmsView.jsx   # NGO administration, session audit & NOC inspector
 │   │   ├── AiMatchmakerView.jsx # AI-powered CSR matchmaker wizard
 │   │   ├── CertificateVerificationView.jsx # Public QR audit page
@@ -105,60 +114,14 @@ Sankalp/
 │   ├── App.jsx                 # View router, compact footer & modals
 │   ├── index.css               # Global base tokens & high-contrast input layer
 │   └── main.jsx                # React DOM entry point
+├── api/                        # Vercel Serverless Functions
+│   ├── send-email.js           # Serverless email dispatch
+│   ├── send-otp.js             # Serverless OTP verification engine
+│   └── send-sos.js             # Emergency SOS alert dispatcher
 ├── server.js                   # Node.js backend for Email OTP dispatch
 ├── vercel.json                 # Vercel deployment SPA rewrite configuration
 └── package.json                # Project dependencies and build scripts
 ```
-
----
-
-## ⚡ Getting Started Locally
-
-### 1. Clone the Repository
-```bash
-git clone https://github.com/manmath2005/Sankalp-.git
-cd Sankalp-
-```
-
-### 2. Install Dependencies
-```bash
-npm install
-```
-
-### 3. Configure Environment Variables
-Create a `.env` file in the root directory:
-```env
-PORT=5000
-EMAIL_USER=your-email@gmail.com
-EMAIL_PASS=your-app-password
-```
-
-### 4. Run Development Server
-```bash
-# Terminal 1: Run Vite Frontend
-npm run dev
-
-# Terminal 2 (Optional): Run Email OTP Backend Server
-npm run server
-```
-
-The application will be available at `http://localhost:5173`.
-
-### 5. Build for Production
-```bash
-npm run build
-```
-
----
-
-## 🔐 Role Demo Reference (For Evaluators)
-
-| Portal / Role | Email | Auth Method |
-| :--- | :--- | :--- |
-| 👤 **Volunteer Hub** | `rohan.verma@example.com` | `volunteer123` *(or passwordless 6-digit email OTP)* |
-| 🏢 **Corporate / PSU Portal** | `corporate@sbi-staff.org` | `company123password` *(or passwordless email OTP)* |
-| 🛡️ **Partner Portal** | `contact@sankalpfoundation.org` | `ngo123password` *(or passwordless email OTP)* |
-| 🔒 **System Security Admin** | `admin@sankalp.org` | `admin123password` |
 
 ---
 
