@@ -130,7 +130,7 @@ function MainLayout() {
         if (!currentUser || (currentUser.role !== 'NGO_PARTNER' && currentUser.role !== 'NGO_STAFF' && currentUser.role !== 'SUPER_ADMIN')) {
           return <NgoLoginView onNavigate={handleNavigate} />;
         }
-        return <AdminDbmsView />;
+        return <AdminDbmsView onNavigate={handleNavigate} />;
       default:
         return (
           <HomeView 

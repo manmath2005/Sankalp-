@@ -47,8 +47,14 @@ export const HiddenAdminLoginView = ({ onNavigate }) => {
     setLoading(true);
 
     try {
-      loginUser(email, password, 'SUPER_ADMIN', adminPin);
-      onNavigate('dbms');
+      const result = loginUser(email, password, 'SUPER_ADMIN', adminPin);
+      // For SUPER_ADMIN: loginUser returns true immediately after loginUserWithSession.
+      // We do NOT call onNavigate here — React state (currentUser) hasn't committed yet.
+      // The conditional render at the top of this component handles showing the DBMS button
+      // once currentUser is set in the next render cycle.
+      if (!result) {
+        setErrorMessage('Authentication failed. Please check your credentials.');
+      }
     } catch (err) {
       setErrorMessage(err.message);
     } finally {
