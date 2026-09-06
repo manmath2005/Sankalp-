@@ -4,7 +4,7 @@
 
 [![Vercel Deployment](https://img.shields.io/badge/Deployed%20with-Vercel-black?style=for-the-badge&logo=vercel)](https://vercel.com)
 [![React 18](https://img.shields.io/badge/Frontend-React%2018%20%7C%20Vite%20%7C%20TailwindCSS-blue?style=for-the-badge&logo=react)](https://reactjs.org/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-emerald.svg?style=for-the-badge)](LICENSE)
+[![License: Proprietary](https://img.shields.io/badge/License-Proprietary-red.svg?style=for-the-badge)](#-license--copyright)
 
 ---
 
@@ -159,6 +159,30 @@ npm run build
 ---
 
 ## 👨‍💻 Maintainer & Founder
+
 **Mr. Manmath N. Sangave**  
-*Founder & Executive Director, BridgeImpact*  
-*Repository:* [https://github.com/manmath2005/Sankalp-](https://github.com/manmath2005/Sankalp-)
+*Founder & Executive Director, Sankalp Social Awareness Network*
+
+> *"Technology is only as powerful as the impact it creates on the ground."*
+
+Dedicated to leveraging software engineering for scalable humanitarian impact. Sankalp was conceptualized and engineered out of the necessity to eliminate logistical bottlenecks and establish transparent, verifiable coordination during critical disaster response windows.
+
+- **Role:** Full-Stack Development, AI Integration & System Architecture.
+- **Focus:** Engineering high-availability systems for social good, corporate ESG compliance, and secure data verification.
+- **Repository:** [https://github.com/manmath2005/Sankalp-](https://github.com/manmath2005/Sankalp-)
+
+---
+
+## 📄 License & Copyright
+
+**Copyright © 2026 Sankalp. All Rights Reserved.**
+
+### Proprietary Software Notice
+This project, including its architectural design, AI matchmaking algorithmic logic, Cryptographic QR Studio implementation, and complete source code, is strictly proprietary.
+
+### Restrictions:
+- **No Unauthorized Use:** You may not copy, modify, distribute, sell, or lease any part of this software or its included documentation via any medium without express written permission from the founder.
+- **No Derivative Works:** The creation of derivative platforms, reverse engineering, or extraction of the matching logic is strictly prohibited.
+- **Intellectual Property:** All UI components, workflows, and database schemas remain the intellectual property of Sankalp and Manmath N. Sangave.
+
+> For partnership inquiries, licensing requests, or corporate CSR onboarding, please contact the maintainer directly.
