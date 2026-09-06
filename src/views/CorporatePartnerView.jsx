@@ -45,7 +45,7 @@ export const CorporatePartnerView = ({ onNavigate }) => {
   const filteredNgos = (ngos || []).filter(ngo => {
     const matchesSector = sectorFilter === 'ALL' || (ngo.primarySectors && ngo.primarySectors.includes(sectorFilter));
     const matchesSearch = searchQuery === '' || 
-      ngo.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      ngo.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
       (ngo.specialization && ngo.specialization.toLowerCase().includes(searchQuery.toLowerCase())) ||
       (ngo.city && ngo.city.toLowerCase().includes(searchQuery.toLowerCase()));
     return matchesSector && matchesSearch;

@@ -175,6 +175,21 @@ export const Navbar = ({ activeTab, setActiveTab }) => {
               <span>{currentUser?.role === 'SUPER_ADMIN' ? 'Admin DBMS' : 'NGO Manager'}</span>
             </button>
           )}
+
+          {/* Corporate / Institutional Dashboard Access */}
+          {currentUser?.role === 'COMPANY_PARTNER' && (
+            <button
+              onClick={() => setActiveTab('corporate')}
+              className={`flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-bold transition-all whitespace-nowrap ${
+                activeTab === 'corporate' 
+                  ? 'bg-indigo-600 text-white shadow-xs' 
+                  : 'text-indigo-700 dark:text-indigo-400 hover:text-indigo-900 hover:bg-indigo-50 dark:hover:bg-indigo-900/30'
+              }`}
+            >
+              <Building className="w-3 h-3" />
+              <span>Corporate Dashboard</span>
+            </button>
+          )}
         </nav>
 
         {/* Right Section: Dark Mode Toggle & Portals */}
@@ -356,6 +371,18 @@ export const Navbar = ({ activeTab, setActiveTab }) => {
               }`}
             >
               <Award className="w-4 h-4 text-emerald-600" /> Volunteer Hub & Certificates
+            </button>
+          )}
+
+          {/* Corporate Dashboard in Mobile Menu */}
+          {currentUser?.role === 'COMPANY_PARTNER' && (
+            <button
+              onClick={() => { setActiveTab('corporate'); setMobileMenuOpen(false); }}
+              className={`w-full flex items-center gap-3 p-2.5 rounded-xl text-xs font-bold transition-colors ${
+                activeTab === 'corporate' ? 'bg-indigo-50 dark:bg-indigo-950/80 text-indigo-700 dark:text-indigo-300' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800'
+              }`}
+            >
+              <Building className="w-4 h-4 text-indigo-600" /> Corporate Dashboard
             </button>
           )}
 
