@@ -12,10 +12,8 @@ import {
   Zap,
   Phone,
   Check,
-  Smartphone,
   Send
 } from 'lucide-react';
-import { FirebasePhoneAuth } from './FirebasePhoneAuth';
 import { useApp } from '../context/AppContext';
 
 export const AuthModal = () => {
@@ -26,19 +24,15 @@ export const AuthModal = () => {
     setAuthMode, 
     loginUser, 
     registerUser,
-    initiateMobileOtpLogin,
     showToast 
   } = useApp();
 
-  const [loginMethod, setLoginMethod] = useState('email_password'); // 'email_password' or 'mobile_otp'
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [mobileNumber, setMobileNumber] = useState('');
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
   const [institution, setInstitution] = useState('');
   const [role, setRole] = useState('VOLUNTEER'); // VOLUNTEER or NGO_ADMIN
-  const [regVerificationMethod, setRegVerificationMethod] = useState('EMAIL'); // 'EMAIL' or 'MOBILE'
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
@@ -59,26 +53,6 @@ export const AuthModal = () => {
     }
   };
 
-  const handleMobileOtpSubmit = async (e) => {
-    e.preventDefault();
-    setErrorMessage('');
-    const cleanDigits = mobileNumber.replace(/\D/g, '');
-    if (!cleanDigits || cleanDigits.length < 10) {
-      setErrorMessage('Please enter a valid 10-digit mobile number.');
-      return;
-    }
-    setLoading(true);
-    try {
-      await initiateMobileOtpLogin(mobileNumber);
-      setAuthModalOpen(false);
-    } catch (err) {
-      setErrorMessage(err.message);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-
   const handleRegisterSubmit = async (e) => {
     e.preventDefault();
     setErrorMessage('');
@@ -92,7 +66,7 @@ export const AuthModal = () => {
         phone,
         institution,
         role
-      }, regVerificationMethod);
+      }, 'EMAIL');
       // Verification modal will open automatically via AppContext
     } catch (err) {
       setErrorMessage(err.message);
@@ -177,95 +151,56 @@ export const AuthModal = () => {
 
           {authMode === 'login' ? (
             <div className="space-y-4">
-              {/* Method Switcher Tabs: Email/Password vs Mobile OTP */}
-              <div className="flex p-1 rounded-2xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
-                <button
-                  type="button"
-                  onClick={() => { setLoginMethod('email_password'); setErrorMessage(''); }}
-                  className={`flex-1 py-2 rounded-xl text-xs font-black transition-all flex items-center justify-center gap-1.5 ${
-                    loginMethod === 'email_password'
-                      ? 'bg-white dark:bg-slate-900 text-slate-900 dark:text-white shadow-xs'
-                      : 'text-slate-500 hover:text-slate-800 dark:hover:text-slate-200'
-                  }`}
-                >
-                  <Mail className="w-3.5 h-3.5 text-sky-600" />
-                  <span>Email &amp; Password</span>
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => { setLoginMethod('mobile_otp'); setErrorMessage(''); }}
-                  className={`flex-1 py-2 rounded-xl text-xs font-black transition-all flex items-center justify-center gap-1.5 ${
-                    loginMethod === 'mobile_otp'
-                      ? 'bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-xs'
-                      : 'text-slate-500 hover:text-slate-800 dark:hover:text-slate-200'
-                  }`}
-                >
-                  <Smartphone className="w-3.5 h-3.5" />
-                  <span>Mobile OTP</span>
-                  <span className="text-[9px] px-1.5 py-0.2 rounded-full bg-amber-400 text-slate-950 font-black">5 MIN</span>
-                </button>
-              </div>
-
-              {loginMethod === 'email_password' ? (
-                <form onSubmit={handleLoginSubmit} className="space-y-4">
-                  <div>
-                    <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
-                      Email Address
-                    </label>
-                    <div className="relative">
-                      <Mail className="w-4 h-4 text-slate-400 absolute left-3 top-3" />
-                      <input
-                        type="email"
-                        required
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        placeholder="name@example.com"
-                        className="w-full pl-9 pr-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 text-xs font-bold text-slate-900 dark:text-white bg-white dark:bg-slate-900 focus:ring-2 focus:ring-sky-500 focus:outline-none placeholder:text-slate-400 dark:placeholder:text-slate-500"
-                      />
-                    </div>
+              <form onSubmit={handleLoginSubmit} className="space-y-4">
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
+                    Email Address
+                  </label>
+                  <div className="relative">
+                    <Mail className="w-4 h-4 text-slate-400 absolute left-3 top-3" />
+                    <input
+                      type="email"
+                      required
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      placeholder="name@example.com"
+                      className="w-full pl-9 pr-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 text-xs font-bold text-slate-900 dark:text-white bg-white dark:bg-slate-900 focus:ring-2 focus:ring-sky-500 focus:outline-none placeholder:text-slate-400 dark:placeholder:text-slate-500"
+                    />
                   </div>
-
-                  <div>
-                    <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">
-                      Password
-                    </label>
-                    <div className="relative">
-                      <Lock className="w-4 h-4 text-slate-400 absolute left-3 top-3" />
-                      <input
-                        type={showPassword ? "text" : "password"}
-                        required
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        placeholder="••••••••"
-                        className="w-full pl-9 pr-10 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 text-xs font-bold text-slate-900 dark:text-white bg-white dark:bg-slate-900 focus:ring-2 focus:ring-sky-500 focus:outline-none placeholder:text-slate-400 dark:placeholder:text-slate-500"
-                      />
-                      <button
-                        type="button"
-                        onClick={() => setShowPassword(!showPassword)}
-                        className="absolute right-3 top-3 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"
-                      >
-                        {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                      </button>
-                    </div>
-                  </div>
-
-                  <button
-                    type="submit"
-                    disabled={loading}
-                    className="w-full py-3 rounded-xl bg-gradient-to-r from-emerald-600 via-teal-600 to-sky-600 hover:from-emerald-700 hover:to-sky-700 text-white font-black text-xs uppercase tracking-wider shadow-md transition-all flex items-center justify-center gap-2 press-effect"
-                  >
-                    {loading ? "Authenticating..." : "Sign In to Account"}
-                  </button>
-                </form>
-              ) : (
-                <div className="pt-1">
-                  <FirebasePhoneAuth 
-                    expectedRole={null} 
-                    onSuccess={() => setAuthModalOpen(false)} 
-                  />
                 </div>
-              )}
+
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">
+                    Password
+                  </label>
+                  <div className="relative">
+                    <Lock className="w-4 h-4 text-slate-400 absolute left-3 top-3" />
+                    <input
+                      type={showPassword ? "text" : "password"}
+                      required
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      placeholder="••••••••"
+                      className="w-full pl-9 pr-10 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 text-xs font-bold text-slate-900 dark:text-white bg-white dark:bg-slate-900 focus:ring-2 focus:ring-sky-500 focus:outline-none placeholder:text-slate-400 dark:placeholder:text-slate-500"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      className="absolute right-3 top-3 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"
+                    >
+                      {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                    </button>
+                  </div>
+                </div>
+
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="w-full py-3 rounded-xl bg-gradient-to-r from-emerald-600 via-teal-600 to-sky-600 hover:from-emerald-700 hover:to-sky-700 text-white font-black text-xs uppercase tracking-wider shadow-md transition-all flex items-center justify-center gap-2 press-effect"
+                >
+                  {loading ? "Authenticating..." : "Sign In to Account"}
+                </button>
+              </form>
             </div>
           ) : (
 
@@ -368,69 +303,24 @@ export const AuthModal = () => {
                 />
               </div>
 
-              {/* Preferred Verification Channel */}
-              <div className="p-3 rounded-2xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 space-y-2">
-                <div className="flex items-center justify-between">
-                  <label className="text-[11px] font-extrabold text-slate-700 dark:text-slate-300 uppercase tracking-wider">
-                    Preferred Verification Method
-                  </label>
-                  <span className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/60 px-2 py-0.5 rounded-md border border-emerald-200 dark:border-emerald-800">
-                    5-Min OTP
-                  </span>
+              {/* Email Verification Banner */}
+              <div className="p-3 rounded-2xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 flex items-center justify-between">
+                <div className="flex items-center gap-2 text-xs text-slate-700 dark:text-slate-300">
+                  <Mail className="w-4 h-4 text-sky-500" />
+                  <span>A 6-digit verification code will be sent to your email inbox.</span>
                 </div>
-
-                <div className="grid grid-cols-2 gap-2">
-                  <button
-                    type="button"
-                    onClick={() => setRegVerificationMethod('EMAIL')}
-                    className={`p-2.5 rounded-xl border-2 text-left transition-all flex items-center gap-2 ${
-                      regVerificationMethod === 'EMAIL'
-                        ? 'border-sky-500 bg-sky-50/80 text-sky-900 shadow-xs'
-                        : 'border-slate-200 bg-white text-slate-600 hover:border-slate-300'
-                    }`}
-                  >
-                    <div className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 ${regVerificationMethod === 'EMAIL' ? 'bg-sky-500 text-white' : 'bg-slate-100 text-slate-500'}`}>
-                      <Mail className="w-3.5 h-3.5" />
-                    </div>
-                    <div>
-                      <div className="text-xs font-bold leading-none">Email OTP</div>
-                      <div className="text-[10px] text-slate-500 mt-0.5">Code to Inbox</div>
-                    </div>
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={() => setRegVerificationMethod('MOBILE')}
-                    className={`p-2.5 rounded-xl border-2 text-left transition-all flex items-center gap-2 ${
-                      regVerificationMethod === 'MOBILE'
-                        ? 'border-emerald-500 bg-emerald-50/80 text-emerald-900 shadow-xs'
-                        : 'border-slate-200 bg-white text-slate-600 hover:border-slate-300'
-                    }`}
-                  >
-                    <div className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 ${regVerificationMethod === 'MOBILE' ? 'bg-emerald-500 text-white' : 'bg-slate-100 text-slate-500'}`}>
-                      <Smartphone className="w-3.5 h-3.5" />
-                    </div>
-                    <div>
-                      <div className="text-xs font-bold leading-none">Mobile OTP</div>
-                      <div className="text-[10px] text-slate-500 mt-0.5">Code to (+91)</div>
-                    </div>
-                  </button>
-                </div>
+                <span className="text-[10px] font-bold text-sky-600 dark:text-sky-400 bg-sky-50 dark:bg-sky-950/60 px-2 py-0.5 rounded-md border border-sky-200 dark:border-sky-800">
+                  5-Min Email OTP
+                </span>
               </div>
 
               <button
                 type="submit"
                 disabled={loading}
-                className={`w-full py-2.5 rounded-xl text-white font-bold text-xs shadow-md transition-all flex items-center justify-center gap-2 mt-2 ${
-                  regVerificationMethod === 'MOBILE'
-                    ? 'bg-gradient-to-r from-teal-600 to-emerald-600 hover:from-teal-700 hover:to-emerald-700'
-                    : 'bg-gradient-to-r from-sky-600 to-sky-700 hover:from-sky-700 hover:to-sky-800'
-                }`}
+                className="w-full py-2.5 rounded-xl text-white font-bold text-xs shadow-md transition-all flex items-center justify-center gap-2 mt-2 bg-gradient-to-r from-sky-600 to-sky-700 hover:from-sky-700 hover:to-sky-800"
               >
                 <Zap className="w-3.5 h-3.5 fill-current" />
-                {loading 
-                  ? "Generating 5-Min OTP..." 
-                  : (regVerificationMethod === 'MOBILE' ? "Proceed to Mobile OTP Verification (5 Min)" : "Proceed to Email OTP Verification (5 Min)")}
+                {loading ? "Generating 5-Min OTP..." : "Proceed to Email Verification (5 Min)"}
               </button>
             </form>
           )}

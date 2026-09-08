@@ -21,38 +21,16 @@ import {
   Landmark,
   GraduationCap,
   Users,
-  Smartphone,
   Send
 } from 'lucide-react';
-import { FirebasePhoneAuth } from '../components/FirebasePhoneAuth';
 
 export const NgoLoginView = ({ onNavigate }) => {
-  const { loginUser, registerNewNgo, initiateEmailOtpLogin, initiateMobileOtpLogin, continueWithGoogleOAuth, currentUser, logoutUser, ngos } = useApp();
+  const { loginUser, registerNewNgo, initiateEmailOtpLogin, continueWithGoogleOAuth, currentUser, logoutUser, ngos } = useApp();
 
   const [isRegisterMode, setIsRegisterMode] = useState(false);
-  const [loginMethod, setLoginMethod] = useState('email_password'); // 'email_password' or 'mobile_otp'
-  const [mobileNumber, setMobileNumber] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
-
-  const handleMobileOtpSubmit = async (e) => {
-    e.preventDefault();
-    setErrorMessage('');
-    const cleanDigits = mobileNumber.replace(/\D/g, '');
-    if (!cleanDigits || cleanDigits.length < 10) {
-      setErrorMessage('Please enter a valid 10-digit registered NGO phone number.');
-      return;
-    }
-    setLoading(true);
-    try {
-      await initiateMobileOtpLogin(mobileNumber, 'NGO_PARTNER');
-    } catch (err) {
-      setErrorMessage(err.message);
-    } finally {
-      setLoading(false);
-    }
-  };
 
 
   const handleGoogleSignIn = async () => {
@@ -281,106 +259,66 @@ export const NgoLoginView = ({ onNavigate }) => {
             {!isRegisterMode ? (
               /* NGO SIGN IN FORM */
               <div className="space-y-4">
-                
-                {/* Method Switcher Tabs: Email/Password vs Mobile OTP */}
-                <div className="flex p-1 rounded-2xl bg-slate-950 border border-slate-800">
-                  <button
-                    type="button"
-                    onClick={() => { setLoginMethod('email_password'); setErrorMessage(''); }}
-                    className={`flex-1 py-2 rounded-xl text-xs font-black transition-all flex items-center justify-center gap-1.5 ${
-                      loginMethod === 'email_password'
-                        ? 'bg-slate-800 text-white shadow-xs'
-                        : 'text-slate-400 hover:text-slate-200'
-                    }`}
-                  >
-                    <Mail className="w-3.5 h-3.5 text-amber-400" />
-                    <span>Email &amp; Password</span>
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={() => { setLoginMethod('mobile_otp'); setErrorMessage(''); }}
-                    className={`flex-1 py-2 rounded-xl text-xs font-black transition-all flex items-center justify-center gap-1.5 ${
-                      loginMethod === 'mobile_otp'
-                        ? 'bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-xs'
-                        : 'text-slate-400 hover:text-slate-200'
-                    }`}
-                  >
-                    <Smartphone className="w-3.5 h-3.5" />
-                    <span>Mobile Number OTP</span>
-                    <span className="text-[9px] px-1.5 py-0.2 rounded-full bg-amber-400 text-slate-950 font-black">5 MIN</span>
-                  </button>
-                </div>
-
-                {loginMethod === 'email_password' ? (
-                  <form onSubmit={handleLoginSubmit} className="space-y-4">
-                    <div>
-                      <label className="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-1">
-                        Official NGO Email
-                      </label>
-                      <div className="relative">
-                        <Mail className="w-4 h-4 text-slate-500 absolute left-3 top-3" />
-                        <input
-                          type="email"
-                          required
-                          value={email}
-                          onChange={(e) => setEmail(e.target.value)}
-                          placeholder="contact@sankalpfoundation.org"
-                          className="w-full pl-9 pr-4 py-2.5 rounded-xl border border-slate-700/80 text-xs font-bold text-white bg-slate-950 focus:border-amber-500 focus:ring-1 focus:ring-amber-500 focus:outline-none transition-all placeholder:text-slate-500"
-                        />
-                      </div>
+                <form onSubmit={handleLoginSubmit} className="space-y-4">
+                  <div>
+                    <label className="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-1">
+                      Official NGO Email
+                    </label>
+                    <div className="relative">
+                      <Mail className="w-4 h-4 text-slate-500 absolute left-3 top-3" />
+                      <input
+                        type="email"
+                        required
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        placeholder="contact@sankalpfoundation.org"
+                        className="w-full pl-9 pr-4 py-2.5 rounded-xl border border-slate-700/80 text-xs font-bold text-white bg-slate-950 focus:border-amber-500 focus:ring-1 focus:ring-amber-500 focus:outline-none transition-all placeholder:text-slate-500"
+                      />
                     </div>
-
-                    <div>
-                      <div className="flex items-center justify-between mb-1">
-                        <label className="block text-xs font-bold text-slate-300 uppercase tracking-wider">
-                          Password
-                        </label>
-                        <button
-                          type="button"
-                          onClick={() => onNavigate('forgot-password')}
-                          className="text-[11px] font-bold text-amber-400 hover:text-amber-300 hover:underline"
-                        >
-                          Forgot Password?
-                        </button>
-                      </div>
-                      <div className="relative">
-                        <Lock className="w-4 h-4 text-slate-500 absolute left-3 top-3" />
-                        <input
-                          type={showPassword ? 'text' : 'password'}
-                          value={password}
-                          onChange={(e) => setPassword(e.target.value)}
-                          placeholder="••••••••"
-                          className="w-full pl-9 pr-10 py-2.5 rounded-xl border border-slate-700/80 text-xs font-bold text-white bg-slate-950 focus:border-amber-500 focus:ring-1 focus:ring-amber-500 focus:outline-none transition-all placeholder:text-slate-500"
-                        />
-                        <button
-                          type="button"
-                          onClick={() => setShowPassword(!showPassword)}
-                          className="absolute right-3 top-3 text-slate-400 hover:text-slate-200"
-                        >
-                          {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                        </button>
-                      </div>
-                    </div>
-
-                    <button
-                      type="submit"
-                      disabled={loading || !password}
-                      className={`w-full py-2.5 rounded-xl font-black text-xs uppercase tracking-wider shadow-md transition-all ${
-                        password ? 'bg-gradient-to-r from-amber-500 via-emerald-500 to-sky-500 hover:from-amber-400 hover:to-sky-400 text-slate-950 press-effect shadow-lg shadow-amber-500/10' : 'bg-slate-800 text-slate-500 cursor-not-allowed'
-                      }`}
-                    >
-                      {loading ? 'Authenticating NGO Account...' : 'Sign In with Password'}
-                    </button>
-                  </form>
-                ) : (
-                  <div className="pt-1">
-                    <FirebasePhoneAuth 
-                      expectedRole="NGO_PARTNER" 
-                      onSuccess={() => onNavigate('dbms')} 
-                    />
                   </div>
-                )}
+
+                  <div>
+                    <div className="flex items-center justify-between mb-1">
+                      <label className="block text-xs font-bold text-slate-300 uppercase tracking-wider">
+                        Password
+                      </label>
+                      <button
+                        type="button"
+                        onClick={() => onNavigate('forgot-password')}
+                        className="text-[11px] font-bold text-amber-400 hover:text-amber-300 hover:underline"
+                      >
+                        Forgot Password?
+                      </button>
+                    </div>
+                    <div className="relative">
+                      <Lock className="w-4 h-4 text-slate-500 absolute left-3 top-3" />
+                      <input
+                        type={showPassword ? 'text' : 'password'}
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        placeholder="••••••••"
+                        className="w-full pl-9 pr-10 py-2.5 rounded-xl border border-slate-700/80 text-xs font-bold text-white bg-slate-950 focus:border-amber-500 focus:ring-1 focus:ring-amber-500 focus:outline-none transition-all placeholder:text-slate-500"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowPassword(!showPassword)}
+                        className="absolute right-3 top-3 text-slate-400 hover:text-slate-200"
+                      >
+                        {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                      </button>
+                    </div>
+                  </div>
+
+                  <button
+                    type="submit"
+                    disabled={loading || !password}
+                    className={`w-full py-2.5 rounded-xl font-black text-xs uppercase tracking-wider shadow-md transition-all ${
+                      password ? 'bg-gradient-to-r from-amber-500 via-emerald-500 to-sky-500 hover:from-amber-400 hover:to-sky-400 text-slate-950 press-effect shadow-lg shadow-amber-500/10' : 'bg-slate-800 text-slate-500 cursor-not-allowed'
+                    }`}
+                  >
+                    {loading ? 'Authenticating NGO Account...' : 'Sign In with Password'}
+                  </button>
+                </form>
 
                 
                 {/* Instant Google / Gmail Sign In */}

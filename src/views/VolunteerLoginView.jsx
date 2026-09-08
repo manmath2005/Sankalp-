@@ -15,29 +15,23 @@ import {
   MapPin,
   Calendar,
   Sparkles,
-  Smartphone,
   Send
 } from 'lucide-react';
-import { FirebasePhoneAuth } from '../components/FirebasePhoneAuth';
 
 export const VolunteerLoginView = ({ onNavigate }) => {
-  const { loginUser, registerUser, initiateEmailOtpLogin, initiateMobileOtpLogin, continueWithGoogleOAuth, currentUser, logoutUser } = useApp();
+  const { loginUser, registerUser, initiateEmailOtpLogin, continueWithGoogleOAuth, currentUser, logoutUser } = useApp();
 
   const [isRegisterMode, setIsRegisterMode] = useState(false);
-  const [loginMethod, setLoginMethod] = useState('email_password'); // 'email_password' or 'mobile_otp'
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [mobileNumber, setMobileNumber] = useState('');
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
   const [institution, setInstitution] = useState('');
 
-  
   // New Volunteer Questionnaire Fields
   const [profession, setProfession] = useState('Student');
   const [city, setCity] = useState('Mumbai');
   const [age, setAge] = useState('22');
-  const [regVerificationMethod, setRegVerificationMethod] = useState('EMAIL'); // 'EMAIL' or 'MOBILE'
 
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -119,7 +113,7 @@ export const VolunteerLoginView = ({ onNavigate }) => {
         city,
         age,
         role: 'VOLUNTEER'
-      }, regVerificationMethod);
+      }, 'EMAIL');
       // Verification OTP modal opens automatically
     } catch (err) {
       setErrorMessage(err.message);
@@ -144,31 +138,9 @@ export const VolunteerLoginView = ({ onNavigate }) => {
     }
   };
 
-  const handleMobileOtpSubmit = async (e) => {
-    e.preventDefault();
-    setErrorMessage('');
-    const cleanDigits = mobileNumber.replace(/\D/g, '');
-    if (!cleanDigits || cleanDigits.length < 10) {
-      setErrorMessage('Please enter a valid 10-digit Indian mobile number.');
-      return;
-    }
-    setLoading(true);
-    try {
-      await initiateMobileOtpLogin(mobileNumber, 'VOLUNTEER');
-    } catch (err) {
-      setErrorMessage(err.message);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   const fillVolunteerDemo = () => {
     setEmail('rohan.verma@example.com');
     setPassword('volunteer123');
-  };
-
-  const fillVolunteerPhoneDemo = () => {
-    setMobileNumber('9811233445');
   };
 
 
@@ -251,108 +223,68 @@ export const VolunteerLoginView = ({ onNavigate }) => {
 
             {!isRegisterMode ? (
               <div className="space-y-4">
-                
-                {/* Method Switcher Tabs: Email/Password vs Mobile OTP */}
-                <div className="flex p-1 rounded-2xl bg-slate-950 border border-slate-800">
-                  <button
-                    type="button"
-                    onClick={() => { setLoginMethod('email_password'); setErrorMessage(''); }}
-                    className={`flex-1 py-2 rounded-xl text-xs font-black transition-all flex items-center justify-center gap-1.5 ${
-                      loginMethod === 'email_password'
-                        ? 'bg-slate-800 text-white shadow-xs'
-                        : 'text-slate-400 hover:text-slate-200'
-                    }`}
-                  >
-                    <Mail className="w-3.5 h-3.5 text-amber-400" />
-                    <span>Email &amp; Password</span>
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={() => { setLoginMethod('mobile_otp'); setErrorMessage(''); }}
-                    className={`flex-1 py-2 rounded-xl text-xs font-black transition-all flex items-center justify-center gap-1.5 ${
-                      loginMethod === 'mobile_otp'
-                        ? 'bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-xs'
-                        : 'text-slate-400 hover:text-slate-200'
-                    }`}
-                  >
-                    <Smartphone className="w-3.5 h-3.5" />
-                    <span>Mobile Number OTP</span>
-                    <span className="text-[9px] px-1.5 py-0.2 rounded-full bg-amber-400 text-slate-950 font-black">5 MIN</span>
-                  </button>
-                </div>
-
-                {loginMethod === 'email_password' ? (
-                  <form onSubmit={handleLoginSubmit} className="space-y-4">
-                    <div>
-                      <label className="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-1">
-                        Volunteer Email Address
-                      </label>
-                      <div className="relative">
-                        <Mail className="w-4 h-4 text-slate-500 absolute left-3 top-3" />
-                        <input
-                          type="email"
-                          required
-                          value={email}
-                          onChange={(e) => setEmail(e.target.value)}
-                          placeholder="rohan.verma@example.com"
-                          className="w-full pl-9 pr-4 py-2.5 rounded-xl border border-slate-700/80 text-xs font-bold text-white bg-slate-950 focus:border-amber-500 focus:ring-1 focus:ring-amber-500 focus:outline-none placeholder:text-slate-500 transition-all"
-                        />
-                      </div>
+                <form onSubmit={handleLoginSubmit} className="space-y-4">
+                  <div>
+                    <label className="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-1">
+                      Volunteer Email Address
+                    </label>
+                    <div className="relative">
+                      <Mail className="w-4 h-4 text-slate-500 absolute left-3 top-3" />
+                      <input
+                        type="email"
+                        required
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        placeholder="rohan.verma@example.com"
+                        className="w-full pl-9 pr-4 py-2.5 rounded-xl border border-slate-700/80 text-xs font-bold text-white bg-slate-950 focus:border-amber-500 focus:ring-1 focus:ring-amber-500 focus:outline-none placeholder:text-slate-500 transition-all"
+                      />
                     </div>
-
-                    <div>
-                      <div className="flex items-center justify-between mb-1">
-                        <label className="block text-xs font-bold text-slate-300 uppercase tracking-wider">
-                          Password
-                        </label>
-                        <button
-                          type="button"
-                          onClick={() => onNavigate('forgot-password')}
-                          className="text-[11px] font-bold text-amber-400 hover:text-amber-300 hover:underline"
-                        >
-                          Forgot Password?
-                        </button>
-                      </div>
-                      <div className="relative">
-                        <Lock className="w-4 h-4 text-slate-500 absolute left-3 top-3" />
-                        <input
-                          type={showPassword ? "text" : "password"}
-                          value={password}
-                          onChange={(e) => setPassword(e.target.value)}
-                          placeholder="••••••••"
-                          className="w-full pl-9 pr-10 py-2.5 rounded-xl border border-slate-700/80 text-xs font-bold text-white bg-slate-950 focus:border-amber-500 focus:ring-1 focus:ring-amber-500 focus:outline-none placeholder:text-slate-500 transition-all"
-                        />
-                        <button
-                          type="button"
-                          onClick={() => setShowPassword(!showPassword)}
-                          className="absolute right-3 top-3 text-slate-400 hover:text-slate-200"
-                        >
-                          {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                        </button>
-                      </div>
-                    </div>
-
-                    <button
-                      type="submit"
-                      disabled={loading || !password}
-                      className={`w-full py-2.5 rounded-xl font-black text-xs uppercase tracking-wider shadow-md transition-all flex items-center justify-center gap-2 ${
-                        password
-                          ? 'bg-gradient-to-r from-amber-500 via-emerald-500 to-sky-500 hover:from-amber-400 hover:to-sky-400 text-slate-950 press-effect shadow-lg shadow-amber-500/10'
-                          : 'bg-slate-800 text-slate-500 cursor-not-allowed'
-                      }`}
-                    >
-                      {loading ? "Authenticating..." : "Sign In with Password"}
-                    </button>
-                  </form>
-                ) : (
-                  <div className="pt-1">
-                    <FirebasePhoneAuth 
-                      expectedRole="VOLUNTEER" 
-                      onSuccess={() => onNavigate('volunteer-hub')} 
-                    />
                   </div>
-                )}
+
+                  <div>
+                    <div className="flex items-center justify-between mb-1">
+                      <label className="block text-xs font-bold text-slate-300 uppercase tracking-wider">
+                        Password
+                      </label>
+                      <button
+                        type="button"
+                        onClick={() => onNavigate('forgot-password')}
+                        className="text-[11px] font-bold text-amber-400 hover:text-amber-300 hover:underline"
+                      >
+                        Forgot Password?
+                      </button>
+                    </div>
+                    <div className="relative">
+                      <Lock className="w-4 h-4 text-slate-500 absolute left-3 top-3" />
+                      <input
+                        type={showPassword ? "text" : "password"}
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        placeholder="••••••••"
+                        className="w-full pl-9 pr-10 py-2.5 rounded-xl border border-slate-700/80 text-xs font-bold text-white bg-slate-950 focus:border-amber-500 focus:ring-1 focus:ring-amber-500 focus:outline-none placeholder:text-slate-500 transition-all"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowPassword(!showPassword)}
+                        className="absolute right-3 top-3 text-slate-400 hover:text-slate-200"
+                      >
+                        {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                      </button>
+                    </div>
+                  </div>
+
+                  <button
+                    type="submit"
+                    disabled={loading || !password}
+                    className={`w-full py-2.5 rounded-xl font-black text-xs uppercase tracking-wider shadow-md transition-all flex items-center justify-center gap-2 ${
+                      password
+                        ? 'bg-gradient-to-r from-amber-500 via-emerald-500 to-sky-500 hover:from-amber-400 hover:to-sky-400 text-slate-950 press-effect shadow-lg shadow-amber-500/10'
+                        : 'bg-slate-800 text-slate-500 cursor-not-allowed'
+                    }`}
+                  >
+                    {loading ? "Authenticating..." : "Sign In with Password"}
+                  </button>
+                </form>
 
 
                 {/* Quick 1-Click Google / Gmail Sign In Option */}
@@ -515,54 +447,15 @@ export const VolunteerLoginView = ({ onNavigate }) => {
                   />
                 </div>
 
-                {/* Verification Channel Option: Email OTP vs Mobile OTP */}
-                <div className="p-3 rounded-2xl bg-slate-950/70 border border-slate-800 space-y-2">
-                  <div className="flex items-center justify-between">
-                    <label className="text-[11px] font-extrabold text-slate-300 uppercase tracking-wider">
-                      Preferred Verification Method
-                    </label>
-                    <span className="text-[10px] font-bold text-emerald-400 bg-emerald-950/80 px-2 py-0.5 rounded-md border border-emerald-800">
-                      5-Min OTP
-                    </span>
+                {/* Email Verification Banner */}
+                <div className="p-3 rounded-2xl bg-slate-950/70 border border-slate-800 flex items-center justify-between">
+                  <div className="flex items-center gap-2 text-xs text-slate-300">
+                    <Mail className="w-4 h-4 text-amber-400" />
+                    <span>A 6-digit verification code will be sent to your email inbox.</span>
                   </div>
-
-                  <div className="grid grid-cols-2 gap-2">
-                    <button
-                      type="button"
-                      onClick={() => setRegVerificationMethod('EMAIL')}
-                      className={`p-2.5 rounded-xl border-2 text-left transition-all flex items-center gap-2 ${
-                        regVerificationMethod === 'EMAIL'
-                          ? 'border-amber-500 bg-amber-950/30 text-white shadow-xs'
-                          : 'border-slate-800 bg-slate-900 text-slate-400 hover:border-slate-700'
-                      }`}
-                    >
-                      <div className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 ${regVerificationMethod === 'EMAIL' ? 'bg-amber-500 text-slate-950 font-bold' : 'bg-slate-800 text-slate-400'}`}>
-                        <Mail className="w-3.5 h-3.5" />
-                      </div>
-                      <div>
-                        <div className="text-xs font-bold leading-none">Email OTP</div>
-                        <div className="text-[10px] text-slate-400 mt-0.5">Code to Inbox</div>
-                      </div>
-                    </button>
-
-                    <button
-                      type="button"
-                      onClick={() => setRegVerificationMethod('MOBILE')}
-                      className={`p-2.5 rounded-xl border-2 text-left transition-all flex items-center gap-2 ${
-                        regVerificationMethod === 'MOBILE'
-                          ? 'border-emerald-500 bg-emerald-950/30 text-white shadow-xs'
-                          : 'border-slate-800 bg-slate-900 text-slate-400 hover:border-slate-700'
-                      }`}
-                    >
-                      <div className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 ${regVerificationMethod === 'MOBILE' ? 'bg-emerald-500 text-slate-950 font-bold' : 'bg-slate-800 text-slate-400'}`}>
-                        <Smartphone className="w-3.5 h-3.5" />
-                      </div>
-                      <div>
-                        <div className="text-xs font-bold leading-none">Mobile OTP</div>
-                        <div className="text-[10px] text-slate-400 mt-0.5">Code to Phone (+91)</div>
-                      </div>
-                    </button>
-                  </div>
+                  <span className="text-[10px] font-mono font-bold text-amber-400 bg-amber-950/60 px-2 py-0.5 rounded-md border border-amber-800/60">
+                    5-Min Email OTP
+                  </span>
                 </div>
 
                 <button
@@ -571,9 +464,7 @@ export const VolunteerLoginView = ({ onNavigate }) => {
                   className="w-full py-2.5 rounded-xl text-slate-950 font-black text-xs uppercase tracking-wider shadow-lg flex items-center justify-center gap-2 mt-2 press-effect bg-gradient-to-r from-amber-500 via-emerald-500 to-sky-500 hover:from-amber-400 hover:to-sky-400 shadow-amber-500/10"
                 >
                   <Zap className="w-3.5 h-3.5 fill-current" />
-                  {loading 
-                    ? "Generating 5-Min OTP..." 
-                    : (regVerificationMethod === 'MOBILE' ? "Proceed to Mobile OTP Verification (5 Min)" : "Proceed to Email OTP Verification (5 Min)")}
+                  {loading ? "Generating 5-Min OTP..." : "Proceed to Email Verification (5 Min)"}
                 </button>
 
                 <div className="relative flex items-center justify-center pt-2">
