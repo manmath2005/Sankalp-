@@ -191,14 +191,15 @@ export const OtpVerificationModal = () => {
     : otpModalData.userEmail;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md animate-in fade-in duration-200">
-      <div className="relative w-full max-w-md glass-panel rounded-3xl border border-white/80 shadow-2xl overflow-hidden flex flex-col text-left">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/85 backdrop-blur-xl animate-in fade-in duration-200">
+      <div className="relative w-full max-w-md horizon-glass-panel rounded-3xl border border-slate-800/90 bg-slate-900/95 shadow-2xl overflow-hidden flex flex-col text-left">
+        <div className="horizon-gradient-line absolute top-0 left-0 right-0 h-1 z-10"></div>
         
         {/* Header Banner */}
-        <div className="p-6 bg-gradient-to-r from-slate-900 via-sky-950 to-slate-900 text-white relative">
+        <div className="p-6 bg-slate-950/90 text-white border-b border-slate-800 relative">
           <button
             onClick={() => setOtpModalData(null)}
-            className="absolute top-4 right-4 p-2 rounded-full bg-white/10 hover:bg-white/20 text-slate-300 transition-colors"
+            className="absolute top-4 right-4 p-2 rounded-full bg-slate-800/80 hover:bg-slate-800 text-slate-300 transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
@@ -207,9 +208,9 @@ export const OtpVerificationModal = () => {
             {isMobileAuth ? (
               <Smartphone className="w-4 h-4 text-emerald-400" />
             ) : (
-              <Mail className="w-4 h-4 text-sky-400" />
+              <Mail className="w-4 h-4 text-amber-400" />
             )}
-            <span className="text-[11px] font-extrabold uppercase tracking-widest text-sky-400">
+            <span className="text-[11px] font-black uppercase tracking-widest text-amber-400">
               {isMobileAuth ? "Mobile OTP Authentication" : (otpModalData.isLogin ? "Secure Login Verification" : "Account Verification Step")}
             </span>
           </div>
@@ -218,7 +219,7 @@ export const OtpVerificationModal = () => {
             {otpModalData.isLogin ? `Verify One-Time Password` : "Activate Your Account"}
           </h2>
           <p className="text-xs text-slate-300 mt-1">
-            Enter the 6-digit code delivered in real-time to <strong className="text-sky-300 font-mono">{identifierDisplay}</strong>
+            Enter the 6-digit code delivered in real-time to <strong className="text-amber-300 font-mono">{identifierDisplay}</strong>
           </p>
         </div>
 
@@ -226,16 +227,16 @@ export const OtpVerificationModal = () => {
         <div className="p-6 space-y-5">
 
           {/* Delivery & Expiration Status Bar */}
-          <div className="p-3.5 rounded-2xl bg-sky-50 dark:bg-sky-950/40 border border-sky-200 dark:border-sky-800/60 flex items-center justify-between">
+          <div className="p-3.5 rounded-2xl bg-slate-950/80 border border-slate-800 flex items-center justify-between">
             <div className="flex items-center gap-2.5">
-              <div className="w-7 h-7 rounded-lg bg-sky-600 text-white flex items-center justify-center shrink-0 shadow-xs">
+              <div className="w-7 h-7 rounded-lg bg-amber-500/20 text-amber-400 border border-amber-500/30 flex items-center justify-center shrink-0 shadow-xs">
                 {isMobileAuth ? <Smartphone className="w-3.5 h-3.5" /> : <Send className="w-3.5 h-3.5" />}
               </div>
               <div className="text-xs">
-                <p className="font-extrabold text-slate-900 dark:text-white">
+                <p className="font-extrabold text-white">
                   {isMobileAuth ? "SMS & Email OTP Dispatched" : "Delivered to Primary Inbox"}
                 </p>
-                <p className="text-[10px] text-slate-500 dark:text-slate-400">
+                <p className="text-[10px] text-slate-400">
                   {isMobileAuth ? "Auto-synced with phone & email record" : "Real-time delivery from Sankalp Network"}
                 </p>
               </div>
@@ -244,8 +245,8 @@ export const OtpVerificationModal = () => {
             {/* Live 5-minute countdown chip */}
             <div className={`flex items-center gap-1.5 px-2.5 py-1 rounded-xl text-xs font-black font-mono tracking-tight border ${
               timeLeft < 60 
-                ? 'bg-red-50 text-red-600 border-red-200 animate-pulse' 
-                : 'bg-white dark:bg-slate-900 text-sky-700 dark:text-sky-300 border-sky-200 dark:border-sky-800'
+                ? 'bg-red-950/80 text-red-400 border-red-800 animate-pulse' 
+                : 'bg-slate-900 text-amber-300 border-slate-800'
             }`}>
               <Clock className="w-3.5 h-3.5" />
               <span>{formatMinutes(timeLeft)}</span>
@@ -254,7 +255,7 @@ export const OtpVerificationModal = () => {
 
           {/* Error Message */}
           {error && (
-            <div className="p-3 rounded-xl bg-red-50 dark:bg-red-950/50 border border-red-200 dark:border-red-800 text-xs font-semibold text-red-700 dark:text-red-300 flex items-center gap-2 animate-scale-in">
+            <div className="p-3 rounded-xl bg-red-950/80 border border-red-800 text-xs font-semibold text-red-200 flex items-center gap-2 animate-scale-in">
               <AlertCircle className="w-4 h-4 shrink-0" />
               <span>{error}</span>
             </div>
@@ -265,7 +266,7 @@ export const OtpVerificationModal = () => {
             
             <div>
               <div className="flex items-center justify-between mb-2.5 px-1">
-                <label className="text-[11px] font-black uppercase tracking-wider text-slate-600 dark:text-slate-300">
+                <label className="text-[11px] font-black uppercase tracking-wider text-slate-300">
                   Enter 6-Digit Code:
                 </label>
                 <span className="text-[10px] text-slate-400 font-medium">
@@ -286,10 +287,10 @@ export const OtpVerificationModal = () => {
                     value={digit}
                     onChange={(e) => handleInputChange(idx, e.target.value)}
                     onKeyDown={(e) => handleKeyDown(idx, e)}
-                    className={`w-full h-13 sm:h-14 text-center text-2xl font-black font-mono rounded-2xl border-2 transition-all bg-white dark:bg-slate-900 text-slate-900 dark:text-white shadow-inner focus:outline-none ${
+                    className={`w-full h-13 sm:h-14 text-center text-2xl font-black font-mono rounded-2xl border-2 transition-all bg-slate-950 text-white shadow-inner focus:outline-none ${
                       digit 
-                        ? 'border-sky-500 bg-sky-50/50 dark:bg-sky-950/30 text-sky-600 dark:text-sky-400 ring-2 ring-sky-200 dark:ring-sky-900' 
-                        : 'border-slate-300 dark:border-slate-700 hover:border-slate-400 focus:border-sky-500 focus:ring-4 focus:ring-sky-100 dark:focus:ring-sky-950'
+                        ? 'border-amber-500 bg-amber-950/30 text-amber-300 ring-2 ring-amber-500/20' 
+                        : 'border-slate-700/80 hover:border-slate-600 focus:border-amber-500 focus:ring-4 focus:ring-amber-500/20'
                     }`}
                   />
                 ))}
@@ -300,10 +301,10 @@ export const OtpVerificationModal = () => {
             <button
               type="submit"
               disabled={currentOtpValue.length !== 6 || isVerifying || timeLeft <= 0}
-              className={`w-full py-3.5 rounded-2xl font-black text-xs uppercase tracking-wider shadow-md transition-all flex items-center justify-center gap-2 press-effect ${
+              className={`w-full py-3.5 rounded-2xl font-black text-xs uppercase tracking-wider shadow-lg transition-all flex items-center justify-center gap-2 press-effect ${
                 currentOtpValue.length === 6 && timeLeft > 0 && !isVerifying
-                  ? 'btn-glow-primary hover:shadow-lg'
-                  : 'bg-slate-200 dark:bg-slate-800 text-slate-400 dark:text-slate-500 cursor-not-allowed'
+                  ? 'bg-gradient-to-r from-amber-500 via-emerald-500 to-sky-500 hover:from-amber-400 hover:to-sky-400 text-slate-950 shadow-amber-500/10'
+                  : 'bg-slate-800 text-slate-500 cursor-not-allowed'
               }`}
             >
               {isVerifying ? (
@@ -320,7 +321,7 @@ export const OtpVerificationModal = () => {
             </button>
 
             {/* Resend Action with cooldown */}
-            <div className="pt-1 text-center flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-2 text-xs text-slate-500 dark:text-slate-400">
+            <div className="pt-1 text-center flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-2 text-xs text-slate-400">
               <span>Didn't receive the one-time code?</span>
               <button
                 type="button"
@@ -328,8 +329,8 @@ export const OtpVerificationModal = () => {
                 disabled={resendCooldown > 0}
                 className={`font-black flex items-center gap-1 transition-colors ${
                   resendCooldown > 0
-                    ? 'text-slate-400 dark:text-slate-600 cursor-not-allowed'
-                    : 'text-sky-600 dark:text-sky-400 hover:underline'
+                    ? 'text-slate-500 cursor-not-allowed'
+                    : 'text-amber-400 hover:text-amber-300 underline'
                 }`}
               >
                 <RefreshCw className={`w-3 h-3 ${resendCooldown > 0 ? '' : 'hover:rotate-180 transition-transform'}`} />
@@ -342,8 +343,8 @@ export const OtpVerificationModal = () => {
         </div>
 
         {/* Security Footer Note */}
-        <div className="px-6 py-3 bg-slate-50 dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 text-[10px] text-slate-500 dark:text-slate-400 flex items-center justify-center gap-1.5 font-medium">
-          <Lock className="w-3 h-3 text-emerald-500" />
+        <div className="px-6 py-3 bg-slate-950/90 border-t border-slate-800 text-[10px] text-slate-400 flex items-center justify-center gap-1.5 font-medium">
+          <Lock className="w-3 h-3 text-emerald-400" />
           <span>Encrypted with 5-Minute Time-Based Expiration • Do not share this code</span>
         </div>
 

@@ -62,22 +62,23 @@ export const VolunteerLoginView = ({ onNavigate }) => {
   if (currentUser && currentUser.role === 'VOLUNTEER') {
     return (
       <div className="max-w-2xl mx-auto px-4 py-12 text-center space-y-6">
-        <div className="glass-panel p-8 rounded-3xl border border-slate-200 shadow-sm space-y-4">
-          <div className="w-16 h-16 rounded-2xl bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto">
+        <div className="horizon-glass-panel p-8 rounded-3xl border border-slate-800/90 shadow-2xl relative overflow-hidden backdrop-blur-2xl space-y-4">
+          <div className="horizon-gradient-line absolute top-0 left-0 right-0 h-1"></div>
+          <div className="w-16 h-16 rounded-2xl bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 flex items-center justify-center mx-auto shadow-lg">
             <CheckCircle2 className="w-8 h-8" />
           </div>
-          <h2 className="text-2xl font-extrabold text-slate-900">Signed In as Verified Volunteer</h2>
-          <p className="text-xs text-slate-600">Welcome, <strong>{currentUser?.name || currentUser?.email}</strong> ({currentUser?.email}). You are currently logged into the Volunteer Portal.</p>
-          <div className="flex justify-center gap-3">
+          <h2 className="text-2xl font-black text-white">Signed In as Verified Volunteer</h2>
+          <p className="text-xs text-slate-300">Welcome, <strong>{currentUser?.name || currentUser?.email}</strong> ({currentUser?.email}). You are currently logged into the Volunteer Portal.</p>
+          <div className="flex justify-center gap-3 pt-2">
             <button
               onClick={() => onNavigate('volunteer-hub')}
-              className="px-6 py-2.5 rounded-xl bg-sky-600 text-white font-bold text-xs shadow"
+              className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 via-emerald-500 to-sky-500 hover:from-amber-400 hover:to-sky-400 text-slate-950 font-black text-xs shadow-lg transition-all press-effect"
             >
               Go to Volunteer Hub & Certificates Studio →
             </button>
             <button
               onClick={logoutUser}
-              className="px-4 py-2.5 rounded-xl bg-slate-100 text-slate-700 font-bold text-xs"
+              className="px-4 py-2.5 rounded-xl bg-slate-800/80 hover:bg-slate-800 border border-slate-700 text-slate-200 font-bold text-xs transition-all"
             >
               Logout
             </button>
@@ -177,34 +178,34 @@ export const VolunteerLoginView = ({ onNavigate }) => {
         
         {/* Left Column: Colorful Visual Highlight */}
         <div className="md:col-span-5 space-y-6">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-gradient-to-r from-sky-500 via-indigo-500 to-emerald-500 text-white text-xs font-black shadow-md">
-            <Award className="w-4 h-4" />
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-900/90 border border-amber-500/30 text-amber-300 text-xs font-black shadow-md">
+            <Award className="w-4 h-4 text-amber-400" />
             Official Volunteer Access Portal
           </div>
 
-          <h1 className="text-3xl font-extrabold text-slate-900 leading-tight">
+          <h1 className="text-3xl sm:text-4xl font-black text-white leading-tight">
             Join the Sankalp <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-sky-600 via-indigo-600 to-emerald-600">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-emerald-400 to-sky-400">
               Volunteer Community
             </span>
           </h1>
 
-          <p className="text-xs text-slate-600 leading-relaxed">
+          <p className="text-xs text-slate-300 leading-relaxed">
             Choose from upcoming social awareness drives in government offices, public sectors, colleges, and schools. Log service hours and earn accredited completion certificates with QR verification.
           </p>
 
           <div className="space-y-3 pt-2">
-            <div className="flex items-start gap-3 p-3.5 rounded-2xl bg-gradient-to-r from-sky-50 to-indigo-50 border border-sky-100 shadow-sm">
-              <CheckCircle2 className="w-4 h-4 text-sky-600 mt-0.5 shrink-0" />
-              <p className="text-xs text-slate-700">
-                <strong>Passwordless Email OTP:</strong> Sign in instantly with a 6-digit code sent directly to your email.
+            <div className="flex items-start gap-3 p-3.5 rounded-2xl bg-slate-900/80 border border-slate-800 shadow-sm">
+              <CheckCircle2 className="w-4 h-4 text-amber-400 mt-0.5 shrink-0" />
+              <p className="text-xs text-slate-300">
+                <strong className="text-white">Passwordless Email OTP:</strong> Sign in instantly with a 6-digit code sent directly to your email.
               </p>
             </div>
 
-            <div className="flex items-start gap-3 p-3.5 rounded-2xl bg-gradient-to-r from-emerald-50 to-teal-50 border border-emerald-100 shadow-sm">
-              <CheckCircle2 className="w-4 h-4 text-emerald-600 mt-0.5 shrink-0" />
-              <p className="text-xs text-slate-700">
-                <strong>Accredited Certificates:</strong> Verified certificates with QR code audit trails.
+            <div className="flex items-start gap-3 p-3.5 rounded-2xl bg-slate-900/80 border border-slate-800 shadow-sm">
+              <CheckCircle2 className="w-4 h-4 text-emerald-400 mt-0.5 shrink-0" />
+              <p className="text-xs text-slate-300">
+                <strong className="text-white">Accredited Certificates:</strong> Verified certificates with QR code audit trails.
               </p>
             </div>
           </div>
@@ -212,29 +213,30 @@ export const VolunteerLoginView = ({ onNavigate }) => {
 
         {/* Right Column: Dedicated Login / Register Form */}
         <div className="md:col-span-7">
-          <div className="glass-panel p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-float">
+          <div className="horizon-glass-panel p-6 sm:p-8 rounded-3xl border border-slate-800/90 bg-slate-900/90 shadow-2xl relative overflow-hidden backdrop-blur-2xl">
+            <div className="horizon-gradient-line absolute top-0 left-0 right-0 h-1"></div>
             
             {/* Header Tabs */}
-            <div className="flex items-center justify-between border-b border-slate-200 pb-4 mb-6">
+            <div className="flex items-center justify-between border-b border-slate-800 pb-4 mb-6">
               <div>
-                <h2 className="text-xl font-extrabold text-slate-900">
+                <h2 className="text-xl font-black text-white">
                   {isRegisterMode ? 'New Volunteer Registration' : 'Volunteer Login Portal'}
                 </h2>
-                <p className="text-xs text-slate-500 mt-0.5">
+                <p className="text-xs text-slate-400 mt-0.5">
                   {isRegisterMode ? 'Complete quick questionnaire & 6-digit email OTP' : 'Sign in with Password or Passwordless Email OTP'}
                 </p>
               </div>
 
-              <div className="flex bg-slate-100 p-1 rounded-xl">
+              <div className="flex bg-slate-950 p-1 rounded-xl border border-slate-800">
                 <button
                   onClick={() => { setIsRegisterMode(false); setErrorMessage(''); }}
-                  className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all ${!isRegisterMode ? 'bg-gradient-to-r from-sky-600 to-sky-700 text-white shadow-sm' : 'text-slate-600'}`}
+                  className={`px-3.5 py-1.5 rounded-lg text-xs font-black transition-all ${!isRegisterMode ? 'bg-gradient-to-r from-amber-500 to-emerald-500 text-slate-950 shadow-sm' : 'text-slate-400 hover:text-white'}`}
                 >
                   Sign In
                 </button>
                 <button
                   onClick={() => { setIsRegisterMode(true); setErrorMessage(''); }}
-                  className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all ${isRegisterMode ? 'bg-gradient-to-r from-sky-600 to-sky-700 text-white shadow-sm' : 'text-slate-600'}`}
+                  className={`px-3.5 py-1.5 rounded-lg text-xs font-black transition-all ${isRegisterMode ? 'bg-gradient-to-r from-amber-500 to-emerald-500 text-slate-950 shadow-sm' : 'text-slate-400 hover:text-white'}`}
                 >
                   Register
                 </button>
@@ -242,7 +244,7 @@ export const VolunteerLoginView = ({ onNavigate }) => {
             </div>
 
             {errorMessage && (
-              <div className="mb-4 p-3 rounded-xl bg-red-50 border border-red-200 text-xs font-semibold text-red-700 animate-scale-in">
+              <div className="mb-4 p-3 rounded-xl bg-red-950/80 border border-red-800/80 text-xs font-semibold text-red-200 animate-scale-in">
                 {errorMessage}
               </div>
             )}
@@ -251,17 +253,17 @@ export const VolunteerLoginView = ({ onNavigate }) => {
               <div className="space-y-4">
                 
                 {/* Method Switcher Tabs: Email/Password vs Mobile OTP */}
-                <div className="flex p-1 rounded-2xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+                <div className="flex p-1 rounded-2xl bg-slate-950 border border-slate-800">
                   <button
                     type="button"
                     onClick={() => { setLoginMethod('email_password'); setErrorMessage(''); }}
                     className={`flex-1 py-2 rounded-xl text-xs font-black transition-all flex items-center justify-center gap-1.5 ${
                       loginMethod === 'email_password'
-                        ? 'bg-white dark:bg-slate-900 text-slate-900 dark:text-white shadow-xs'
-                        : 'text-slate-500 hover:text-slate-800 dark:hover:text-slate-200'
+                        ? 'bg-slate-800 text-white shadow-xs'
+                        : 'text-slate-400 hover:text-slate-200'
                     }`}
                   >
-                    <Mail className="w-3.5 h-3.5 text-sky-600" />
+                    <Mail className="w-3.5 h-3.5 text-amber-400" />
                     <span>Email &amp; Password</span>
                   </button>
 
@@ -271,7 +273,7 @@ export const VolunteerLoginView = ({ onNavigate }) => {
                     className={`flex-1 py-2 rounded-xl text-xs font-black transition-all flex items-center justify-center gap-1.5 ${
                       loginMethod === 'mobile_otp'
                         ? 'bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-xs'
-                        : 'text-slate-500 hover:text-slate-800 dark:hover:text-slate-200'
+                        : 'text-slate-400 hover:text-slate-200'
                     }`}
                   >
                     <Smartphone className="w-3.5 h-3.5" />
@@ -283,48 +285,48 @@ export const VolunteerLoginView = ({ onNavigate }) => {
                 {loginMethod === 'email_password' ? (
                   <form onSubmit={handleLoginSubmit} className="space-y-4">
                     <div>
-                      <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
+                      <label className="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-1">
                         Volunteer Email Address
                       </label>
                       <div className="relative">
-                        <Mail className="w-4 h-4 text-slate-400 absolute left-3 top-3" />
+                        <Mail className="w-4 h-4 text-slate-500 absolute left-3 top-3" />
                         <input
                           type="email"
                           required
                           value={email}
                           onChange={(e) => setEmail(e.target.value)}
                           placeholder="rohan.verma@example.com"
-                          className="w-full pl-9 pr-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 text-xs font-bold text-slate-900 dark:text-white bg-white dark:bg-slate-900 focus:ring-2 focus:ring-sky-500 focus:outline-none placeholder:text-slate-400 dark:placeholder:text-slate-500"
+                          className="w-full pl-9 pr-4 py-2.5 rounded-xl border border-slate-700/80 text-xs font-bold text-white bg-slate-950 focus:border-amber-500 focus:ring-1 focus:ring-amber-500 focus:outline-none placeholder:text-slate-500 transition-all"
                         />
                       </div>
                     </div>
 
                     <div>
                       <div className="flex items-center justify-between mb-1">
-                        <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider">
+                        <label className="block text-xs font-bold text-slate-300 uppercase tracking-wider">
                           Password
                         </label>
                         <button
                           type="button"
                           onClick={() => onNavigate('forgot-password')}
-                          className="text-[11px] font-bold text-sky-600 dark:text-sky-400 hover:text-sky-700 hover:underline"
+                          className="text-[11px] font-bold text-amber-400 hover:text-amber-300 hover:underline"
                         >
                           Forgot Password?
                         </button>
                       </div>
                       <div className="relative">
-                        <Lock className="w-4 h-4 text-slate-400 absolute left-3 top-3" />
+                        <Lock className="w-4 h-4 text-slate-500 absolute left-3 top-3" />
                         <input
                           type={showPassword ? "text" : "password"}
                           value={password}
                           onChange={(e) => setPassword(e.target.value)}
                           placeholder="••••••••"
-                          className="w-full pl-9 pr-10 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 text-xs font-bold text-slate-900 dark:text-white bg-white dark:bg-slate-900 focus:ring-2 focus:ring-sky-500 focus:outline-none placeholder:text-slate-400 dark:placeholder:text-slate-500"
+                          className="w-full pl-9 pr-10 py-2.5 rounded-xl border border-slate-700/80 text-xs font-bold text-white bg-slate-950 focus:border-amber-500 focus:ring-1 focus:ring-amber-500 focus:outline-none placeholder:text-slate-500 transition-all"
                         />
                         <button
                           type="button"
                           onClick={() => setShowPassword(!showPassword)}
-                          className="absolute right-3 top-3 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"
+                          className="absolute right-3 top-3 text-slate-400 hover:text-slate-200"
                         >
                           {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                         </button>
@@ -336,8 +338,8 @@ export const VolunteerLoginView = ({ onNavigate }) => {
                       disabled={loading || !password}
                       className={`w-full py-2.5 rounded-xl font-black text-xs uppercase tracking-wider shadow-md transition-all flex items-center justify-center gap-2 ${
                         password
-                          ? 'bg-gradient-to-r from-emerald-600 via-teal-600 to-sky-600 hover:from-emerald-700 hover:to-sky-700 text-white press-effect'
-                          : 'bg-slate-200 dark:bg-slate-800 text-slate-400 cursor-not-allowed'
+                          ? 'bg-gradient-to-r from-amber-500 via-emerald-500 to-sky-500 hover:from-amber-400 hover:to-sky-400 text-slate-950 press-effect shadow-lg shadow-amber-500/10'
+                          : 'bg-slate-800 text-slate-500 cursor-not-allowed'
                       }`}
                     >
                       {loading ? "Authenticating..." : "Sign In with Password"}
@@ -355,8 +357,8 @@ export const VolunteerLoginView = ({ onNavigate }) => {
 
                 {/* Quick 1-Click Google / Gmail Sign In Option */}
                 <div className="relative flex items-center justify-center pt-2">
-                  <div className="border-t border-slate-200 dark:border-slate-700 w-full"></div>
-                  <span className="bg-white dark:bg-slate-900 px-3 text-[11px] font-bold text-slate-400 uppercase tracking-wider absolute">
+                  <div className="border-t border-slate-800 w-full"></div>
+                  <span className="bg-slate-900 px-3 text-[11px] font-bold text-slate-500 uppercase tracking-wider absolute">
                     or instant access
                   </span>
                 </div>
@@ -365,7 +367,7 @@ export const VolunteerLoginView = ({ onNavigate }) => {
                   type="button"
                   onClick={handleGoogleSignIn}
                   disabled={loading}
-                  className="w-full py-2.5 rounded-xl bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-800 dark:text-white border-2 border-slate-200 dark:border-slate-700 font-extrabold text-xs tracking-wide shadow-xs transition-all flex items-center justify-center gap-2.5 press-effect"
+                  className="w-full py-2.5 rounded-xl bg-slate-950 hover:bg-slate-800 text-white border border-slate-700 font-extrabold text-xs tracking-wide shadow-xs transition-all flex items-center justify-center gap-2.5 press-effect"
                 >
                   <svg className="w-4 h-4" viewBox="0 0 24 24">
                     <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
@@ -380,24 +382,24 @@ export const VolunteerLoginView = ({ onNavigate }) => {
               <form onSubmit={handleRegisterSubmit} className="space-y-3">
                 <div className="grid grid-cols-2 gap-2">
                   <div>
-                    <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">
+                    <label className="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-1">
                       Full Name
                     </label>
                     <div className="relative">
-                      <User className="w-4 h-4 text-slate-400 absolute left-3 top-2.5" />
+                      <User className="w-4 h-4 text-slate-500 absolute left-3 top-2.5" />
                       <input
                         type="text"
                         required
                         value={name}
                         onChange={(e) => setName(e.target.value)}
                         placeholder="Ananya Sharma"
-                        className="w-full pl-9 pr-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 text-xs font-bold text-slate-900 dark:text-white bg-white dark:bg-slate-900 focus:ring-2 focus:ring-sky-500 focus:outline-none placeholder:text-slate-400 dark:placeholder:text-slate-500"
+                        className="w-full pl-9 pr-3 py-2 rounded-xl border border-slate-700/80 text-xs font-bold text-white bg-slate-950 focus:border-amber-500 focus:ring-1 focus:ring-amber-500 focus:outline-none placeholder:text-slate-500"
                       />
                     </div>
                   </div>
 
                   <div>
-                    <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">
+                    <label className="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-1">
                       Phone Number
                     </label>
                     <input
@@ -406,43 +408,43 @@ export const VolunteerLoginView = ({ onNavigate }) => {
                       value={phone}
                       onChange={(e) => setPhone(e.target.value)}
                       placeholder="+91 98000 00000"
-                      className="w-full px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 text-xs font-bold text-slate-900 dark:text-white bg-white dark:bg-slate-900 focus:ring-2 focus:ring-sky-500 focus:outline-none placeholder:text-slate-400 dark:placeholder:text-slate-500"
+                      className="w-full px-3 py-2 rounded-xl border border-slate-700/80 text-xs font-bold text-white bg-slate-950 focus:border-amber-500 focus:ring-1 focus:ring-amber-500 focus:outline-none placeholder:text-slate-500"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">
+                  <label className="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-1">
                     Email Address (OTP Sent Here)
                   </label>
                   <div className="relative">
-                    <Mail className="w-4 h-4 text-slate-400 absolute left-3 top-2.5" />
+                    <Mail className="w-4 h-4 text-slate-500 absolute left-3 top-2.5" />
                     <input
                       type="email"
                       required
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       placeholder="ananya@college.edu"
-                      className="w-full pl-9 pr-4 py-2 rounded-xl border border-slate-300 dark:border-slate-700 text-xs font-bold text-slate-900 dark:text-white bg-white dark:bg-slate-900 focus:ring-2 focus:ring-sky-500 focus:outline-none placeholder:text-slate-400 dark:placeholder:text-slate-500"
+                      className="w-full pl-9 pr-4 py-2 rounded-xl border border-slate-700/80 text-xs font-bold text-white bg-slate-950 focus:border-amber-500 focus:ring-1 focus:ring-amber-500 focus:outline-none placeholder:text-slate-500"
                     />
                   </div>
                 </div>
 
                 {/* VOLUNTEER QUESTIONNAIRE FIELDS: Profession, City, Age */}
-                <div className="p-3 rounded-2xl bg-sky-50/70 dark:bg-sky-950/40 border border-sky-200/80 dark:border-sky-800 space-y-2">
-                  <p className="text-[11px] font-extrabold text-sky-900 dark:text-sky-300 uppercase">
-                    Volunteer Questionnaire (Analytics & Event Matching)
+                <div className="p-3 rounded-2xl bg-slate-950/70 border border-slate-800 space-y-2">
+                  <p className="text-[11px] font-black text-amber-300 uppercase tracking-wider">
+                    Volunteer Questionnaire (Analytics &amp; Event Matching)
                   </p>
 
                   <div className="grid grid-cols-3 gap-2">
                     <div>
-                      <label className="block text-[10px] font-bold text-slate-600 dark:text-slate-400 uppercase mb-0.5">
+                      <label className="block text-[10px] font-bold text-slate-400 uppercase mb-0.5">
                         Profession
                       </label>
                       <select
                         value={profession}
                         onChange={(e) => setProfession(e.target.value)}
-                        className="w-full px-2 py-1.5 rounded-lg border border-slate-300 dark:border-slate-700 text-xs font-bold text-slate-900 dark:text-white bg-white dark:bg-slate-900 focus:ring-2 focus:ring-sky-500"
+                        className="w-full px-2 py-1.5 rounded-lg border border-slate-700 text-xs font-bold text-white bg-slate-900 focus:border-amber-500"
                       >
                         <option value="Student">Student</option>
                         <option value="Software Engineer">IT / Software</option>
@@ -454,7 +456,7 @@ export const VolunteerLoginView = ({ onNavigate }) => {
                     </div>
 
                     <div>
-                      <label className="block text-[10px] font-bold text-slate-600 dark:text-slate-400 uppercase mb-0.5">
+                      <label className="block text-[10px] font-bold text-slate-400 uppercase mb-0.5">
                         City
                       </label>
                       <input
@@ -463,12 +465,12 @@ export const VolunteerLoginView = ({ onNavigate }) => {
                         value={city}
                         onChange={(e) => setCity(e.target.value)}
                         placeholder="Mumbai"
-                        className="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 dark:border-slate-700 text-xs font-bold text-slate-900 dark:text-white bg-white dark:bg-slate-900 focus:ring-2 focus:ring-sky-500"
+                        className="w-full px-2.5 py-1.5 rounded-lg border border-slate-700 text-xs font-bold text-white bg-slate-900 focus:border-amber-500"
                       />
                     </div>
 
                     <div>
-                      <label className="block text-[10px] font-bold text-slate-600 dark:text-slate-400 uppercase mb-0.5">
+                      <label className="block text-[10px] font-bold text-slate-400 uppercase mb-0.5">
                         Age
                       </label>
                       <input
@@ -479,14 +481,14 @@ export const VolunteerLoginView = ({ onNavigate }) => {
                         value={age}
                         onChange={(e) => setAge(e.target.value)}
                         placeholder="22"
-                        className="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 dark:border-slate-700 text-xs font-bold text-slate-900 dark:text-white bg-white dark:bg-slate-900 focus:ring-2 focus:ring-sky-500"
+                        className="w-full px-2.5 py-1.5 rounded-lg border border-slate-700 text-xs font-bold text-white bg-slate-900 focus:border-amber-500"
                       />
                     </div>
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">
+                  <label className="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-1">
                     College / Institution
                   </label>
                   <input
@@ -495,12 +497,12 @@ export const VolunteerLoginView = ({ onNavigate }) => {
                     value={institution}
                     onChange={(e) => setInstitution(e.target.value)}
                     placeholder="Delhi University"
-                    className="w-full px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 text-xs font-bold text-slate-900 dark:text-white bg-white dark:bg-slate-900 focus:ring-2 focus:ring-sky-500 focus:outline-none placeholder:text-slate-400 dark:placeholder:text-slate-500"
+                    className="w-full px-3 py-2 rounded-xl border border-slate-700/80 text-xs font-bold text-white bg-slate-950 focus:border-amber-500 focus:ring-1 focus:ring-amber-500 focus:outline-none placeholder:text-slate-500"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">
+                  <label className="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-1">
                     Create Password
                   </label>
                   <input
@@ -509,17 +511,17 @@ export const VolunteerLoginView = ({ onNavigate }) => {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="At least 6 characters"
-                    className="w-full px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 text-xs font-bold text-slate-900 dark:text-white bg-white dark:bg-slate-900 focus:ring-2 focus:ring-sky-500 focus:outline-none placeholder:text-slate-400 dark:placeholder:text-slate-500"
+                    className="w-full px-3 py-2 rounded-xl border border-slate-700/80 text-xs font-bold text-white bg-slate-950 focus:border-amber-500 focus:ring-1 focus:ring-amber-500 focus:outline-none placeholder:text-slate-500"
                   />
                 </div>
 
                 {/* Verification Channel Option: Email OTP vs Mobile OTP */}
-                <div className="p-3 rounded-2xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 space-y-2">
+                <div className="p-3 rounded-2xl bg-slate-950/70 border border-slate-800 space-y-2">
                   <div className="flex items-center justify-between">
-                    <label className="text-[11px] font-extrabold text-slate-700 dark:text-slate-300 uppercase tracking-wider">
+                    <label className="text-[11px] font-extrabold text-slate-300 uppercase tracking-wider">
                       Preferred Verification Method
                     </label>
-                    <span className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/60 px-2 py-0.5 rounded-md border border-emerald-200 dark:border-emerald-800">
+                    <span className="text-[10px] font-bold text-emerald-400 bg-emerald-950/80 px-2 py-0.5 rounded-md border border-emerald-800">
                       5-Min OTP
                     </span>
                   </div>
@@ -530,16 +532,16 @@ export const VolunteerLoginView = ({ onNavigate }) => {
                       onClick={() => setRegVerificationMethod('EMAIL')}
                       className={`p-2.5 rounded-xl border-2 text-left transition-all flex items-center gap-2 ${
                         regVerificationMethod === 'EMAIL'
-                          ? 'border-sky-500 bg-sky-50/80 dark:bg-sky-950/50 text-sky-900 dark:text-sky-200 shadow-xs'
-                          : 'border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-400 hover:border-slate-300'
+                          ? 'border-amber-500 bg-amber-950/30 text-white shadow-xs'
+                          : 'border-slate-800 bg-slate-900 text-slate-400 hover:border-slate-700'
                       }`}
                     >
-                      <div className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 ${regVerificationMethod === 'EMAIL' ? 'bg-sky-500 text-white' : 'bg-slate-100 text-slate-500'}`}>
+                      <div className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 ${regVerificationMethod === 'EMAIL' ? 'bg-amber-500 text-slate-950 font-bold' : 'bg-slate-800 text-slate-400'}`}>
                         <Mail className="w-3.5 h-3.5" />
                       </div>
                       <div>
                         <div className="text-xs font-bold leading-none">Email OTP</div>
-                        <div className="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5">Code to Inbox</div>
+                        <div className="text-[10px] text-slate-400 mt-0.5">Code to Inbox</div>
                       </div>
                     </button>
 
@@ -548,16 +550,16 @@ export const VolunteerLoginView = ({ onNavigate }) => {
                       onClick={() => setRegVerificationMethod('MOBILE')}
                       className={`p-2.5 rounded-xl border-2 text-left transition-all flex items-center gap-2 ${
                         regVerificationMethod === 'MOBILE'
-                          ? 'border-emerald-500 bg-emerald-50/80 dark:bg-emerald-950/50 text-emerald-900 dark:text-emerald-200 shadow-xs'
-                          : 'border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-400 hover:border-slate-300'
+                          ? 'border-emerald-500 bg-emerald-950/30 text-white shadow-xs'
+                          : 'border-slate-800 bg-slate-900 text-slate-400 hover:border-slate-700'
                       }`}
                     >
-                      <div className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 ${regVerificationMethod === 'MOBILE' ? 'bg-emerald-500 text-white' : 'bg-slate-100 text-slate-500'}`}>
+                      <div className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 ${regVerificationMethod === 'MOBILE' ? 'bg-emerald-500 text-slate-950 font-bold' : 'bg-slate-800 text-slate-400'}`}>
                         <Smartphone className="w-3.5 h-3.5" />
                       </div>
                       <div>
                         <div className="text-xs font-bold leading-none">Mobile OTP</div>
-                        <div className="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5">Code to Phone (+91)</div>
+                        <div className="text-[10px] text-slate-400 mt-0.5">Code to Phone (+91)</div>
                       </div>
                     </button>
                   </div>
@@ -566,11 +568,7 @@ export const VolunteerLoginView = ({ onNavigate }) => {
                 <button
                   type="submit"
                   disabled={loading}
-                  className={`w-full py-2.5 rounded-xl text-white font-black text-xs uppercase tracking-wider shadow-md flex items-center justify-center gap-2 mt-2 press-effect ${
-                    regVerificationMethod === 'MOBILE'
-                      ? 'bg-gradient-to-r from-teal-600 via-emerald-600 to-green-600 hover:from-teal-700 hover:to-green-700'
-                      : 'bg-gradient-to-r from-emerald-600 via-teal-600 to-sky-600 hover:from-emerald-700 hover:to-sky-700'
-                  }`}
+                  className="w-full py-2.5 rounded-xl text-slate-950 font-black text-xs uppercase tracking-wider shadow-lg flex items-center justify-center gap-2 mt-2 press-effect bg-gradient-to-r from-amber-500 via-emerald-500 to-sky-500 hover:from-amber-400 hover:to-sky-400 shadow-amber-500/10"
                 >
                   <Zap className="w-3.5 h-3.5 fill-current" />
                   {loading 
@@ -579,8 +577,8 @@ export const VolunteerLoginView = ({ onNavigate }) => {
                 </button>
 
                 <div className="relative flex items-center justify-center pt-2">
-                  <div className="border-t border-slate-200 dark:border-slate-700 w-full"></div>
-                  <span className="bg-white dark:bg-slate-900 px-3 text-[11px] font-bold text-slate-400 uppercase tracking-wider absolute">
+                  <div className="border-t border-slate-800 w-full"></div>
+                  <span className="bg-slate-900 px-3 text-[11px] font-bold text-slate-500 uppercase tracking-wider absolute">
                     or instant signup
                   </span>
                 </div>
@@ -589,7 +587,7 @@ export const VolunteerLoginView = ({ onNavigate }) => {
                   type="button"
                   onClick={handleGoogleSignIn}
                   disabled={loading}
-                  className="w-full py-2.5 rounded-xl bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-800 dark:text-white border-2 border-slate-200 dark:border-slate-700 font-extrabold text-xs tracking-wide shadow-xs transition-all flex items-center justify-center gap-2.5 press-effect"
+                  className="w-full py-2.5 rounded-xl bg-slate-950 hover:bg-slate-800 text-white border border-slate-700 font-extrabold text-xs tracking-wide shadow-xs transition-all flex items-center justify-center gap-2.5 press-effect"
                 >
                   <svg className="w-4 h-4" viewBox="0 0 24 24">
                     <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />

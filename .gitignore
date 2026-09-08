@@ -38,3 +38,7 @@ Thumbs.db
 *.sln
 *.sw?
 *.exe
+
+# Planning & Superpowers specs (kept local only)
+docs/superpowers/
+.planning/

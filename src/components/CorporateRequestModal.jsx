@@ -90,46 +90,46 @@ export const CorporateRequestModal = ({ isOpen, onClose, targetNgo = null }) => 
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/70 backdrop-blur-sm animate-in fade-in duration-200">
-      <div className="relative w-full max-w-2xl glass-panel rounded-3xl border border-slate-200 shadow-float-lg overflow-hidden flex flex-col text-left max-h-[90vh]">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/85 backdrop-blur-xl animate-in fade-in duration-200">
+      <div className="relative w-full max-w-2xl horizon-glass-panel rounded-3xl border border-slate-750 bg-slate-900/95 shadow-2xl overflow-hidden flex flex-col text-left max-h-[90vh] text-slate-200">
         
         {/* Header */}
-        <div className="p-6 bg-gradient-to-r from-slate-900 via-sky-950 to-indigo-950 text-white relative">
+        <div className="p-6 bg-slate-950 text-white relative border-b border-slate-800">
           <button
             onClick={onClose}
-            className="absolute top-4 right-4 p-2 rounded-full bg-white/10 hover:bg-white/20 text-slate-300 transition-colors"
+            className="absolute top-5 right-5 p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
 
-          <div className="flex items-center gap-2 mb-1">
-            <Building className="w-5 h-5 text-sky-400" />
-            <span className="text-xs font-bold text-sky-400 uppercase tracking-widest">
+          <div className="flex items-center gap-2 mb-1.5">
+            <Building className="w-5 h-5 text-amber-400" />
+            <span className="text-xs font-mono font-bold text-amber-400 uppercase tracking-widest">
               Institutional Partnership Portal
             </span>
           </div>
 
-          <h2 className="text-xl font-extrabold text-white">
+          <h2 className="text-xl font-black text-white">
             Request Awareness Event Drive
           </h2>
-          <p className="text-xs text-slate-300 mt-1">
+          <p className="text-xs text-slate-400 mt-1">
             For Government Offices, Corporate MNCs, Colleges, and Schools.
           </p>
         </div>
 
         {/* Scrollable Form Body */}
-        <form onSubmit={handleSubmit} className="p-6 space-y-4 overflow-y-auto flex-1">
+        <form onSubmit={handleSubmit} className="p-6 space-y-4 overflow-y-auto flex-1 bg-slate-900">
           
           {/* Target NGO Selection Dropdown */}
-          <div className="p-4 rounded-2xl bg-indigo-50/80 border border-indigo-200 space-y-1.5">
-            <label className="block text-xs font-extrabold text-indigo-950 uppercase tracking-wider flex items-center gap-1.5">
-              <Globe2 className="w-4 h-4 text-indigo-600" />
+          <div className="p-4 rounded-2xl bg-slate-950/80 border border-slate-800 space-y-1.5">
+            <label className="block text-xs font-mono font-bold text-amber-400 uppercase tracking-wider flex items-center gap-1.5">
+              <Globe2 className="w-4 h-4 text-emerald-400" />
               Select Targeted NGO Organization for this Event
             </label>
             <select
               value={selectedNgoId}
               onChange={(e) => setSelectedNgoId(e.target.value)}
-              className="w-full px-3 py-2 rounded-xl border border-indigo-200 text-xs font-bold bg-white text-slate-900 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+              className="w-full px-3.5 py-2 rounded-xl border border-slate-700 text-xs font-bold bg-slate-900 text-slate-100 focus:border-amber-500 outline-hidden"
             >
               <option value="ALL">🌐 Broadcast to All Verified Partner NGOs</option>
               {ngos.map(n => (
@@ -142,7 +142,7 @@ export const CorporateRequestModal = ({ isOpen, onClose, targetNgo = null }) => 
 
           <div className="grid sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
+              <label className="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-1">
                 Company / Office / Institution Name
               </label>
               <input
@@ -151,18 +151,18 @@ export const CorporateRequestModal = ({ isOpen, onClose, targetNgo = null }) => 
                 value={organizationName}
                 onChange={(e) => setOrganizationName(e.target.value)}
                 placeholder="e.g. State Treasury Dept / TechCorp MNC"
-                className="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs font-medium focus:ring-2 focus:ring-sky-500 focus:outline-none"
+                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-700 bg-slate-950 text-slate-100 placeholder-slate-500 text-xs font-medium focus:border-amber-500 outline-hidden"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
+              <label className="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-1">
                 Institution Type
               </label>
               <select
                 value={type}
                 onChange={(e) => setType(e.target.value)}
-                className="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs font-medium focus:ring-2 focus:ring-sky-500 focus:outline-none bg-white"
+                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-700 bg-slate-950 text-slate-100 text-xs font-medium focus:border-amber-500 outline-hidden"
               >
                 <option value="Government Office">Government Office / Ministry</option>
                 <option value="Public Office">Public Office / Corporate MNC</option>
@@ -174,7 +174,7 @@ export const CorporateRequestModal = ({ isOpen, onClose, targetNgo = null }) => 
 
           <div className="grid sm:grid-cols-3 gap-3">
             <div>
-              <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
+              <label className="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-1">
                 Nodal Officer Name
               </label>
               <input
@@ -183,12 +183,12 @@ export const CorporateRequestModal = ({ isOpen, onClose, targetNgo = null }) => 
                 value={contactPerson}
                 onChange={(e) => setContactPerson(e.target.value)}
                 placeholder="e.g. Rajesh Kumar (HR Head)"
-                className="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs font-medium focus:ring-2 focus:ring-sky-500 focus:outline-none"
+                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-700 bg-slate-950 text-slate-100 placeholder-slate-500 text-xs font-medium focus:border-amber-500 outline-hidden"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
+              <label className="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-1">
                 Official Email
               </label>
               <input
@@ -197,12 +197,12 @@ export const CorporateRequestModal = ({ isOpen, onClose, targetNgo = null }) => 
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="hr@company.com"
-                className="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs font-medium focus:ring-2 focus:ring-sky-500 focus:outline-none"
+                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-700 bg-slate-950 text-slate-100 placeholder-slate-500 text-xs font-medium focus:border-amber-500 outline-hidden font-mono"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
+              <label className="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-1">
                 Phone Number
               </label>
               <input
@@ -211,13 +211,13 @@ export const CorporateRequestModal = ({ isOpen, onClose, targetNgo = null }) => 
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
                 placeholder="+91 98000 00000"
-                className="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs font-medium focus:ring-2 focus:ring-sky-500 focus:outline-none"
+                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-700 bg-slate-950 text-slate-100 placeholder-slate-500 text-xs font-medium focus:border-amber-500 outline-hidden font-mono"
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
+            <label className="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-1">
               Proposed Awareness Subject / Topic
             </label>
             <input
@@ -226,19 +226,19 @@ export const CorporateRequestModal = ({ isOpen, onClose, targetNgo = null }) => 
               value={proposedTopic}
               onChange={(e) => setProposedTopic(e.target.value)}
               placeholder="e.g. Cyber Crime Prevention, RTI Rights, Mental Health, E-Waste Drive"
-              className="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs font-medium focus:ring-2 focus:ring-sky-500 focus:outline-none"
+              className="w-full px-3.5 py-2.5 rounded-xl border border-slate-700 bg-slate-950 text-slate-100 placeholder-slate-500 text-xs font-medium focus:border-amber-500 outline-hidden"
             />
           </div>
 
           <div className="grid sm:grid-cols-3 gap-3">
             <div>
-              <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
+              <label className="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-1">
                 Campaign Mode
               </label>
               <select
                 value={proposedMode}
                 onChange={(e) => setProposedMode(e.target.value)}
-                className="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs font-medium focus:ring-2 focus:ring-sky-500 focus:outline-none bg-white"
+                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-700 bg-slate-950 text-slate-100 text-xs font-medium focus:border-amber-500 outline-hidden"
               >
                 <option value="Onfield">Onfield Physical Event</option>
                 <option value="Online">Online Interactive Stream</option>
@@ -246,7 +246,7 @@ export const CorporateRequestModal = ({ isOpen, onClose, targetNgo = null }) => 
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
+              <label className="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-1">
                 Expected Audience Size
               </label>
               <input
@@ -255,12 +255,12 @@ export const CorporateRequestModal = ({ isOpen, onClose, targetNgo = null }) => 
                 value={targetAudienceSize}
                 onChange={(e) => setTargetAudienceSize(e.target.value)}
                 placeholder="e.g. 200 Employees"
-                className="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs font-medium focus:ring-2 focus:ring-sky-500 focus:outline-none"
+                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-700 bg-slate-950 text-slate-100 placeholder-slate-500 text-xs font-medium focus:border-amber-500 outline-hidden"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
+              <label className="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-1">
                 Proposed Date
               </label>
               <input
@@ -268,13 +268,13 @@ export const CorporateRequestModal = ({ isOpen, onClose, targetNgo = null }) => 
                 required
                 value={proposedDate}
                 onChange={(e) => setProposedDate(e.target.value)}
-                className="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs font-medium focus:ring-2 focus:ring-sky-500 focus:outline-none"
+                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-700 bg-slate-950 text-slate-100 text-xs font-medium focus:border-amber-500 outline-hidden font-mono"
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
+            <label className="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-1">
               Venue / Location Address
             </label>
             <input
@@ -283,22 +283,22 @@ export const CorporateRequestModal = ({ isOpen, onClose, targetNgo = null }) => 
               value={locationAddress}
               onChange={(e) => setLocationAddress(e.target.value)}
               placeholder="Full address of corporate auditorium / meeting room"
-              className="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs font-medium focus:ring-2 focus:ring-sky-500 focus:outline-none"
+              className="w-full px-3.5 py-2.5 rounded-xl border border-slate-700 bg-slate-950 text-slate-100 placeholder-slate-500 text-xs font-medium focus:border-amber-500 outline-hidden"
             />
           </div>
 
           {/* PERMISSION LETTER UPLOAD SECTION (PDF or Image) */}
-          <div className="p-4 rounded-2xl bg-amber-50/70 border border-amber-200/90 space-y-2">
-            <label className="block text-xs font-extrabold text-amber-900 uppercase tracking-wider flex items-center gap-1.5">
-              <Upload className="w-4 h-4 text-amber-600" />
+          <div className="p-4 rounded-2xl bg-amber-950/30 border border-amber-800/60 space-y-2">
+            <label className="block text-xs font-mono font-bold text-amber-400 uppercase tracking-wider flex items-center gap-1.5">
+              <Upload className="w-4 h-4 text-amber-400" />
               Upload Permission Letter from HR / CEO / Director (PDF or Image)*
             </label>
 
-            <p className="text-[11px] text-amber-800">
+            <p className="text-[11px] text-amber-200/80 leading-relaxed">
               An official sanction NOC letter on organization letterhead signed by HR, CEO, or Principal is mandatory for audit compliance.
             </p>
 
-            <div className="relative border-2 border-dashed border-amber-300 rounded-xl p-4 text-center hover:bg-white/60 transition-colors cursor-pointer">
+            <div className="relative border-2 border-dashed border-amber-600/50 rounded-xl p-4 text-center hover:bg-slate-950/60 transition-colors cursor-pointer">
               <input
                 type="file"
                 accept=".pdf,.jpg,.jpeg,.png"
@@ -307,16 +307,16 @@ export const CorporateRequestModal = ({ isOpen, onClose, targetNgo = null }) => 
               />
               
               {permissionFile ? (
-                <div className="flex items-center justify-center gap-2 text-xs font-bold text-emerald-800">
-                  <FileText className="w-5 h-5 text-emerald-600" />
+                <div className="flex items-center justify-center gap-2 text-xs font-bold text-emerald-400">
+                  <FileText className="w-5 h-5 text-emerald-400" />
                   <span>{permissionFile.name} ({(permissionFile.size / 1024).toFixed(1)} KB)</span>
-                  <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+                  <CheckCircle2 className="w-4 h-4 text-emerald-400" />
                 </div>
               ) : (
                 <div className="space-y-1">
-                  <Upload className="w-6 h-6 text-amber-600 mx-auto" />
-                  <p className="text-xs font-bold text-amber-900">Click or Drag & Drop Permission Letter (PDF / PNG / JPG)</p>
-                  <p className="text-[10px] text-slate-500">Max size 5MB</p>
+                  <Upload className="w-6 h-6 text-amber-400 mx-auto" />
+                  <p className="text-xs font-bold text-amber-300">Click or Drag & Drop Permission Letter (PDF / PNG / JPG)</p>
+                  <p className="text-[10px] text-slate-500">Max file size 5MB</p>
                 </div>
               )}
             </div>
@@ -324,7 +324,7 @@ export const CorporateRequestModal = ({ isOpen, onClose, targetNgo = null }) => 
 
           <button
             type="submit"
-            className="w-full py-3 rounded-xl bg-gradient-to-r from-sky-600 to-indigo-600 hover:from-sky-700 hover:to-indigo-700 text-white font-bold text-xs shadow-md transition-all press-effect flex items-center justify-center gap-2"
+            className="w-full py-3.5 rounded-xl bg-gradient-to-r from-amber-500 via-emerald-600 to-teal-600 hover:from-amber-600 hover:to-teal-700 text-white font-extrabold text-xs shadow-lg shadow-emerald-900/30 transition-all hover-lift active:scale-95 flex items-center justify-center gap-2"
           >
             <Send className="w-4 h-4" />
             Submit Event Conduction Request to NGO

@@ -57,24 +57,25 @@ export const CompanyLoginView = ({ onNavigate }) => {
   if (currentUser && currentUser.role === 'COMPANY_PARTNER') {
     return (
       <div className="max-w-2xl mx-auto px-4 py-12 text-center space-y-6 page-enter">
-        <div className="glass-panel p-8 rounded-3xl border border-slate-200 shadow-sm space-y-4 hover-lift">
-          <div className="w-16 h-16 rounded-2xl bg-gradient-to-tr from-indigo-500 to-sky-400 text-white flex items-center justify-center mx-auto animate-bounce-soft">
-            <Building2 className="w-8 h-8" />
+        <div className="horizon-glass-panel p-8 rounded-3xl border border-slate-800/90 shadow-2xl space-y-4 hover-lift relative overflow-hidden text-white">
+          <div className="horizon-gradient-line absolute top-0 left-0 right-0 h-[2px]" />
+          <div className="w-16 h-16 rounded-2xl bg-gradient-to-tr from-amber-500 via-emerald-500 to-sky-400 text-white flex items-center justify-center mx-auto shadow-lg shadow-emerald-950/50 animate-bounce-soft">
+            <Building2 className="w-8 h-8 text-slate-950" />
           </div>
-          <h2 className="text-2xl font-extrabold text-slate-900">Welcome, Institutional Partner</h2>
-          <p className="text-xs text-slate-600">
-            Organization: <strong>{currentUser.companyName || currentUser.name}</strong> ({currentUser.email})
+          <h2 className="text-2xl font-black text-white">Welcome, Institutional Partner</h2>
+          <p className="text-xs text-slate-300">
+            Organization: <strong className="text-white font-bold">{currentUser.companyName || currentUser.name}</strong> ({currentUser.email})
           </p>
-          <div className="flex justify-center gap-3">
+          <div className="flex justify-center gap-3 pt-2">
             <button
               onClick={() => onNavigate('corporate-partner')}
-              className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-indigo-600 to-sky-600 text-white font-bold text-xs shadow-md press-effect flex items-center gap-2"
+              className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 via-emerald-600 to-teal-600 hover:from-amber-600 hover:to-teal-700 text-white font-extrabold text-xs shadow-lg shadow-emerald-900/30 press-effect flex items-center gap-2 hover-lift"
             >
               Browse NGO Profiles & Request Events <ArrowRight className="w-4 h-4" />
             </button>
             <button
               onClick={logoutUser}
-              className="px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs press-effect"
+              className="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 hover:text-white border border-slate-700 font-bold text-xs press-effect"
             >
               Logout
             </button>
@@ -133,44 +134,44 @@ export const CompanyLoginView = ({ onNavigate }) => {
         
         {/* Left Column: Partnership Benefits Visual */}
         <div className="md:col-span-5 space-y-5">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-gradient-to-r from-indigo-500 to-sky-500 text-white text-xs font-black shadow-md">
-            <Building2 className="w-4 h-4" />
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-gradient-to-r from-amber-500/20 via-emerald-500/20 to-sky-500/20 border border-amber-500/30 text-amber-300 text-xs font-mono font-bold uppercase tracking-wider shadow-inner">
+            <Building2 className="w-4 h-4 text-amber-400" />
             Corporate & Gov Sector Portal
           </div>
 
-          <h1 className="text-3xl font-extrabold text-slate-900 leading-tight">
+          <h1 className="text-3xl font-black text-white leading-tight">
             Partner with <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 via-sky-600 to-emerald-600">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-emerald-400 to-sky-400">
               Verified NGOs for Social Impact
             </span>
           </h1>
 
-          <p className="text-xs text-slate-600 leading-relaxed">
+          <p className="text-xs text-slate-300 leading-relaxed font-medium">
             Register your company, government office, college, or school to browse verified NGO profiles, inspect complete event histories, and submit awareness drive requests.
           </p>
 
           <div className="space-y-3 pt-2">
-            <div className="flex items-start gap-3 p-3.5 rounded-2xl bg-gradient-to-r from-indigo-50 to-sky-50 border border-indigo-100 shadow-sm hover-lift cursor-default">
-              <Globe2 className="w-5 h-5 text-indigo-600 mt-0.5 shrink-0" />
+            <div className="flex items-start gap-3 p-4 rounded-2xl horizon-glass-panel border border-slate-800/80 shadow-md hover-lift cursor-default">
+              <Globe2 className="w-5 h-5 text-amber-400 mt-0.5 shrink-0" />
               <div>
-                <p className="text-xs font-bold text-slate-900">Browse NGO Profiles & Track Records</p>
-                <p className="text-[11px] text-slate-600 mt-0.5">View verified event history, impact reports, partner testimonials, and completed task audits.</p>
+                <p className="text-xs font-extrabold text-white">Browse NGO Profiles & Track Records</p>
+                <p className="text-[11px] text-slate-400 mt-0.5 leading-relaxed">View verified event history, impact reports, partner testimonials, and completed task audits.</p>
               </div>
             </div>
 
-            <div className="flex items-start gap-3 p-3.5 rounded-2xl bg-gradient-to-r from-emerald-50 to-teal-50 border border-emerald-100 shadow-sm hover-lift cursor-default">
-              <Shield className="w-5 h-5 text-emerald-600 mt-0.5 shrink-0" />
+            <div className="flex items-start gap-3 p-4 rounded-2xl horizon-glass-panel border border-slate-800/80 shadow-md hover-lift cursor-default">
+              <Shield className="w-5 h-5 text-emerald-400 mt-0.5 shrink-0" />
               <div>
-                <p className="text-xs font-bold text-slate-900">Secure HR/CEO Permission Upload</p>
-                <p className="text-[11px] text-slate-600 mt-0.5">Attach official sanction letters (PDF/Image) for compliance.</p>
+                <p className="text-xs font-extrabold text-white">Secure HR/CEO Permission Upload</p>
+                <p className="text-[11px] text-slate-400 mt-0.5 leading-relaxed">Attach official sanction letters (PDF/Image) for compliance.</p>
               </div>
             </div>
 
-            <div className="flex items-start gap-3 p-3.5 rounded-2xl bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-100 shadow-sm hover-lift cursor-default">
-              <Award className="w-5 h-5 text-amber-600 mt-0.5 shrink-0" />
+            <div className="flex items-start gap-3 p-4 rounded-2xl horizon-glass-panel border border-slate-800/80 shadow-md hover-lift cursor-default">
+              <Award className="w-5 h-5 text-teal-400 mt-0.5 shrink-0" />
               <div>
-                <p className="text-xs font-bold text-slate-900">ESG Impact Reporting</p>
-                <p className="text-[11px] text-slate-600 mt-0.5">Post-event documentation with volunteer logs, certificates, and citizen reach metrics.</p>
+                <p className="text-xs font-extrabold text-white">ESG Impact Reporting</p>
+                <p className="text-[11px] text-slate-400 mt-0.5 leading-relaxed">Post-event documentation with volunteer logs, certificates, and citizen reach metrics.</p>
               </div>
             </div>
           </div>
@@ -178,29 +179,30 @@ export const CompanyLoginView = ({ onNavigate }) => {
 
         {/* Right Column: Login / Register Card */}
         <div className="md:col-span-7">
-          <div className="glass-panel p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-float animate-scale-in">
+          <div className="horizon-glass-panel p-6 sm:p-8 rounded-3xl border border-slate-800/90 shadow-2xl animate-scale-in relative overflow-hidden">
+            <div className="horizon-gradient-line absolute top-0 left-0 right-0 h-[2px]" />
             
             {/* Tab Switcher */}
-            <div className="flex items-center justify-between border-b border-slate-200 pb-4 mb-6">
+            <div className="flex items-center justify-between border-b border-slate-800 pb-4 mb-6">
               <div>
-                <h2 className="text-xl font-extrabold text-slate-900">
+                <h2 className="text-xl font-black text-white">
                   {isRegisterMode ? 'Register Your Institution' : 'Institutional Partner Login'}
                 </h2>
-                <p className="text-xs text-slate-500 mt-0.5">
+                <p className="text-xs text-slate-400 mt-0.5">
                   {isRegisterMode ? 'Create account with email OTP verification' : 'Sign in to browse NGOs & manage event requests'}
                 </p>
               </div>
 
-              <div className="flex bg-slate-100 p-1 rounded-xl">
+              <div className="flex bg-slate-900 border border-slate-800 p-1 rounded-xl">
                 <button
                   onClick={() => { setIsRegisterMode(false); setErrorMessage(''); }}
-                  className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all press-effect ${!isRegisterMode ? 'bg-gradient-to-r from-indigo-600 to-sky-600 text-white shadow-sm' : 'text-slate-600 hover:text-slate-900'}`}
+                  className={`px-3.5 py-1.5 rounded-lg text-xs font-extrabold transition-all press-effect ${!isRegisterMode ? 'bg-gradient-to-r from-amber-500 via-emerald-600 to-teal-600 text-white shadow-md' : 'text-slate-400 hover:text-white'}`}
                 >
                   Sign In
                 </button>
                 <button
                   onClick={() => { setIsRegisterMode(true); setErrorMessage(''); }}
-                  className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all press-effect ${isRegisterMode ? 'bg-gradient-to-r from-indigo-600 to-sky-600 text-white shadow-sm' : 'text-slate-600 hover:text-slate-900'}`}
+                  className={`px-3.5 py-1.5 rounded-lg text-xs font-extrabold transition-all press-effect ${isRegisterMode ? 'bg-gradient-to-r from-amber-500 via-emerald-600 to-teal-600 text-white shadow-md' : 'text-slate-400 hover:text-white'}`}
                 >
                   Register
                 </button>
@@ -208,7 +210,7 @@ export const CompanyLoginView = ({ onNavigate }) => {
             </div>
 
             {errorMessage && (
-              <div className="mb-4 p-3 rounded-xl bg-red-50 border border-red-200 text-xs font-semibold text-red-700 animate-scale-in">
+              <div className="mb-4 p-3 rounded-xl bg-red-950/70 border border-red-800/80 text-xs font-semibold text-red-300 animate-scale-in">
                 {errorMessage}
               </div>
             )}
@@ -217,17 +219,17 @@ export const CompanyLoginView = ({ onNavigate }) => {
               <div className="space-y-4">
                 
                 {/* Method Switcher Tabs: Email/Password vs Mobile OTP */}
-                <div className="flex p-1 rounded-2xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+                <div className="flex p-1 rounded-2xl bg-slate-950/80 border border-slate-800">
                   <button
                     type="button"
                     onClick={() => { setLoginMethod('email_password'); setErrorMessage(''); }}
                     className={`flex-1 py-2 rounded-xl text-xs font-black transition-all flex items-center justify-center gap-1.5 ${
                       loginMethod === 'email_password'
-                        ? 'bg-white dark:bg-slate-900 text-slate-900 dark:text-white shadow-xs'
-                        : 'text-slate-500 hover:text-slate-800 dark:hover:text-slate-200'
+                        ? 'bg-slate-900 text-white shadow-xs border border-slate-750'
+                        : 'text-slate-400 hover:text-white'
                     }`}
                   >
-                    <Mail className="w-3.5 h-3.5 text-indigo-600" />
+                    <Mail className="w-3.5 h-3.5 text-amber-400" />
                     <span>Email &amp; Password</span>
                   </button>
 
@@ -236,8 +238,8 @@ export const CompanyLoginView = ({ onNavigate }) => {
                     onClick={() => { setLoginMethod('mobile_otp'); setErrorMessage(''); }}
                     className={`flex-1 py-2 rounded-xl text-xs font-black transition-all flex items-center justify-center gap-1.5 ${
                       loginMethod === 'mobile_otp'
-                        ? 'bg-gradient-to-r from-indigo-600 to-sky-600 text-white shadow-xs'
-                        : 'text-slate-500 hover:text-slate-800 dark:hover:text-slate-200'
+                        ? 'bg-gradient-to-r from-amber-500 via-emerald-600 to-teal-600 text-white shadow-md'
+                        : 'text-slate-400 hover:text-white'
                     }`}
                   >
                     <Smartphone className="w-3.5 h-3.5" />
@@ -249,32 +251,32 @@ export const CompanyLoginView = ({ onNavigate }) => {
                 {loginMethod === 'email_password' ? (
                   <form onSubmit={handleLoginSubmit} className="space-y-4">
                     <div>
-                      <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">Official Corporate / Gov Email</label>
+                      <label className="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-1">Official Corporate / Gov Email</label>
                       <div className="relative">
-                        <Mail className="w-4 h-4 text-slate-400 absolute left-3 top-3" />
-                        <input type="email" required value={email} onChange={(e) => setEmail(e.target.value)} placeholder="corporate@sbi-staff.org" className="w-full pl-9 pr-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 text-xs font-bold text-slate-900 dark:text-white bg-white dark:bg-slate-900 focus:ring-2 focus:ring-indigo-500 focus:outline-none transition-all placeholder:text-slate-400 dark:placeholder:text-slate-500" />
+                        <Mail className="w-4 h-4 text-slate-500 absolute left-3 top-3" />
+                        <input type="email" required value={email} onChange={(e) => setEmail(e.target.value)} placeholder="corporate@sbi-staff.org" className="w-full pl-9 pr-4 py-2.5 rounded-xl border border-slate-700 text-xs font-bold text-white bg-slate-950 focus:border-amber-500 outline-hidden transition-all placeholder:text-slate-500 font-mono" />
                       </div>
                     </div>
                     <div>
                       <div className="flex items-center justify-between mb-1">
-                        <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider">Password</label>
+                        <label className="block text-xs font-bold text-slate-300 uppercase tracking-wider">Password</label>
                         <button
                           type="button"
                           onClick={() => onNavigate('forgot-password')}
-                          className="text-[11px] font-bold text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 hover:underline"
+                          className="text-[11px] font-bold text-amber-400 hover:text-amber-300 hover:underline"
                         >
                           Forgot Password?
                         </button>
                       </div>
                       <div className="relative">
-                        <Lock className="w-4 h-4 text-slate-400 absolute left-3 top-3" />
-                        <input type={showPassword ? 'text' : 'password'} value={password} onChange={(e) => setPassword(e.target.value)} placeholder="••••••••" className="w-full pl-9 pr-10 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 text-xs font-bold text-slate-900 dark:text-white bg-white dark:bg-slate-900 focus:ring-2 focus:ring-indigo-500 focus:outline-none transition-all placeholder:text-slate-400 dark:placeholder:text-slate-500" />
-                        <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-3 top-3 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors">
+                        <Lock className="w-4 h-4 text-slate-500 absolute left-3 top-3" />
+                        <input type={showPassword ? 'text' : 'password'} value={password} onChange={(e) => setPassword(e.target.value)} placeholder="••••••••" className="w-full pl-9 pr-10 py-2.5 rounded-xl border border-slate-700 text-xs font-bold text-white bg-slate-950 focus:border-amber-500 outline-hidden transition-all placeholder:text-slate-500 font-mono" />
+                        <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-3 top-3 text-slate-400 hover:text-white transition-colors">
                           {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                         </button>
                       </div>
                     </div>
-                    <button type="submit" disabled={loading || !password} className={`w-full py-2.5 rounded-xl font-black text-xs uppercase tracking-wider shadow-md transition-all ${password ? 'bg-gradient-to-r from-indigo-600 via-sky-600 to-emerald-600 hover:from-indigo-700 hover:to-emerald-700 text-white press-effect' : 'bg-slate-200 dark:bg-slate-800 text-slate-400 cursor-not-allowed'}`}>
+                    <button type="submit" disabled={loading || !password} className={`w-full py-3 rounded-xl font-black text-xs uppercase tracking-wider shadow-lg transition-all ${password ? 'bg-gradient-to-r from-amber-500 via-emerald-600 to-teal-600 hover:from-amber-600 hover:to-teal-700 text-white shadow-emerald-900/30 press-effect hover-lift' : 'bg-slate-850 text-slate-500 cursor-not-allowed border border-slate-800'}`}>
                       {loading ? 'Authenticating...' : 'Sign In with Password'}
                     </button>
                   </form>
@@ -287,11 +289,10 @@ export const CompanyLoginView = ({ onNavigate }) => {
                   </div>
                 )}
 
-
                 {/* Instant Google / Gmail Sign In */}
                 <div className="relative flex items-center justify-center pt-2">
-                  <div className="border-t border-slate-200 dark:border-slate-700 w-full"></div>
-                  <span className="bg-white dark:bg-slate-900 px-3 text-[11px] font-bold text-slate-400 uppercase tracking-wider absolute">
+                  <div className="border-t border-slate-800 w-full"></div>
+                  <span className="bg-slate-900 px-3 text-[11px] font-bold text-slate-400 uppercase tracking-wider absolute">
                     or instant access
                   </span>
                 </div>
@@ -300,7 +301,7 @@ export const CompanyLoginView = ({ onNavigate }) => {
                   type="button"
                   onClick={handleGoogleSignIn}
                   disabled={loading}
-                  className="w-full py-2.5 rounded-xl bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-800 dark:text-white border-2 border-slate-200 dark:border-slate-700 font-extrabold text-xs tracking-wide shadow-xs transition-all flex items-center justify-center gap-2.5 press-effect"
+                  className="w-full py-2.5 rounded-xl bg-slate-950 hover:bg-slate-850 text-white border border-slate-700 hover:border-slate-600 font-extrabold text-xs tracking-wide shadow-xs transition-all flex items-center justify-center gap-2.5 press-effect"
                 >
                   <svg className="w-4 h-4" viewBox="0 0 24 24">
                     <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
@@ -314,20 +315,20 @@ export const CompanyLoginView = ({ onNavigate }) => {
             ) : (
               <form onSubmit={handleRegisterSubmit} className="space-y-3">
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">Organization / Company / Institution Name</label>
+                  <label className="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-1">Organization / Company / Institution Name</label>
                   <div className="relative">
-                    <Building className="w-4 h-4 text-slate-400 absolute left-3 top-2.5" />
-                    <input type="text" required value={companyName} onChange={(e) => setCompanyName(e.target.value)} placeholder="State Bank Staff College / TechCorp India" className="w-full pl-9 pr-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 text-xs font-bold text-slate-900 dark:text-white bg-white dark:bg-slate-900 focus:ring-2 focus:ring-indigo-500 focus:outline-none transition-all placeholder:text-slate-400 dark:placeholder:text-slate-500" />
+                    <Building className="w-4 h-4 text-slate-500 absolute left-3 top-2.5" />
+                    <input type="text" required value={companyName} onChange={(e) => setCompanyName(e.target.value)} placeholder="State Bank Staff College / TechCorp India" className="w-full pl-9 pr-3 py-2 rounded-xl border border-slate-700 text-xs font-bold text-white bg-slate-950 focus:border-amber-500 outline-hidden transition-all placeholder:text-slate-500" />
                   </div>
                 </div>
                 <div className="grid grid-cols-2 gap-2">
                   <div>
-                    <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">Nodal Officer / Contact Person</label>
-                    <input type="text" required value={contactPerson} onChange={(e) => setContactPerson(e.target.value)} placeholder="Rajesh Kumar (HR)" className="w-full px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 text-xs font-bold text-slate-900 dark:text-white bg-white dark:bg-slate-900 focus:ring-2 focus:ring-indigo-500 focus:outline-none placeholder:text-slate-400 dark:placeholder:text-slate-500" />
+                    <label className="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-1">Nodal Officer / Contact Person</label>
+                    <input type="text" required value={contactPerson} onChange={(e) => setContactPerson(e.target.value)} placeholder="Rajesh Kumar (HR)" className="w-full px-3 py-2 rounded-xl border border-slate-700 text-xs font-bold text-white bg-slate-950 focus:border-amber-500 outline-hidden placeholder:text-slate-500" />
                   </div>
                   <div>
-                    <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">Institution Type</label>
-                    <select value={institutionType} onChange={(e) => setInstitutionType(e.target.value)} className="w-full px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 text-xs font-bold text-slate-900 dark:text-white bg-white dark:bg-slate-900 focus:ring-2 focus:ring-indigo-500">
+                    <label className="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-1">Institution Type</label>
+                    <select value={institutionType} onChange={(e) => setInstitutionType(e.target.value)} className="w-full px-3 py-2 rounded-xl border border-slate-700 text-xs font-bold text-white bg-slate-950 focus:border-amber-500 outline-hidden">
                       <option value="Government Office">Government Office</option>
                       <option value="Public Office">Corporate / MNC</option>
                       <option value="College">College / University</option>
@@ -336,30 +337,30 @@ export const CompanyLoginView = ({ onNavigate }) => {
                   </div>
                 </div>
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">Official Email (OTP Verification Sent Here)</label>
+                  <label className="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-1">Official Email (OTP Verification Sent Here)</label>
                   <div className="relative">
-                    <Mail className="w-4 h-4 text-slate-400 absolute left-3 top-2.5" />
-                    <input type="email" required value={email} onChange={(e) => setEmail(e.target.value)} placeholder="admin@company.com" className="w-full pl-9 pr-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 text-xs font-bold text-slate-900 dark:text-white bg-white dark:bg-slate-900 focus:ring-2 focus:ring-indigo-500 focus:outline-none placeholder:text-slate-400 dark:placeholder:text-slate-500" />
+                    <Mail className="w-4 h-4 text-slate-500 absolute left-3 top-2.5" />
+                    <input type="email" required value={email} onChange={(e) => setEmail(e.target.value)} placeholder="admin@company.com" className="w-full pl-9 pr-3 py-2 rounded-xl border border-slate-700 text-xs font-bold text-white bg-slate-950 focus:border-amber-500 outline-hidden placeholder:text-slate-500 font-mono" />
                   </div>
                 </div>
                 <div className="grid grid-cols-2 gap-2">
                   <div>
-                    <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">Phone Number</label>
-                    <input type="tel" required value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="+91 98000 00000" className="w-full px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 text-xs font-bold text-slate-900 dark:text-white bg-white dark:bg-slate-900 focus:ring-2 focus:ring-indigo-500 focus:outline-none placeholder:text-slate-400 dark:placeholder:text-slate-500" />
+                    <label className="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-1">Phone Number</label>
+                    <input type="tel" required value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="+91 98000 00000" className="w-full px-3 py-2 rounded-xl border border-slate-700 text-xs font-bold text-white bg-slate-950 focus:border-amber-500 outline-hidden placeholder:text-slate-500 font-mono" />
                   </div>
                   <div>
-                    <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">Create Password</label>
-                    <input type="password" required value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Min 6 chars" className="w-full px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 text-xs font-bold text-slate-900 dark:text-white bg-white dark:bg-slate-900 focus:ring-2 focus:ring-indigo-500 focus:outline-none placeholder:text-slate-400 dark:placeholder:text-slate-500" />
+                    <label className="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-1">Create Password</label>
+                    <input type="password" required value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Min 6 chars" className="w-full px-3 py-2 rounded-xl border border-slate-700 text-xs font-bold text-white bg-slate-950 focus:border-amber-500 outline-hidden placeholder:text-slate-500 font-mono" />
                   </div>
                 </div>
 
                 {/* Preferred Verification Channel */}
-                <div className="p-3 rounded-2xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 space-y-2">
+                <div className="p-3 rounded-2xl bg-slate-950/70 border border-slate-800 space-y-2">
                   <div className="flex items-center justify-between">
-                    <label className="text-[11px] font-extrabold text-slate-700 dark:text-slate-300 uppercase tracking-wider">
+                    <label className="text-[11px] font-mono font-extrabold text-slate-300 uppercase tracking-wider">
                       Preferred Verification Method
                     </label>
-                    <span className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/60 px-2 py-0.5 rounded-md border border-emerald-200 dark:border-emerald-800">
+                    <span className="text-[10px] font-mono font-bold text-emerald-400 bg-emerald-950/60 px-2 py-0.5 rounded-md border border-emerald-800/60">
                       5-Min OTP
                     </span>
                   </div>
@@ -368,36 +369,36 @@ export const CompanyLoginView = ({ onNavigate }) => {
                     <button
                       type="button"
                       onClick={() => setRegVerificationMethod('EMAIL')}
-                      className={`p-2.5 rounded-xl border-2 text-left transition-all flex items-center gap-2 ${
+                      className={`p-2.5 rounded-xl border text-left transition-all flex items-center gap-2 ${
                         regVerificationMethod === 'EMAIL'
-                          ? 'border-indigo-500 bg-indigo-50/80 dark:bg-indigo-950/50 text-indigo-900 dark:text-indigo-200 shadow-xs'
-                          : 'border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-400 hover:border-slate-300'
+                          ? 'border-emerald-500 bg-emerald-950/40 text-emerald-200 shadow-xs'
+                          : 'border-slate-800 bg-slate-900 text-slate-400 hover:border-slate-700'
                       }`}
                     >
-                      <div className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 ${regVerificationMethod === 'EMAIL' ? 'bg-indigo-500 text-white' : 'bg-slate-100 text-slate-500'}`}>
+                      <div className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 ${regVerificationMethod === 'EMAIL' ? 'bg-emerald-500 text-slate-950' : 'bg-slate-800 text-slate-400'}`}>
                         <Mail className="w-3.5 h-3.5" />
                       </div>
                       <div>
-                        <div className="text-xs font-bold leading-none">Official Email</div>
-                        <div className="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5">Code to Inbox</div>
+                        <div className="text-xs font-bold leading-none text-white">Official Email</div>
+                        <div className="text-[10px] text-slate-400 mt-0.5">Code to Inbox</div>
                       </div>
                     </button>
 
                     <button
                       type="button"
                       onClick={() => setRegVerificationMethod('MOBILE')}
-                      className={`p-2.5 rounded-xl border-2 text-left transition-all flex items-center gap-2 ${
+                      className={`p-2.5 rounded-xl border text-left transition-all flex items-center gap-2 ${
                         regVerificationMethod === 'MOBILE'
-                          ? 'border-emerald-500 bg-emerald-50/80 dark:bg-emerald-950/50 text-emerald-900 dark:text-emerald-200 shadow-xs'
-                          : 'border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-400 hover:border-slate-300'
+                          ? 'border-amber-500 bg-amber-950/40 text-amber-200 shadow-xs'
+                          : 'border-slate-800 bg-slate-900 text-slate-400 hover:border-slate-700'
                       }`}
                     >
-                      <div className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 ${regVerificationMethod === 'MOBILE' ? 'bg-emerald-500 text-white' : 'bg-slate-100 text-slate-500'}`}>
+                      <div className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 ${regVerificationMethod === 'MOBILE' ? 'bg-amber-500 text-slate-950' : 'bg-slate-800 text-slate-400'}`}>
                         <Smartphone className="w-3.5 h-3.5" />
                       </div>
                       <div>
-                        <div className="text-xs font-bold leading-none">Mobile OTP</div>
-                        <div className="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5">Code to Phone (+91)</div>
+                        <div className="text-xs font-bold leading-none text-white">Mobile OTP</div>
+                        <div className="text-[10px] text-slate-400 mt-0.5">Code to Phone (+91)</div>
                       </div>
                     </button>
                   </div>
@@ -406,13 +407,9 @@ export const CompanyLoginView = ({ onNavigate }) => {
                 <button 
                   type="submit" 
                   disabled={loading} 
-                  className={`w-full py-2.5 rounded-xl text-white font-black text-xs uppercase tracking-wider shadow-md press-effect flex items-center justify-center gap-2 mt-2 ${
-                    regVerificationMethod === 'MOBILE'
-                      ? 'bg-gradient-to-r from-teal-600 via-emerald-600 to-green-600 hover:from-teal-700 hover:to-green-700'
-                      : 'bg-gradient-to-r from-emerald-600 via-teal-600 to-sky-600 hover:from-emerald-700 hover:to-sky-700'
-                  }`}
+                  className="w-full py-3 rounded-xl text-white font-black text-xs uppercase tracking-wider shadow-lg shadow-emerald-900/30 press-effect flex items-center justify-center gap-2 mt-2 bg-gradient-to-r from-amber-500 via-emerald-600 to-teal-600 hover:from-amber-600 hover:to-teal-700 hover-lift transition-all"
                 >
-                  <Zap className="w-3.5 h-3.5 fill-current" />
+                  <Zap className="w-3.5 h-3.5 fill-current text-amber-300" />
                   {loading 
                     ? 'Sending OTP...' 
                     : (regVerificationMethod === 'MOBILE' ? 'Proceed to Mobile OTP Verification (5 Min)' : 'Proceed to Email OTP Verification (5 Min)')}

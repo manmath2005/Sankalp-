@@ -16,22 +16,23 @@ export const HiddenAdminLoginView = ({ onNavigate }) => {
   if (currentUser && currentUser.role === 'SUPER_ADMIN') {
     return (
       <div className="max-w-2xl mx-auto px-4 py-12 text-center space-y-6">
-        <div className="glass-panel p-8 rounded-3xl border border-slate-900 bg-slate-900 text-white shadow-float-lg space-y-4">
-          <div className="w-16 h-16 rounded-2xl bg-sky-500/20 text-sky-400 flex items-center justify-center mx-auto">
+        <div className="horizon-glass-panel p-8 rounded-3xl border border-slate-800/90 bg-slate-900/90 text-white shadow-2xl relative overflow-hidden backdrop-blur-2xl space-y-4">
+          <div className="horizon-gradient-line absolute top-0 left-0 right-0 h-1"></div>
+          <div className="w-16 h-16 rounded-2xl bg-amber-500/20 border border-amber-500/30 text-amber-400 flex items-center justify-center mx-auto shadow-lg">
             <KeyRound className="w-8 h-8" />
           </div>
-          <h2 className="text-2xl font-extrabold text-white">Super Admin Access Granted</h2>
+          <h2 className="text-2xl font-black text-white">Super Admin Access Granted</h2>
           <p className="text-xs text-slate-300">Logged in as: <strong>{currentUser.name}</strong> (Super Admin)</p>
-          <div className="flex justify-center gap-3">
+          <div className="flex justify-center gap-3 pt-2">
             <button
               onClick={() => onNavigate('dbms')}
-              className="px-6 py-2.5 rounded-xl bg-sky-500 hover:bg-sky-400 text-slate-950 font-extrabold text-xs shadow"
+              className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 via-emerald-500 to-sky-500 hover:from-amber-400 hover:to-sky-400 text-slate-950 font-black text-xs shadow-lg transition-all press-effect"
             >
               Access Central DBMS Control Panel →
             </button>
             <button
               onClick={logoutUser}
-              className="px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs"
+              className="px-4 py-2.5 rounded-xl bg-slate-800/80 hover:bg-slate-800 border border-slate-700 text-slate-200 font-bold text-xs transition-all"
             >
               Logout
             </button>
@@ -48,10 +49,6 @@ export const HiddenAdminLoginView = ({ onNavigate }) => {
 
     try {
       const result = loginUser(email, password, 'SUPER_ADMIN', adminPin);
-      // For SUPER_ADMIN: loginUser returns true immediately after loginUserWithSession.
-      // We do NOT call onNavigate here — React state (currentUser) hasn't committed yet.
-      // The conditional render at the top of this component handles showing the DBMS button
-      // once currentUser is set in the next render cycle.
       if (!result) {
         setErrorMessage('Authentication failed. Please check your credentials.');
       }
@@ -70,14 +67,15 @@ export const HiddenAdminLoginView = ({ onNavigate }) => {
 
   return (
     <div className="max-w-md mx-auto px-4 py-12 text-left">
-      <div className="glass-panel p-8 rounded-3xl bg-slate-950 text-white border border-slate-800 shadow-float-lg space-y-6">
+      <div className="horizon-glass-panel p-8 rounded-3xl bg-slate-900/90 text-white border border-slate-800/90 shadow-2xl relative overflow-hidden backdrop-blur-2xl space-y-6">
+        <div className="horizon-gradient-line absolute top-0 left-0 right-0 h-1"></div>
         
         {/* Secret Header */}
         <div className="space-y-2 border-b border-slate-800 pb-4">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-500/20 text-red-400 text-[10px] font-extrabold uppercase tracking-widest border border-red-500/30">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-500/10 text-red-400 text-[10px] font-black uppercase tracking-widest border border-red-500/30">
             <ShieldAlert className="w-3.5 h-3.5" /> Hidden Administrative Security Gateway
           </div>
-          <h1 className="text-2xl font-extrabold text-white">NGO Super Admin Access</h1>
+          <h1 className="text-2xl font-black text-white">NGO Super Admin Access</h1>
           <p className="text-xs text-slate-400">
             Restricted access point for DBMS Central System Control. Requires double-layer security PIN authentication.
           </p>
@@ -91,7 +89,7 @@ export const HiddenAdminLoginView = ({ onNavigate }) => {
 
         <form onSubmit={handleAdminSubmit} className="space-y-4">
           <div>
-            <label className="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">
+            <label className="block text-[11px] font-bold text-slate-300 uppercase tracking-wider mb-1">
               Admin Super Email
             </label>
             <div className="relative">
@@ -102,13 +100,13 @@ export const HiddenAdminLoginView = ({ onNavigate }) => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="admin@sankalp.org"
-                className="w-full pl-9 pr-4 py-2.5 rounded-xl bg-slate-900 border border-slate-800 text-xs font-medium text-white focus:ring-2 focus:ring-sky-500 focus:outline-none"
+                className="w-full pl-9 pr-4 py-2.5 rounded-xl bg-slate-950 border border-slate-700/80 text-xs font-bold text-white focus:border-amber-500 focus:ring-1 focus:ring-amber-500 focus:outline-none transition-all placeholder:text-slate-500"
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">
+            <label className="block text-[11px] font-bold text-slate-300 uppercase tracking-wider mb-1">
               Master Password
             </label>
             <div className="relative">
@@ -119,12 +117,12 @@ export const HiddenAdminLoginView = ({ onNavigate }) => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••••••"
-                className="w-full pl-9 pr-10 py-2.5 rounded-xl bg-slate-900 border border-slate-800 text-xs font-medium text-white focus:ring-2 focus:ring-sky-500 focus:outline-none"
+                className="w-full pl-9 pr-10 py-2.5 rounded-xl bg-slate-950 border border-slate-700/80 text-xs font-bold text-white focus:border-amber-500 focus:ring-1 focus:ring-amber-500 focus:outline-none transition-all placeholder:text-slate-500"
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-3 text-slate-500 hover:text-slate-300"
+                className="absolute right-3 top-3 text-slate-400 hover:text-slate-200"
               >
                 {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
               </button>
@@ -145,7 +143,7 @@ export const HiddenAdminLoginView = ({ onNavigate }) => {
                 value={adminPin}
                 onChange={(e) => setAdminPin(e.target.value.replace(/\D/g, ''))}
                 placeholder="••••"
-                className="w-full pl-9 pr-4 py-2.5 rounded-xl bg-slate-900 border border-slate-800 text-sm font-mono font-bold tracking-widest text-amber-300 focus:ring-2 focus:ring-amber-500 focus:outline-none"
+                className="w-full pl-9 pr-4 py-2.5 rounded-xl bg-slate-950 border border-amber-500/40 text-sm font-mono font-bold tracking-widest text-amber-300 focus:border-amber-400 focus:ring-2 focus:ring-amber-500/20 focus:outline-none"
               />
             </div>
           </div>
@@ -153,17 +151,17 @@ export const HiddenAdminLoginView = ({ onNavigate }) => {
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-3 rounded-xl bg-sky-500 hover:bg-sky-400 text-slate-950 font-extrabold text-xs shadow-md transition-all flex items-center justify-center gap-2"
+            className="w-full py-3 rounded-xl bg-gradient-to-r from-amber-500 via-emerald-500 to-sky-500 hover:from-amber-400 hover:to-sky-400 text-slate-950 font-black text-xs uppercase tracking-wider shadow-lg transition-all flex items-center justify-center gap-2 press-effect shadow-amber-500/10"
           >
             {loading ? "Verifying Administrative Credentials..." : "Authenticate & Open DBMS Panel"}
           </button>
 
           <div className="pt-3 border-t border-slate-800 flex items-center justify-between">
-            <span className="text-[10px] text-slate-500 font-mono">DEBUG AUTO-FILL:</span>
+            <span className="text-[10px] text-slate-400 font-mono">DEBUG AUTO-FILL:</span>
             <button
               type="button"
               onClick={fillAdminDemo}
-              className="text-[11px] font-bold text-sky-400 hover:underline bg-white/5 px-2.5 py-1 rounded-lg border border-white/10"
+              className="text-[11px] font-black text-amber-300 hover:text-amber-200 bg-slate-950 px-2.5 py-1 rounded-lg border border-amber-500/30 press-effect"
             >
               Fill Hidden Admin Credentials 🔑
             </button>

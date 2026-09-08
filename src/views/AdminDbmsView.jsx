@@ -202,24 +202,27 @@ export const AdminDbmsView = () => {
   );
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8 text-left">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8 text-left page-enter">
       
-      {/* Header */}
-      <div className="glass-panel p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4 bg-gradient-to-r from-slate-900 via-sky-950 to-indigo-950 text-white">
-        <div className="flex items-center gap-3">
-          <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-sky-500 to-emerald-400 text-slate-950 flex items-center justify-center font-bold">
-            <Database className="w-6 h-6" />
+      {/* Header - Luminous Horizon Glass */}
+      <div className="relative overflow-hidden rounded-3xl bg-slate-900/85 backdrop-blur-2xl border border-slate-800/90 p-6 sm:p-8 shadow-2xl flex flex-col md:flex-row md:items-center justify-between gap-6 text-white">
+        <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-amber-500 via-emerald-400 to-sky-500 opacity-90" />
+        <div className="absolute -top-24 -right-24 w-80 h-80 bg-sky-500/10 rounded-full blur-3xl pointer-events-none" />
+
+        <div className="flex items-center gap-4">
+          <div className="w-14 h-14 rounded-2xl bg-gradient-to-tr from-amber-500 via-emerald-500 to-sky-500 text-slate-950 flex items-center justify-center font-black shadow-lg shadow-amber-500/20 shrink-0">
+            <Database className="w-7 h-7" />
           </div>
           <div>
             <div className="flex items-center gap-2 flex-wrap">
-              <h1 className="text-2xl font-extrabold text-white">
+              <h1 className="text-xl sm:text-2xl font-black text-white">
                 {isSuperAdmin ? 'Master Super Admin DBMS & Analytics' : `${currentNgoName} — Management Dashboard`}
               </h1>
-              <span className="bg-sky-500/20 text-sky-300 text-[10px] font-extrabold px-2.5 py-0.5 rounded-full uppercase border border-sky-400/30">
+              <span className="bg-sky-950/80 text-sky-300 text-[10px] font-extrabold px-2.5 py-0.5 rounded-full uppercase border border-sky-500/40">
                 {isSuperAdmin ? 'All-India Central View' : 'Scoped NGO Data'}
               </span>
             </div>
-            <p className="text-xs text-slate-300 mt-1">
+            <p className="text-xs sm:text-sm text-slate-300 mt-1 max-w-2xl">
               {isSuperAdmin 
                 ? 'Central master command ledger viewing and managing awareness drives, volunteer demographics, and corporate requests across all partner NGOs in India.'
                 : `Managing specific awareness drives, participating volunteers, participant demographics, and corporate CSR requests for ${currentNgoName}.`}
@@ -227,10 +230,10 @@ export const AdminDbmsView = () => {
           </div>
         </div>
 
-        <div className="flex items-center gap-2 shrink-0">
+        <div className="flex items-center gap-2 shrink-0 flex-wrap">
           <button
             onClick={exportDbToJson}
-            className="px-3.5 py-2 rounded-xl bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white text-xs font-bold shadow-sm flex items-center gap-1.5"
+            className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white text-xs font-black shadow-lg shadow-emerald-500/20 flex items-center gap-1.5 press-effect"
           >
             <Download className="w-3.5 h-3.5" /> Export {isSuperAdmin ? 'Master DB' : 'NGO Records'}
           </button>
@@ -239,7 +242,7 @@ export const AdminDbmsView = () => {
             <button
               onClick={resetSystemData}
               title="Reset to default mock data"
-              className="px-3.5 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-bold flex items-center gap-1.5 border border-white/10"
+              className="px-3.5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-xs font-bold flex items-center gap-1.5 border border-slate-700 transition-all"
             >
               <RefreshCw className="w-3.5 h-3.5" /> Reset DBMS
             </button>
@@ -249,25 +252,25 @@ export const AdminDbmsView = () => {
 
       {/* Super Admin NGO Selector Banner */}
       {isSuperAdmin && (
-        <div className="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-          <div className="flex items-center gap-2">
-            <Building2 className="w-4 h-4 text-amber-500 shrink-0" />
+        <div className="relative overflow-hidden rounded-2xl bg-slate-900/80 backdrop-blur-xl border border-slate-800/90 p-4 shadow-md flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div className="flex items-center gap-2.5">
+            <Building2 className="w-4 h-4 text-amber-400 shrink-0" />
             <div>
-              <p className="text-xs font-bold text-slate-900 dark:text-white">
+              <p className="text-xs font-bold text-white">
                 Super Admin Scope Filter: Inspecting <strong>{selectedNgoFilter === 'ALL' ? 'All Partner NGOs Across India' : selectedNgoFilter}</strong>
               </p>
-              <p className="text-[11px] text-slate-500 dark:text-slate-400">
+              <p className="text-[11px] text-slate-400">
                 Filter demographic analytics and volunteer directories for individual non-profits or view aggregated nationwide totals.
               </p>
             </div>
           </div>
 
-          <div className="flex items-center gap-2">
-            <span className="text-xs font-bold text-slate-600 dark:text-slate-300">Filter by NGO:</span>
+          <div className="flex items-center gap-2 shrink-0">
+            <span className="text-xs font-bold text-slate-300">Filter by NGO:</span>
             <select
               value={selectedNgoFilter}
               onChange={(e) => setSelectedNgoFilter(e.target.value)}
-              className="px-3 py-1.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs font-bold text-slate-800 dark:text-slate-200"
+              className="px-3 py-1.5 rounded-xl border border-slate-700 bg-slate-950 text-xs font-bold text-white focus:outline-none focus:ring-2 focus:ring-amber-500"
             >
               <option value="ALL">🌟 All Non-Profits (Consolidated View)</option>
               <option value="Sankalp Social Foundation">Sankalp Social Foundation</option>
@@ -282,11 +285,11 @@ export const AdminDbmsView = () => {
       )}
 
       {/* DBMS Navigation Tabs */}
-      <div className="flex flex-wrap gap-2 border-b border-slate-200 pb-2">
+      <div className="flex flex-wrap gap-2 border-b border-slate-800 pb-3">
         <button
           onClick={() => setActiveTab('analytics')}
-          className={`px-4 py-2 rounded-xl text-xs font-extrabold transition-all flex items-center gap-1.5 ${
-            activeTab === 'analytics' ? 'bg-gradient-to-r from-sky-600 to-indigo-600 text-white shadow' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+          className={`px-4 py-2 rounded-xl text-xs font-black transition-all flex items-center gap-1.5 ${
+            activeTab === 'analytics' ? 'bg-gradient-to-r from-amber-500 via-emerald-500 to-sky-500 text-slate-950 shadow-md' : 'bg-slate-900/80 text-slate-300 border border-slate-800 hover:bg-slate-800'
           }`}
         >
           <BarChart3 className="w-4 h-4" /> {isSuperAdmin ? 'All-NGO Demographics' : 'My Volunteer Demographics'}
@@ -294,8 +297,8 @@ export const AdminDbmsView = () => {
 
         <button
           onClick={() => setActiveTab('volunteers')}
-          className={`px-4 py-2 rounded-xl text-xs font-extrabold transition-all flex items-center gap-1.5 ${
-            activeTab === 'volunteers' ? 'bg-gradient-to-r from-sky-600 to-indigo-600 text-white shadow' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+          className={`px-4 py-2 rounded-xl text-xs font-black transition-all flex items-center gap-1.5 ${
+            activeTab === 'volunteers' ? 'bg-gradient-to-r from-amber-500 via-emerald-500 to-sky-500 text-slate-950 shadow-md' : 'bg-slate-900/80 text-slate-300 border border-slate-800 hover:bg-slate-800'
           }`}
         >
           <Users className="w-4 h-4" /> {isSuperAdmin ? 'Master Volunteers Directory' : 'Participating Volunteers'} ({scopedVolunteers.length})
@@ -303,8 +306,8 @@ export const AdminDbmsView = () => {
 
         <button
           onClick={() => setActiveTab('events')}
-          className={`px-4 py-2 rounded-xl text-xs font-extrabold transition-all flex items-center gap-1.5 ${
-            activeTab === 'events' ? 'bg-gradient-to-r from-sky-600 to-indigo-600 text-white shadow' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+          className={`px-4 py-2 rounded-xl text-xs font-black transition-all flex items-center gap-1.5 ${
+            activeTab === 'events' ? 'bg-gradient-to-r from-amber-500 via-emerald-500 to-sky-500 text-slate-950 shadow-md' : 'bg-slate-900/80 text-slate-300 border border-slate-800 hover:bg-slate-800'
           }`}
         >
           <Calendar className="w-4 h-4" /> {isSuperAdmin ? 'All Drives Manager' : 'My Conducted Drives'} ({scopedEvents.length})
@@ -312,8 +315,8 @@ export const AdminDbmsView = () => {
 
         <button
           onClick={() => setActiveTab('requests')}
-          className={`px-4 py-2 rounded-xl text-xs font-extrabold transition-all flex items-center gap-1.5 ${
-            activeTab === 'requests' ? 'bg-gradient-to-r from-sky-600 to-indigo-600 text-white shadow' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+          className={`px-4 py-2 rounded-xl text-xs font-black transition-all flex items-center gap-1.5 ${
+            activeTab === 'requests' ? 'bg-gradient-to-r from-amber-500 via-emerald-500 to-sky-500 text-slate-950 shadow-md' : 'bg-slate-900/80 text-slate-300 border border-slate-800 hover:bg-slate-800'
           }`}
         >
           <Building2 className="w-4 h-4" /> Corporate Requests & NOCs ({scopedCorporateRequests.length})
@@ -322,8 +325,8 @@ export const AdminDbmsView = () => {
         {isSuperAdmin && (
           <button
             onClick={() => setActiveTab('users')}
-            className={`px-4 py-2 rounded-xl text-xs font-extrabold transition-all flex items-center gap-1.5 ${
-              activeTab === 'users' ? 'bg-gradient-to-r from-sky-600 to-indigo-600 text-white shadow' : 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200'
+            className={`px-4 py-2 rounded-xl text-xs font-black transition-all flex items-center gap-1.5 ${
+              activeTab === 'users' ? 'bg-gradient-to-r from-amber-500 via-emerald-500 to-sky-500 text-slate-950 shadow-md' : 'bg-slate-900/80 text-slate-300 border border-slate-800 hover:bg-slate-800'
             }`}
           >
             <ShieldCheck className="w-4 h-4" /> Master Session Audit ({users.length})
@@ -334,13 +337,13 @@ export const AdminDbmsView = () => {
       {/* SEARCH BAR */}
       {activeTab !== 'analytics' && (
         <div className="relative max-w-md">
-          <Search className="w-4 h-4 text-slate-400 absolute left-3 top-3" />
+          <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-3" />
           <input
             type="text"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             placeholder={`Search ${isSuperAdmin ? 'all records' : 'your NGO records'} by name, city, profession, or title...`}
-            className="w-full pl-9 pr-4 py-2 rounded-xl border border-slate-300 text-xs font-medium focus:ring-2 focus:ring-sky-500 focus:outline-none bg-white"
+            className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-700 bg-slate-950/70 text-white placeholder-slate-400 text-xs font-medium focus:ring-2 focus:ring-amber-500 focus:outline-none"
           />
         </div>
       )}
@@ -351,22 +354,22 @@ export const AdminDbmsView = () => {
           <div className="grid md:grid-cols-3 gap-6">
             
             {/* 1. Profession Breakdown */}
-            <div className="glass-panel p-6 rounded-3xl border border-slate-200 space-y-4">
-              <h3 className="text-sm font-extrabold text-slate-900 flex items-center gap-2">
-                <Briefcase className="w-4 h-4 text-sky-600" />
+            <div className="relative overflow-hidden rounded-3xl bg-slate-900/85 backdrop-blur-xl border border-slate-800/90 p-6 shadow-xl space-y-4">
+              <h3 className="text-sm font-black text-white flex items-center gap-2">
+                <Briefcase className="w-4 h-4 text-sky-400" />
                 Volunteer Profession Breakdown
               </h3>
               
-              <div className="space-y-2.5">
+              <div className="space-y-3">
                 {Object.entries(professionCounts).map(([prof, count]) => {
                   const percentage = Math.round((count / volunteers.length) * 100);
                   return (
                     <div key={prof} className="space-y-1">
-                      <div className="flex justify-between text-xs font-bold text-slate-800">
+                      <div className="flex justify-between text-xs font-bold text-slate-300">
                         <span>{prof}</span>
-                        <span className="text-sky-700">{count} ({percentage}%)</span>
+                        <span className="text-sky-400 font-mono">{count} ({percentage}%)</span>
                       </div>
-                      <div className="w-full h-2 bg-slate-100 rounded-full overflow-hidden">
+                      <div className="w-full h-2 bg-slate-950 rounded-full overflow-hidden border border-slate-800">
                         <div 
                           className="h-full bg-gradient-to-r from-sky-500 to-indigo-500 rounded-full transition-all duration-500" 
                           style={{ width: `${percentage}%` }}
@@ -379,22 +382,22 @@ export const AdminDbmsView = () => {
             </div>
 
             {/* 2. City Distribution */}
-            <div className="glass-panel p-6 rounded-3xl border border-slate-200 space-y-4">
-              <h3 className="text-sm font-extrabold text-slate-900 flex items-center gap-2">
-                <MapPin className="w-4 h-4 text-emerald-600" />
+            <div className="relative overflow-hidden rounded-3xl bg-slate-900/85 backdrop-blur-xl border border-slate-800/90 p-6 shadow-xl space-y-4">
+              <h3 className="text-sm font-black text-white flex items-center gap-2">
+                <MapPin className="w-4 h-4 text-emerald-400" />
                 Top Cities Distribution
               </h3>
 
-              <div className="space-y-2.5">
+              <div className="space-y-3">
                 {Object.entries(cityCounts).map(([c, count]) => {
                   const percentage = Math.round((count / volunteers.length) * 100);
                   return (
                     <div key={c} className="space-y-1">
-                      <div className="flex justify-between text-xs font-bold text-slate-800">
+                      <div className="flex justify-between text-xs font-bold text-slate-300">
                         <span>{c}</span>
-                        <span className="text-emerald-700">{count} Volunteers</span>
+                        <span className="text-emerald-400 font-mono">{count} Volunteers</span>
                       </div>
-                      <div className="w-full h-2 bg-slate-100 rounded-full overflow-hidden">
+                      <div className="w-full h-2 bg-slate-950 rounded-full overflow-hidden border border-slate-800">
                         <div 
                           className="h-full bg-gradient-to-r from-emerald-500 to-teal-400 rounded-full transition-all duration-500" 
                           style={{ width: `${percentage}%` }}
@@ -407,22 +410,22 @@ export const AdminDbmsView = () => {
             </div>
 
             {/* 3. Age Demographic Breakdown */}
-            <div className="glass-panel p-6 rounded-3xl border border-slate-200 space-y-4">
-              <h3 className="text-sm font-extrabold text-slate-900 flex items-center gap-2">
-                <PieChart className="w-4 h-4 text-amber-600" />
+            <div className="relative overflow-hidden rounded-3xl bg-slate-900/85 backdrop-blur-xl border border-slate-800/90 p-6 shadow-xl space-y-4">
+              <h3 className="text-sm font-black text-white flex items-center gap-2">
+                <PieChart className="w-4 h-4 text-amber-400" />
                 Age Group Demographics
               </h3>
 
-              <div className="space-y-2.5">
+              <div className="space-y-3">
                 {Object.entries(ageGroups).map(([group, count]) => {
                   const percentage = Math.round((count / volunteers.length) * 100);
                   return (
                     <div key={group} className="space-y-1">
-                      <div className="flex justify-between text-xs font-bold text-slate-800">
+                      <div className="flex justify-between text-xs font-bold text-slate-300">
                         <span>{group}</span>
-                        <span className="text-amber-700">{count}</span>
+                        <span className="text-amber-400 font-mono">{count}</span>
                       </div>
-                      <div className="w-full h-2 bg-slate-100 rounded-full overflow-hidden">
+                      <div className="w-full h-2 bg-slate-950 rounded-full overflow-hidden border border-slate-800">
                         <div 
                           className="h-full bg-gradient-to-r from-amber-500 to-yellow-400 rounded-full transition-all duration-500" 
                           style={{ width: `${percentage}%` }}
@@ -443,20 +446,20 @@ export const AdminDbmsView = () => {
         <div className="space-y-6">
           
           {/* Issue Certificate Tool Box */}
-          <div className="glass-panel p-5 rounded-2xl border border-amber-200 space-y-3 bg-gradient-to-r from-amber-50 to-orange-50">
-            <h3 className="text-xs font-extrabold text-amber-900 uppercase tracking-wider flex items-center gap-1.5">
-              <Award className="w-4 h-4 text-amber-600" />
+          <div className="relative overflow-hidden rounded-2xl bg-slate-900/90 backdrop-blur-xl border border-amber-500/30 p-5 space-y-3">
+            <h3 className="text-xs font-black text-amber-300 uppercase tracking-wider flex items-center gap-1.5">
+              <Award className="w-4 h-4 text-amber-400" />
               Issue Direct Accredited Certificate to Volunteer
             </h3>
 
             <form onSubmit={handleIssueCertSubmit} className="grid sm:grid-cols-12 gap-3 items-end">
               <div className="sm:col-span-4">
-                <label className="block text-[10px] font-bold text-slate-600 uppercase mb-1">Select Volunteer</label>
+                <label className="block text-[10px] font-bold text-slate-300 uppercase mb-1">Select Volunteer</label>
                 <select
                   value={certVolId}
                   onChange={(e) => setCertVolId(e.target.value)}
                   required
-                  className="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs font-medium bg-white"
+                  className="w-full px-3 py-2 rounded-xl border border-slate-700 text-xs font-medium bg-slate-950 text-white"
                 >
                   <option value="">-- Choose Volunteer --</option>
                   {volunteers.map(v => (
@@ -466,21 +469,21 @@ export const AdminDbmsView = () => {
               </div>
 
               <div className="sm:col-span-5">
-                <label className="block text-[10px] font-bold text-slate-600 uppercase mb-1">Awareness Campaign Title</label>
+                <label className="block text-[10px] font-bold text-slate-300 uppercase mb-1">Awareness Campaign Title</label>
                 <input
                   type="text"
                   value={certTitle}
                   onChange={(e) => setCertTitle(e.target.value)}
                   placeholder="e.g. Cyber Safety & Digital Rights Drive"
                   required
-                  className="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs font-medium bg-white"
+                  className="w-full px-3 py-2 rounded-xl border border-slate-700 text-xs font-medium bg-slate-950 text-white placeholder-slate-400"
                 />
               </div>
 
               <div className="sm:col-span-3">
                 <button
                   type="submit"
-                  className="w-full py-2 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 font-black text-xs shadow-sm"
+                  className="w-full py-2 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-slate-950 font-black text-xs shadow-md transition-all press-effect"
                 >
                   Issue Certificate
                 </button>
@@ -489,51 +492,47 @@ export const AdminDbmsView = () => {
           </div>
 
           {/* Volunteers Data Table */}
-          <div className="glass-panel rounded-2xl border border-slate-200 overflow-hidden">
-            <div className="overflow-x-auto">
-              <div className="overflow-x-auto w-full rounded-xl border border-slate-200 shadow-sm">
-                <table className="w-full text-left border-collapse min-w-[800px]">
-                <thead>
-                  <tr className="bg-slate-100 text-slate-600 text-[11px] font-extrabold uppercase border-b border-slate-200">
-                    <th className="p-3">ID</th>
-                    <th className="p-3">Volunteer Name</th>
-                    <th className="p-3">Profession</th>
-                    <th className="p-3">City</th>
-                    <th className="p-3">Age</th>
-                    <th className="p-3">Institution</th>
-                    <th className="p-3">Certificates</th>
-                    <th className="p-3">Status</th>
+          <div className="relative overflow-hidden rounded-2xl bg-slate-900/85 backdrop-blur-xl border border-slate-800/90 shadow-xl overflow-x-auto">
+            <table className="w-full text-left border-collapse min-w-[800px]">
+              <thead>
+                <tr className="bg-slate-950/80 text-slate-400 text-[11px] font-extrabold uppercase border-b border-slate-800">
+                  <th className="p-3">ID</th>
+                  <th className="p-3">Volunteer Name</th>
+                  <th className="p-3">Profession</th>
+                  <th className="p-3">City</th>
+                  <th className="p-3">Age</th>
+                  <th className="p-3">Institution</th>
+                  <th className="p-3">Certificates</th>
+                  <th className="p-3">Status</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-800 text-xs font-medium text-slate-300">
+                {filteredVolunteers.map(v => (
+                  <tr key={v.id} className="hover:bg-slate-950/50 transition-colors">
+                    <td className="p-3 font-mono text-slate-400 font-bold">{v.id}</td>
+                    <td className="p-3 font-bold text-white">{v.name}</td>
+                    <td className="p-3">
+                      <span className="px-2 py-0.5 rounded bg-sky-950/80 text-sky-300 border border-sky-500/40 font-bold text-[10px]">
+                        {v.profession || 'Student'}
+                      </span>
+                    </td>
+                    <td className="p-3 font-bold text-slate-300">{v.city || 'Mumbai'}</td>
+                    <td className="p-3 text-slate-400 font-semibold">{v.age || 22} yrs</td>
+                    <td className="p-3 text-slate-400">{v.institution}</td>
+                    <td className="p-3">
+                      <span className="px-2 py-0.5 rounded bg-amber-950/80 text-amber-300 border border-amber-500/40 font-bold text-[10px]">
+                        {v.certificates?.length || 0} Certificates
+                      </span>
+                    </td>
+                    <td className="p-3">
+                      <span className="px-2.5 py-0.5 rounded-full bg-emerald-950/80 text-emerald-300 border border-emerald-500/40 font-extrabold text-[10px]">
+                        {v.status}
+                      </span>
+                    </td>
                   </tr>
-                </thead>
-                <tbody className="divide-y divide-slate-200 text-xs font-medium text-slate-800">
-                  {filteredVolunteers.map(v => (
-                    <tr key={v.id} className="hover:bg-slate-50">
-                      <td className="p-3 font-mono text-slate-500 font-bold">{v.id}</td>
-                      <td className="p-3 font-bold text-slate-900">{v.name}</td>
-                      <td className="p-3">
-                        <span className="px-2 py-0.5 rounded bg-sky-100 text-sky-800 font-bold text-[10px]">
-                          {v.profession || 'Student'}
-                        </span>
-                      </td>
-                      <td className="p-3 font-bold text-slate-700">{v.city || 'Mumbai'}</td>
-                      <td className="p-3 text-slate-600 font-semibold">{v.age || 22} yrs</td>
-                      <td className="p-3 text-slate-600">{v.institution}</td>
-                      <td className="p-3">
-                        <span className="px-2 py-0.5 rounded bg-amber-100 text-amber-800 font-bold text-[10px]">
-                          {v.certificates?.length || 0} Certificates
-                        </span>
-                      </td>
-                      <td className="p-3">
-                        <span className="px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-extrabold text-[10px]">
-                          {v.status}
-                        </span>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-              </div>
-            </div>
+                ))}
+              </tbody>
+            </table>
           </div>
 
         </div>
@@ -542,72 +541,81 @@ export const AdminDbmsView = () => {
       {/* TAB 2: EVENTS MANAGER */}
       {activeTab === 'events' && (
         <div className="space-y-6">
-          <div className="flex justify-between items-center">
-            <h3 className="text-base font-extrabold text-slate-900">
-              Active Awareness Events List ({filteredEvents.length})
-            </h3>
+          <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-4">
+            <div>
+              <div className="flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                <h3 className="text-lg font-extrabold text-white tracking-tight">
+                  Active Awareness Events Manager
+                </h3>
+              </div>
+              <p className="text-xs text-slate-400 mt-0.5">
+                Monitoring {filteredEvents.length} live and scheduled civic campaigns
+              </p>
+            </div>
 
             <button
               onClick={() => setShowAddEventModal(true)}
-              className="px-4 py-2 rounded-xl bg-sky-600 hover:bg-sky-700 text-white text-xs font-bold shadow flex items-center gap-1.5"
+              className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 via-emerald-600 to-teal-600 hover:from-amber-600 hover:to-teal-700 text-white text-xs font-extrabold shadow-lg shadow-emerald-900/30 flex items-center justify-center gap-2 transition-all hover-lift active:scale-95"
             >
               <Plus className="w-4 h-4" /> Create New Event
             </button>
           </div>
 
-          <div className="glass-panel rounded-2xl border border-slate-200 overflow-hidden">
+          <div className="horizon-glass-panel rounded-3xl border border-slate-800/80 p-5 shadow-2xl overflow-hidden">
             <div className="overflow-x-auto">
-              <div className="overflow-x-auto w-full rounded-xl border border-slate-200 shadow-sm">
-                <table className="w-full text-left border-collapse min-w-[800px]">
+              <table className="w-full text-left border-collapse min-w-[800px]">
                 <thead>
-                  <tr className="bg-slate-100 text-slate-600 text-[11px] font-extrabold uppercase border-b border-slate-200">
-                    <th className="p-3">ID</th>
-                    <th className="p-3">Title</th>
-                    <th className="p-3">Category</th>
-                    <th className="p-3">Mode</th>
-                    <th className="p-3">Venue</th>
-                    <th className="p-3">Date</th>
-                    <th className="p-3">Volunteer Quota</th>
-                    <th className="p-3">Actions</th>
+                  <tr className="bg-slate-950/70 text-slate-400 text-[11px] font-mono uppercase tracking-wider border-b border-slate-800">
+                    <th className="p-3.5">ID</th>
+                    <th className="p-3.5">Title</th>
+                    <th className="p-3.5">Category</th>
+                    <th className="p-3.5">Mode</th>
+                    <th className="p-3.5">Venue</th>
+                    <th className="p-3.5">Date</th>
+                    <th className="p-3.5">Volunteer Quota</th>
+                    <th className="p-3.5">Actions</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-200 text-xs font-medium text-slate-800">
+                <tbody className="divide-y divide-slate-800/60 text-xs font-medium text-slate-300">
                   {filteredEvents.map(e => (
-                    <tr key={e.id} className="hover:bg-slate-50">
-                      <td className="p-3 font-mono text-slate-500 font-bold">{e.id}</td>
-                      <td className="p-3 font-bold text-slate-900 max-w-[200px] truncate">{e.title}</td>
-                      <td className="p-3">
-                        <span className="px-2 py-0.5 rounded bg-slate-100 text-slate-700 font-bold text-[10px]">
+                    <tr key={e.id} className="hover:bg-slate-800/40 transition-colors">
+                      <td className="p-3.5 font-mono text-amber-400 font-bold">{e.id}</td>
+                      <td className="p-3.5 font-bold text-white max-w-[220px] truncate">{e.title}</td>
+                      <td className="p-3.5">
+                        <span className="px-2.5 py-1 rounded-lg bg-slate-800/90 border border-slate-700/80 text-slate-300 font-semibold text-[10px]">
                           {e.category}
                         </span>
                       </td>
-                      <td className="p-3">
-                        <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${
-                          e.mode === 'Online' ? 'bg-purple-100 text-purple-800' : 'bg-emerald-100 text-emerald-800'
+                      <td className="p-3.5">
+                        <span className={`px-2.5 py-1 rounded-lg text-[10px] font-extrabold border ${
+                          e.mode === 'Online' 
+                            ? 'bg-purple-950/60 text-purple-300 border-purple-800/50' 
+                            : 'bg-emerald-950/60 text-emerald-300 border-emerald-800/50'
                         }`}>
                           {e.mode}
                         </span>
                       </td>
-                      <td className="p-3 text-slate-600 max-w-[150px] truncate">{e.venue}</td>
-                      <td className="p-3 text-slate-600">{e.date}</td>
-                      <td className="p-3 font-bold text-sky-700">
+                      <td className="p-3.5 text-slate-400 max-w-[160px] truncate">{e.venue}</td>
+                      <td className="p-3.5 text-slate-300 font-mono text-[11px]">{e.date}</td>
+                      <td className="p-3.5 font-bold font-mono text-sky-400">
                         {e.volunteersRegistered} / {e.volunteerSeats}
                       </td>
-                      <td className="p-3">
+                      <td className="p-3.5">
                         <div className="flex items-center gap-2">
                           <button
                             onClick={() => updateEvent(e.id, { status: e.status === 'Completed' ? 'Upcoming' : 'Completed' })}
-                            className="px-2.5 py-1 rounded bg-slate-200 hover:bg-slate-300 text-[10px] font-bold transition-all"
+                            className="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 text-[10px] font-bold transition-all"
                           >
                             Toggle {e.status}
                           </button>
 
                           <button
                             onClick={() => setSelectedSosEvent(e)}
-                            className={`px-2.5 py-1 rounded text-[10px] font-extrabold flex items-center gap-1 transition-all shadow-xs ${
+                            className={`px-2.5 py-1 rounded-lg text-[10px] font-extrabold flex items-center gap-1 transition-all shadow-xs ${
                               e.isEmergency 
                                 ? 'bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-700 hover:to-rose-700 text-white animate-pulse' 
-                                : 'bg-red-50 hover:bg-red-100 text-red-700 border border-red-200 hover:border-red-300'
+                                : 'bg-red-950/60 hover:bg-red-900/70 text-red-300 border border-red-800/60'
                             }`}
                             title="Declare as Urgent SOS & broadcast email to all registered volunteers"
                           >
@@ -620,55 +628,52 @@ export const AdminDbmsView = () => {
                   ))}
                 </tbody>
               </table>
-              </div>
             </div>
           </div>
         </div>
       )}
 
-
       {/* TAB 3: CORPORATE REQUESTS & HR/CEO PERMISSION NOC AUDIT */}
       {activeTab === 'requests' && (
         <div className="space-y-4">
-          <div className="glass-panel rounded-2xl border border-slate-200 overflow-hidden">
+          <div className="horizon-glass-panel rounded-3xl border border-slate-800/80 p-5 shadow-2xl overflow-hidden">
             <div className="overflow-x-auto">
-              <div className="overflow-x-auto w-full rounded-xl border border-slate-200 shadow-sm">
-                <table className="w-full text-left border-collapse min-w-[800px]">
+              <table className="w-full text-left border-collapse min-w-[850px]">
                 <thead>
-                  <tr className="bg-slate-100 text-slate-600 text-[11px] font-extrabold uppercase border-b border-slate-200">
-                    <th className="p-3">Req ID</th>
-                    <th className="p-3">Organization Name</th>
-                    <th className="p-3">Type</th>
-                    <th className="p-3">Nodal Contact</th>
-                    <th className="p-3">Proposed Topic</th>
-                    <th className="p-3">Target Date</th>
-                    <th className="p-3">HR/CEO Permission NOC</th>
-                    <th className="p-3">Status</th>
-                    <th className="p-3">Action</th>
+                  <tr className="bg-slate-950/70 text-slate-400 text-[11px] font-mono uppercase tracking-wider border-b border-slate-800">
+                    <th className="p-3.5">Req ID</th>
+                    <th className="p-3.5">Organization Name</th>
+                    <th className="p-3.5">Type</th>
+                    <th className="p-3.5">Nodal Contact</th>
+                    <th className="p-3.5">Proposed Topic</th>
+                    <th className="p-3.5">Target Date</th>
+                    <th className="p-3.5">HR/CEO Permission NOC</th>
+                    <th className="p-3.5">Status</th>
+                    <th className="p-3.5">Action</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-200 text-xs font-medium text-slate-800">
+                <tbody className="divide-y divide-slate-800/60 text-xs font-medium text-slate-300">
                   {scopedCorporateRequests.map(r => (
-                    <tr key={r.id} className="hover:bg-slate-50">
-                      <td className="p-3 font-mono text-slate-500 font-bold">{r.id}</td>
-                      <td className="p-3 font-bold text-slate-900">{r.organizationName}</td>
-                      <td className="p-3 text-slate-600">{r.type}</td>
-                      <td className="p-3 text-slate-600">{r.contactPerson} ({r.phone})</td>
-                      <td className="p-3 text-slate-700 font-semibold">{r.proposedTopic}</td>
-                      <td className="p-3 text-slate-600 font-mono text-[11px]">{r.proposedDate || '2026-09-18'}</td>
+                    <tr key={r.id} className="hover:bg-slate-800/40 transition-colors">
+                      <td className="p-3.5 font-mono text-amber-400 font-bold">{r.id}</td>
+                      <td className="p-3.5 font-bold text-white">{r.organizationName}</td>
+                      <td className="p-3.5 text-slate-400">{r.type}</td>
+                      <td className="p-3.5 text-slate-400">{r.contactPerson} <span className="text-[10px] text-slate-500">({r.phone})</span></td>
+                      <td className="p-3.5 text-amber-300/90 font-medium">{r.proposedTopic}</td>
+                      <td className="p-3.5 text-slate-400 font-mono text-[11px]">{r.proposedDate || '2026-09-18'}</td>
                       
                       {/* Permission Letter Document Column with Interactive Preview & Download */}
-                      <td className="p-3">
+                      <td className="p-3.5">
                         {r.permissionLetterName ? (
                           <div className="flex items-center gap-1.5 flex-wrap">
                             <button
                               onClick={() => setSelectedNocDoc(r)}
-                              className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-amber-50 hover:bg-amber-100 dark:bg-amber-950/60 dark:hover:bg-amber-900/60 text-amber-900 dark:text-amber-200 font-bold text-[11px] border border-amber-300 dark:border-amber-700 transition-all hover-lift press-effect"
+                              className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-amber-950/40 hover:bg-amber-900/60 text-amber-300 font-bold text-[11px] border border-amber-800/60 transition-all hover-lift press-effect"
                               title="Inspect full permission letter & download"
                             >
-                              <FileText className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" />
+                              <FileText className="w-3.5 h-3.5 text-amber-400" />
                               <span className="max-w-[110px] truncate">{r.permissionLetterName}</span>
-                              <Eye className="w-3 h-3 text-amber-500 ml-0.5" />
+                              <Eye className="w-3 h-3 text-amber-400 ml-0.5" />
                             </button>
 
                             <button
@@ -682,29 +687,31 @@ export const AdminDbmsView = () => {
                                 a.click();
                                 showToast(`Downloading official sanction letter: ${r.permissionLetterName}`, "success");
                               }}
-                              className="p-1 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-sky-100 dark:hover:bg-sky-900 text-slate-700 dark:text-slate-300 hover:text-sky-700 transition-colors"
+                              className="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 transition-colors"
                               title="Download official sanction file"
                             >
                               <Download className="w-3.5 h-3.5" />
                             </button>
                           </div>
                         ) : (
-                          <span className="text-slate-400 text-[10px]">No NOC Attached</span>
+                          <span className="text-slate-500 text-[10px]">No NOC Attached</span>
                         )}
                       </td>
 
-                      <td className="p-3">
-                        <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-extrabold ${
-                          r.status === 'Approved' ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950/80 dark:text-emerald-300' : 'bg-amber-100 text-amber-800 dark:bg-amber-950/80 dark:text-amber-300'
+                      <td className="p-3.5">
+                        <span className={`px-2.5 py-1 rounded-lg text-[10px] font-extrabold border ${
+                          r.status === 'Approved' 
+                            ? 'bg-emerald-950/80 text-emerald-300 border-emerald-800/60' 
+                            : 'bg-amber-950/80 text-amber-300 border-amber-800/60'
                         }`}>
                           {r.status}
                         </span>
                       </td>
-                      <td className="p-3">
+                      <td className="p-3.5">
                         <select
                           value={r.status}
                           onChange={(e) => updateCorporateRequestStatus(r.id, e.target.value)}
-                          className="px-2 py-1 rounded-lg border border-slate-300 dark:border-slate-700 text-[10px] font-bold bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200"
+                          className="px-2.5 py-1 rounded-xl border border-slate-700 text-[10px] font-bold bg-slate-900 text-slate-200 focus:ring-1 focus:ring-amber-500"
                         >
                           <option value="Pending">Pending</option>
                           <option value="Approved">Approve Drive</option>
@@ -715,19 +722,18 @@ export const AdminDbmsView = () => {
                   ))}
                 </tbody>
               </table>
-              </div>
             </div>
           </div>
 
           {/* Dedicated Full Document Viewer Modal */}
           {selectedNocDoc && (
-            <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md animate-in fade-in duration-200">
-              <div className="relative w-full max-w-2xl glass-panel rounded-3xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 shadow-2xl overflow-hidden flex flex-col text-left">
+            <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/85 backdrop-blur-xl animate-in fade-in duration-200">
+              <div className="relative w-full max-w-2xl horizon-glass-panel rounded-3xl border border-slate-700 bg-slate-900/95 shadow-2xl overflow-hidden flex flex-col text-left">
                 
                 {/* Header */}
-                <div className="p-5 bg-slate-900 text-white flex items-center justify-between border-b border-slate-800">
+                <div className="p-5 bg-slate-950 text-white flex items-center justify-between border-b border-slate-800">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center font-bold">
+                    <div className="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center font-bold border border-amber-500/30">
                       <FileText className="w-5 h-5" />
                     </div>
                     <div>
@@ -735,11 +741,11 @@ export const AdminDbmsView = () => {
                         <h3 className="text-base font-extrabold text-white">
                           Official HR/CEO Sanction Letter (NOC)
                         </h3>
-                        <span className="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-[10px] font-extrabold uppercase">
+                        <span className="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-[10px] font-mono uppercase font-bold">
                           Verified
                         </span>
                       </div>
-                      <p className="text-xs text-slate-300">
+                      <p className="text-xs text-slate-400">
                         {selectedNocDoc.organizationName} • {selectedNocDoc.permissionLetterName}
                       </p>
                     </div>
@@ -747,25 +753,25 @@ export const AdminDbmsView = () => {
 
                   <button
                     onClick={() => setSelectedNocDoc(null)}
-                    className="p-1.5 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white"
+                    className="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white transition-colors"
                   >
                     <X className="w-5 h-5" />
                   </button>
                 </div>
 
                 {/* Letter Body Preview */}
-                <div className="p-6 space-y-5 overflow-y-auto max-h-[60vh] bg-slate-50 dark:bg-slate-950">
+                <div className="p-6 space-y-5 overflow-y-auto max-h-[60vh] bg-slate-950">
                   
                   {/* Formal Letter Paper Simulation */}
-                  <div className="p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-4 font-serif text-slate-800 dark:text-slate-200 leading-relaxed text-xs">
+                  <div className="p-6 rounded-2xl bg-slate-900/90 border border-slate-800 shadow-inner space-y-4 font-serif text-slate-200 leading-relaxed text-xs">
                     
                     {/* Letterhead */}
-                    <div className="border-b border-slate-200 dark:border-slate-800 pb-3 flex justify-between items-start font-sans">
+                    <div className="border-b border-slate-800 pb-3 flex justify-between items-start font-sans">
                       <div>
-                        <h4 className="text-sm font-black text-slate-900 dark:text-white uppercase tracking-wider">
+                        <h4 className="text-sm font-black text-white uppercase tracking-wider">
                           {selectedNocDoc.organizationName}
                         </h4>
-                        <p className="text-[10px] text-slate-500 dark:text-slate-400">
+                        <p className="text-[10px] text-slate-400">
                           Corporate & Institutional CSR Directorate
                         </p>
                       </div>
@@ -776,44 +782,44 @@ export const AdminDbmsView = () => {
                     </div>
 
                     {/* Subject */}
-                    <div className="font-bold text-slate-900 dark:text-white font-sans text-xs">
+                    <div className="font-bold text-amber-300 font-sans text-xs">
                       SUBJECT: OFFICIAL PERMISSION & NO-OBJECTION SANCTION FOR HOSTING ONFIELD AWARENESS DRIVE ON "{selectedNocDoc.proposedTopic.toUpperCase()}"
                     </div>
 
-                    <p>
+                    <p className="text-slate-300">
                       To Whom It May Concern / The Lead Non-Profit Executive Director,
                     </p>
 
-                    <p>
-                      This official communication confirms that <strong>{selectedNocDoc.organizationName}</strong> has formally authorized and sanctioned the conduction of a dedicated institutional social awareness drive on our premises.
+                    <p className="text-slate-300">
+                      This official communication confirms that <strong className="text-white">{selectedNocDoc.organizationName}</strong> has formally authorized and sanctioned the conduction of a dedicated institutional social awareness drive on our premises.
                     </p>
 
                     {/* Details Table */}
-                    <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 font-sans space-y-1 text-[11px]">
-                      <div><strong>Nodal Officer:</strong> {selectedNocDoc.contactPerson} ({selectedNocDoc.phone})</div>
-                      <div><strong>Proposed Schedule:</strong> {selectedNocDoc.proposedDate || '2026-09-18'}</div>
-                      <div><strong>Target Audience Size:</strong> {selectedNocDoc.targetAudienceSize}</div>
-                      <div><strong>Venue / Hall:</strong> {selectedNocDoc.locationAddress || 'Campus Auditorium'}</div>
-                      <div><strong>Special Provisions:</strong> {selectedNocDoc.specialRequirements || 'AV equipment, seating, and volunteer registration desks are approved.'}</div>
+                    <div className="p-3.5 rounded-xl bg-slate-950/70 border border-slate-800 font-sans space-y-1 text-[11px] text-slate-300">
+                      <div><strong className="text-slate-200">Nodal Officer:</strong> {selectedNocDoc.contactPerson} ({selectedNocDoc.phone})</div>
+                      <div><strong className="text-slate-200">Proposed Schedule:</strong> {selectedNocDoc.proposedDate || '2026-09-18'}</div>
+                      <div><strong className="text-slate-200">Target Audience Size:</strong> {selectedNocDoc.targetAudienceSize}</div>
+                      <div><strong className="text-slate-200">Venue / Hall:</strong> {selectedNocDoc.locationAddress || 'Campus Auditorium'}</div>
+                      <div><strong className="text-slate-200">Special Provisions:</strong> {selectedNocDoc.specialRequirements || 'AV equipment, seating, and volunteer registration desks are approved.'}</div>
                     </div>
 
-                    <p>
+                    <p className="text-slate-300">
                       Our security and HR administrative teams will facilitate smooth entry and logistics for all registered NGO personnel and accredited citizen volunteers.
                     </p>
 
                     {/* Sign-off Seal */}
-                    <div className="pt-4 border-t border-slate-200 dark:border-slate-800 flex justify-between items-end font-sans">
+                    <div className="pt-4 border-t border-slate-800 flex justify-between items-end font-sans">
                       <div className="flex items-center gap-2">
-                        <ShieldCheck className="w-8 h-8 text-emerald-600" />
+                        <ShieldCheck className="w-8 h-8 text-emerald-400" />
                         <div>
-                          <p className="text-[10px] font-black uppercase text-emerald-700 dark:text-emerald-400">Digitally Verified Document</p>
-                          <p className="text-[9px] text-slate-400 font-mono">SHA-256 Hash: e3b0c44298fc1c149afbf4c8996fb924</p>
+                          <p className="text-[10px] font-black uppercase text-emerald-400">Digitally Verified Document</p>
+                          <p className="text-[9px] text-slate-500 font-mono">SHA-256 Hash: e3b0c44298fc1c149afbf4c8996fb924</p>
                         </div>
                       </div>
 
                       <div className="text-right">
-                        <p className="font-bold text-xs text-slate-900 dark:text-white">{selectedNocDoc.contactPerson}</p>
-                        <p className="text-[10px] text-slate-500">Head of Human Resources & Institutional Relations</p>
+                        <p className="font-bold text-xs text-white">{selectedNocDoc.contactPerson}</p>
+                        <p className="text-[10px] text-slate-400">Head of Human Resources & Institutional Relations</p>
                       </div>
                     </div>
 
@@ -822,8 +828,8 @@ export const AdminDbmsView = () => {
                 </div>
 
                 {/* Footer Actions */}
-                <div className="p-4 bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 flex items-center justify-between">
-                  <span className="text-xs text-slate-500 font-mono">
+                <div className="p-4 bg-slate-950 border-t border-slate-800 flex items-center justify-between">
+                  <span className="text-xs text-slate-400 font-mono">
                     File: {selectedNocDoc.permissionLetterName}
                   </span>
                   
@@ -839,13 +845,13 @@ export const AdminDbmsView = () => {
                         a.click();
                         showToast(`Downloaded official sanction file: ${selectedNocDoc.permissionLetterName}`, "success");
                       }}
-                      className="px-4 py-2 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-bold text-xs flex items-center gap-1.5 shadow-sm press-effect"
+                      className="px-4 py-2 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-bold text-xs flex items-center gap-1.5 shadow-lg shadow-emerald-900/30 press-effect"
                     >
                       <Download className="w-3.5 h-3.5" /> Download Sanction Letter
                     </button>
                     <button
                       onClick={() => setSelectedNocDoc(null)}
-                      className="px-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 font-bold text-xs hover:bg-slate-200 dark:hover:bg-slate-700"
+                      className="px-4 py-2 rounded-xl bg-slate-800 text-slate-300 font-bold text-xs hover:bg-slate-700 hover:text-white"
                     >
                       Close
                     </button>
@@ -862,58 +868,57 @@ export const AdminDbmsView = () => {
       {/* TAB 4: SESSION AUDIT */}
       {activeTab === 'users' && (
         <div className="space-y-6">
-          <div className="glass-panel rounded-2xl border border-slate-200 overflow-hidden">
+          <div className="horizon-glass-panel rounded-3xl border border-slate-800/80 p-5 shadow-2xl overflow-hidden">
             <div className="overflow-x-auto">
-              <div className="overflow-x-auto w-full rounded-xl border border-slate-200 shadow-sm">
-                <table className="w-full text-left border-collapse min-w-[800px]">
+              <table className="w-full text-left border-collapse min-w-[800px]">
                 <thead>
-                  <tr className="bg-slate-100 text-slate-600 text-[11px] font-extrabold uppercase border-b border-slate-200">
-                    <th className="p-3">User ID</th>
-                    <th className="p-3">User Name</th>
-                    <th className="p-3">Email Address</th>
-                    <th className="p-3">Role</th>
-                    <th className="p-3">Email Verified</th>
-                    <th className="p-3">Active Session State</th>
-                    <th className="p-3">Security Action</th>
+                  <tr className="bg-slate-950/70 text-slate-400 text-[11px] font-mono uppercase tracking-wider border-b border-slate-800">
+                    <th className="p-3.5">User ID</th>
+                    <th className="p-3.5">User Name</th>
+                    <th className="p-3.5">Email Address</th>
+                    <th className="p-3.5">Role</th>
+                    <th className="p-3.5">Email Verified</th>
+                    <th className="p-3.5">Active Session State</th>
+                    <th className="p-3.5">Security Action</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-200 text-xs font-medium text-slate-800">
+                <tbody className="divide-y divide-slate-800/60 text-xs font-medium text-slate-300">
                   {users.map(u => {
                     const session = activeSessions[u.id];
                     return (
-                      <tr key={u.id} className="hover:bg-slate-50">
-                        <td className="p-3 font-mono text-slate-500 font-bold">{u.id}</td>
-                        <td className="p-3 font-bold text-slate-900">{u.name}</td>
-                        <td className="p-3 text-slate-600">{u.email}</td>
-                        <td className="p-3">
-                          <span className="px-2 py-0.5 rounded text-[10px] font-extrabold bg-sky-100 text-sky-800">
+                      <tr key={u.id} className="hover:bg-slate-800/40 transition-colors">
+                        <td className="p-3.5 font-mono text-amber-400 font-bold">{u.id}</td>
+                        <td className="p-3.5 font-bold text-white">{u.name}</td>
+                        <td className="p-3.5 text-slate-400 font-mono text-xs">{u.email}</td>
+                        <td className="p-3.5">
+                          <span className="px-2.5 py-1 rounded-lg text-[10px] font-mono font-bold bg-sky-950/70 text-sky-300 border border-sky-800/60">
                             {u.role}
                           </span>
                         </td>
-                        <td className="p-3">
-                          <span className="text-emerald-600 font-bold flex items-center gap-1 text-[11px]">
+                        <td className="p-3.5">
+                          <span className="text-emerald-400 font-bold flex items-center gap-1 text-[11px]">
                             <CheckCircle2 className="w-3.5 h-3.5" /> Verified OTP
                           </span>
                         </td>
-                        <td className="p-3">
+                        <td className="p-3.5">
                           {session ? (
-                            <span className="px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 font-bold text-[10px] animate-pulse">
-                              🟢 Active Session
+                            <span className="px-2.5 py-1 rounded-lg bg-emerald-950/80 text-emerald-300 border border-emerald-800/60 font-mono font-bold text-[10px] animate-pulse inline-flex items-center gap-1.5">
+                              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" /> Active Session
                             </span>
                           ) : (
-                            <span className="text-slate-400 text-[11px]">Inactive</span>
+                            <span className="text-slate-500 font-mono text-[11px]">Inactive</span>
                           )}
                         </td>
-                        <td className="p-3">
+                        <td className="p-3.5">
                           {session ? (
                             <button
                               onClick={() => invalidateUserSession(u.id)}
-                              className="px-2.5 py-1 rounded bg-red-50 hover:bg-red-100 text-red-700 text-[10px] font-bold border border-red-200"
+                              className="px-2.5 py-1 rounded-lg bg-red-950/60 hover:bg-red-900/80 text-red-300 text-[10px] font-bold border border-red-800/60 transition-colors"
                             >
                               Terminate Session
                             </button>
                           ) : (
-                            <span className="text-slate-300 text-[10px]">—</span>
+                            <span className="text-slate-600 text-[10px]">—</span>
                           )}
                         </td>
                       </tr>
@@ -921,7 +926,6 @@ export const AdminDbmsView = () => {
                   })}
                 </tbody>
               </table>
-              </div>
             </div>
           </div>
         </div>
@@ -929,30 +933,42 @@ export const AdminDbmsView = () => {
 
       {/* Modal: Create Event Form */}
       {showAddEventModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
-          <div className="relative w-full max-w-xl glass-panel rounded-3xl border border-slate-200 p-6 space-y-4 text-left max-h-[90vh] overflow-y-auto">
-            <h3 className="text-lg font-extrabold text-slate-900">Create New Awareness Event</h3>
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/85 backdrop-blur-xl animate-in fade-in duration-200">
+          <div className="relative w-full max-w-xl horizon-glass-panel rounded-3xl border border-slate-700 bg-slate-900/95 p-6 space-y-4 text-left max-h-[90vh] overflow-y-auto shadow-2xl text-slate-200">
+            <div className="flex items-center justify-between pb-3 border-b border-slate-800">
+              <div className="flex items-center gap-2">
+                <span className="w-2.5 h-2.5 rounded-full bg-emerald-400" />
+                <h3 className="text-lg font-extrabold text-white">Create New Awareness Event</h3>
+              </div>
+              <button
+                type="button"
+                onClick={() => setShowAddEventModal(false)}
+                className="p-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
             
-            <form onSubmit={handleAddEventSubmit} className="space-y-3">
+            <form onSubmit={handleAddEventSubmit} className="space-y-4">
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">Campaign Title</label>
+                <label className="block text-xs font-bold text-slate-300 mb-1">Campaign Title</label>
                 <input
                   type="text"
                   required
                   value={newEventTitle}
                   onChange={(e) => setNewEventTitle(e.target.value)}
                   placeholder="e.g. Digital Rights & Anti-Cyber Fraud Drive"
-                  className="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs font-medium"
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-700 bg-slate-950 text-slate-100 placeholder-slate-500 text-xs font-medium focus:border-amber-500 focus:ring-1 focus:ring-amber-500 outline-hidden"
                 />
               </div>
 
-              <div className="grid grid-cols-2 gap-2">
+              <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 mb-1">Sector Category</label>
+                  <label className="block text-xs font-bold text-slate-300 mb-1">Sector Category</label>
                   <select
                     value={newEventCategory}
                     onChange={(e) => setNewEventCategory(e.target.value)}
-                    className="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs font-medium bg-white"
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-700 bg-slate-950 text-slate-100 text-xs font-medium focus:border-amber-500 focus:ring-1 focus:ring-amber-500 outline-hidden"
                   >
                     <option value="Government Office">Government Office</option>
                     <option value="Public Office">Public Office / Corporate</option>
@@ -962,11 +978,11 @@ export const AdminDbmsView = () => {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 mb-1">Drive Mode</label>
+                  <label className="block text-xs font-bold text-slate-300 mb-1">Drive Mode</label>
                   <select
                     value={newEventMode}
                     onChange={(e) => setNewEventMode(e.target.value)}
-                    className="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs font-medium bg-white"
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-700 bg-slate-950 text-slate-100 text-xs font-medium focus:border-amber-500 focus:ring-1 focus:ring-amber-500 outline-hidden"
                   >
                     <option value="Onfield">Onfield Event</option>
                     <option value="Online">Online Webinar</option>
@@ -974,94 +990,94 @@ export const AdminDbmsView = () => {
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-2">
+              <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 mb-1">Venue Name</label>
+                  <label className="block text-xs font-bold text-slate-300 mb-1">Venue Name</label>
                   <input
                     type="text"
                     required
                     value={newEventVenue}
                     onChange={(e) => setNewEventVenue(e.target.value)}
                     placeholder="Collectorate Auditorium"
-                    className="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs font-medium"
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-700 bg-slate-950 text-slate-100 placeholder-slate-500 text-xs font-medium focus:border-amber-500 outline-hidden"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 mb-1">Location Zone</label>
+                  <label className="block text-xs font-bold text-slate-300 mb-1">Location Zone</label>
                   <input
                     type="text"
                     required
                     value={newEventLocation}
                     onChange={(e) => setNewEventLocation(e.target.value)}
                     placeholder="Civil Lines, Central Hub"
-                    className="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs font-medium"
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-700 bg-slate-950 text-slate-100 placeholder-slate-500 text-xs font-medium focus:border-amber-500 outline-hidden"
                   />
                 </div>
               </div>
 
-              <div className="grid grid-cols-3 gap-2">
+              <div className="grid grid-cols-3 gap-3">
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 mb-1">Date</label>
+                  <label className="block text-xs font-bold text-slate-300 mb-1">Date</label>
                   <input
                     type="date"
                     required
                     value={newEventDate}
                     onChange={(e) => setNewEventDate(e.target.value)}
-                    className="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs font-medium"
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-700 bg-slate-950 text-slate-100 text-xs font-medium focus:border-amber-500 outline-hidden"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 mb-1">Time Slot</label>
+                  <label className="block text-xs font-bold text-slate-300 mb-1">Time Slot</label>
                   <input
                     type="text"
                     required
                     value={newEventTime}
                     onChange={(e) => setNewEventTime(e.target.value)}
                     placeholder="10:00 AM - 02:00 PM"
-                    className="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs font-medium"
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-700 bg-slate-950 text-slate-100 placeholder-slate-500 text-xs font-medium focus:border-amber-500 outline-hidden"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 mb-1">Volunteer Quota</label>
+                  <label className="block text-xs font-bold text-slate-300 mb-1">Volunteer Quota</label>
                   <input
                     type="number"
                     required
                     value={newEventSeats}
                     onChange={(e) => setNewEventSeats(e.target.value)}
-                    className="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs font-medium"
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-700 bg-slate-950 text-slate-100 text-xs font-medium focus:border-amber-500 outline-hidden font-mono"
                   />
                 </div>
               </div>
 
               {/* SOS Emergency Campaign Toggle & Inputs */}
-              <div className="p-4 rounded-2xl bg-red-50/80 border border-red-200 space-y-3">
+              <div className="p-4 rounded-2xl bg-red-950/40 border border-red-800/60 space-y-3">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <AlertTriangle className="w-4 h-4 text-red-600" />
+                    <AlertTriangle className="w-4 h-4 text-red-400" />
                     <div>
-                      <h4 className="text-xs font-black text-red-950">SOS Emergency Mode (Disaster Response)</h4>
-                      <p className="text-[10px] text-red-700">Triggers nationwide high-visibility banner and 50km radius volunteer mobilization.</p>
+                      <h4 className="text-xs font-black text-red-200">SOS Emergency Mode (Disaster Response)</h4>
+                      <p className="text-[10px] text-red-300/80">Triggers nationwide high-visibility banner and 50km radius volunteer mobilization.</p>
                     </div>
                   </div>
                   <input
                     type="checkbox"
                     checked={isEmergency}
                     onChange={(e) => setIsEmergency(e.target.checked)}
-                    className="w-4 h-4 text-red-600 rounded focus:ring-red-500 cursor-pointer"
+                    className="w-4 h-4 text-red-600 rounded bg-slate-900 border-slate-700 focus:ring-red-500 cursor-pointer"
                   />
                 </div>
 
                 {isEmergency && (
-                  <div className="grid sm:grid-cols-2 gap-3 pt-2 border-t border-red-200/80 animate-fade-in">
+                  <div className="grid sm:grid-cols-2 gap-3 pt-2 border-t border-red-800/60 animate-fade-in">
                     <div>
-                      <label className="block text-[10px] font-bold text-red-900 uppercase mb-1">Urgency Level</label>
+                      <label className="block text-[10px] font-bold text-red-300 uppercase mb-1">Urgency Level</label>
                       <select
                         value={urgencyLevel}
                         onChange={(e) => setUrgencyLevel(e.target.value)}
-                        className="w-full px-3 py-2 rounded-xl border border-red-300 text-xs font-bold bg-white text-red-900"
+                        className="w-full px-3 py-2 rounded-xl border border-red-700 text-xs font-bold bg-slate-950 text-red-200"
                       >
                         <option value="Critical">Critical (Immediate Deployment Required)</option>
                         <option value="High">High (Disaster Support Within 24 Hours)</option>
@@ -1069,13 +1085,13 @@ export const AdminDbmsView = () => {
                     </div>
 
                     <div>
-                      <label className="block text-[10px] font-bold text-red-900 uppercase mb-1">Immediate Required Resources</label>
+                      <label className="block text-[10px] font-bold text-red-300 uppercase mb-1">Immediate Required Resources</label>
                       <input
                         type="text"
                         value={requiredResources}
                         onChange={(e) => setRequiredResources(e.target.value)}
                         placeholder="e.g. 50 Volunteers for Food Packing, O+ Donors"
-                        className="w-full px-3 py-2 rounded-xl border border-red-300 text-xs font-medium bg-white"
+                        className="w-full px-3 py-2 rounded-xl border border-red-700 text-xs font-medium bg-slate-950 text-slate-100 placeholder-slate-500"
                       />
                     </div>
                   </div>
@@ -1083,29 +1099,29 @@ export const AdminDbmsView = () => {
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">Overview Description</label>
+                <label className="block text-xs font-bold text-slate-300 mb-1">Overview Description</label>
                 <textarea
                   rows={2}
                   required
                   value={newEventDescription}
                   onChange={(e) => setNewEventDescription(e.target.value)}
                   placeholder="Detailed objectives of the awareness drive..."
-                  className="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs font-medium"
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-700 bg-slate-950 text-slate-100 placeholder-slate-500 text-xs font-medium focus:border-amber-500 outline-hidden"
                 />
               </div>
 
-              <div className="flex justify-end gap-2 pt-2">
+              <div className="flex justify-end gap-2.5 pt-2">
                 <button
                   type="button"
                   onClick={() => setShowAddEventModal(false)}
-                  className="px-4 py-2 rounded-xl border border-slate-300 text-xs font-bold"
+                  className="px-4 py-2.5 rounded-xl border border-slate-700 bg-slate-800 hover:bg-slate-700 text-xs font-bold text-slate-300 hover:text-white transition-colors"
                 >
                   Cancel
                 </button>
 
                 <button
                   type="submit"
-                  className="px-5 py-2 rounded-xl bg-sky-600 text-white text-xs font-bold shadow"
+                  className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 via-emerald-600 to-teal-600 hover:from-amber-600 hover:to-teal-700 text-white text-xs font-extrabold shadow-lg shadow-emerald-900/30 transition-all hover-lift active:scale-95"
                 >
                   Publish Event
                 </button>
@@ -1117,8 +1133,8 @@ export const AdminDbmsView = () => {
 
       {/* URGENT SOS BROADCAST MODAL */}
       {selectedSosEvent && (
-        <div className="fixed inset-0 z-50 bg-slate-900/80 backdrop-blur-md flex items-center justify-center p-4">
-          <div className="bg-white dark:bg-slate-900 rounded-3xl border-2 border-red-500/50 shadow-2xl max-w-lg w-full overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+        <div className="fixed inset-0 z-50 bg-slate-950/85 backdrop-blur-xl flex items-center justify-center p-4">
+          <div className="horizon-glass-panel bg-slate-900 rounded-3xl border-2 border-red-500/60 shadow-2xl max-w-lg w-full overflow-hidden animate-in fade-in zoom-in-95 duration-200">
             
             {/* Modal Header */}
             <div className="bg-gradient-to-r from-red-600 via-rose-600 to-red-700 p-6 text-white text-center relative">
@@ -1146,47 +1162,47 @@ export const AdminDbmsView = () => {
             <div className="p-6 space-y-4">
               
               {/* Event Card Summary */}
-              <div className="p-4 rounded-2xl bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-800 space-y-2">
+              <div className="p-4 rounded-2xl bg-red-950/40 border border-red-800/60 space-y-2">
                 <div className="flex items-center justify-between">
-                  <span className="text-[10px] font-extrabold text-red-700 dark:text-red-300 uppercase tracking-wider">
+                  <span className="text-[10px] font-extrabold text-red-300 uppercase tracking-wider">
                     Target Drive
                   </span>
                   <span className="px-2 py-0.5 rounded-md bg-red-600 text-white text-[10px] font-black uppercase">
                     {selectedSosEvent.urgencyLevel || 'CRITICAL'}
                   </span>
                 </div>
-                <h4 className="text-sm font-black text-slate-900 dark:text-white">
+                <h4 className="text-sm font-black text-white">
                   {selectedSosEvent.title}
                 </h4>
-                <div className="grid grid-cols-2 gap-2 text-[11px] text-slate-600 dark:text-slate-300 pt-1 border-t border-red-200 dark:border-red-800/60">
-                  <div>📅 <span className="font-semibold">{selectedSosEvent.date || 'Immediate'}</span></div>
-                  <div>📍 <span className="font-semibold">{selectedSosEvent.venue || selectedSosEvent.location}</span></div>
-                  <div>👤 <span className="font-semibold">{selectedSosEvent.coordinator || 'Coordinator'}</span></div>
-                  <div>📱 <span className="font-semibold">{selectedSosEvent.organizerContact || '+91 98201 94821'}</span></div>
+                <div className="grid grid-cols-2 gap-2 text-[11px] text-slate-300 pt-1 border-t border-red-800/60">
+                  <div>📅 <span className="font-semibold text-slate-200">{selectedSosEvent.date || 'Immediate'}</span></div>
+                  <div>📍 <span className="font-semibold text-slate-200">{selectedSosEvent.venue || selectedSosEvent.location}</span></div>
+                  <div>👤 <span className="font-semibold text-slate-200">{selectedSosEvent.coordinator || 'Coordinator'}</span></div>
+                  <div>📱 <span className="font-semibold text-slate-200">{selectedSosEvent.organizerContact || '+91 98201 94821'}</span></div>
                 </div>
               </div>
 
               {/* Target Audience Count */}
-              <div className="flex items-center justify-between p-3.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+              <div className="flex items-center justify-between p-3.5 rounded-xl bg-slate-950/70 border border-slate-800">
                 <div className="flex items-center gap-2.5">
-                  <Users className="w-4 h-4 text-sky-600 dark:text-sky-400" />
+                  <Users className="w-4 h-4 text-sky-400" />
                   <div>
-                    <p className="text-xs font-bold text-slate-800 dark:text-slate-200">
+                    <p className="text-xs font-bold text-slate-200">
                       Total Registered Volunteers
                     </p>
-                    <p className="text-[10px] text-slate-500">
+                    <p className="text-[10px] text-slate-400">
                       Each volunteer will receive a personalized priority SOS email.
                     </p>
                   </div>
                 </div>
-                <span className="text-base font-black text-sky-600 dark:text-sky-400 px-3 py-1 bg-sky-50 dark:bg-sky-950/60 rounded-xl border border-sky-200 dark:border-sky-800">
+                <span className="text-base font-black text-sky-400 px-3 py-1 bg-sky-950/60 rounded-xl border border-sky-800/60 font-mono">
                   {volunteers.length} Recipients
                 </span>
               </div>
 
               {/* Warning box */}
-              <div className="flex gap-2.5 p-3 rounded-xl bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800/60 text-amber-900 dark:text-amber-200">
-                <AlertTriangle className="w-4 h-4 shrink-0 text-amber-600 mt-0.5" />
+              <div className="flex gap-2.5 p-3 rounded-xl bg-amber-950/30 border border-amber-800/60 text-amber-200">
+                <AlertTriangle className="w-4 h-4 shrink-0 text-amber-400 mt-0.5" />
                 <p className="text-[11px] leading-relaxed">
                   <strong>Notice:</strong> This action will mark this event as an Active Emergency SOS on the public portal and dispatch high-priority notifications immediately.
                 </p>
@@ -1198,7 +1214,7 @@ export const AdminDbmsView = () => {
                   type="button"
                   disabled={isBroadcastingSos}
                   onClick={() => setSelectedSosEvent(null)}
-                  className="px-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 text-xs font-bold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all"
+                  className="px-4 py-2.5 rounded-xl border border-slate-700 bg-slate-800 text-xs font-bold text-slate-300 hover:bg-slate-700 hover:text-white transition-all"
                 >
                   Cancel
                 </button>

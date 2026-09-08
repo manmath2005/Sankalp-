@@ -106,19 +106,20 @@ export const ForgotPasswordView = ({ onNavigate }) => {
 
   return (
     <div className="max-w-xl mx-auto px-4 py-12 text-left page-enter">
-      <div className="glass-panel p-6 sm:p-8 rounded-3xl border border-white/80 shadow-float-lg space-y-6">
+      <div className="horizon-glass-panel p-6 sm:p-8 rounded-3xl border border-slate-800/90 bg-slate-900/90 shadow-2xl relative overflow-hidden backdrop-blur-2xl space-y-6">
+        <div className="horizon-gradient-line absolute top-0 left-0 right-0 h-1"></div>
         
         {/* Top Header */}
-        <div className="flex items-center justify-between border-b border-slate-100 pb-4">
+        <div className="flex items-center justify-between border-b border-slate-800 pb-4">
           <div className="flex items-center gap-2.5">
-            <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-sky-500 to-indigo-600 flex items-center justify-center text-white shadow-md shadow-sky-500/20">
+            <div className="w-10 h-10 rounded-2xl bg-amber-500/20 border border-amber-500/30 flex items-center justify-center text-amber-400 shadow-lg">
               <KeyRound className="w-5 h-5" />
             </div>
             <div>
-              <h1 className="text-xl font-extrabold text-slate-900">
-                Account Recovery & Password Reset
+              <h1 className="text-xl font-black text-white">
+                Account Recovery &amp; Password Reset
               </h1>
-              <p className="text-xs text-slate-500 mt-0.5">
+              <p className="text-xs text-slate-400 mt-0.5">
                 {step === 1 && "Enter your registered email to receive a 6-digit reset code"}
                 {step === 2 && "Enter the verification code sent to your email & choose a new password"}
                 {step === 3 && "Password updated successfully"}
@@ -128,7 +129,7 @@ export const ForgotPasswordView = ({ onNavigate }) => {
 
           <button
             onClick={() => onNavigate('volunteer-login')}
-            className="text-xs font-bold text-slate-400 hover:text-slate-700 flex items-center gap-1 transition-colors"
+            className="text-xs font-bold text-slate-400 hover:text-white flex items-center gap-1 transition-colors"
           >
             <ArrowLeft className="w-3.5 h-3.5" /> Back
           </button>
@@ -136,13 +137,13 @@ export const ForgotPasswordView = ({ onNavigate }) => {
 
         {/* Progress Tracker */}
         <div className="grid grid-cols-3 gap-2">
-          <div className={`h-1.5 rounded-full transition-all ${step >= 1 ? 'bg-sky-600' : 'bg-slate-200'}`} />
-          <div className={`h-1.5 rounded-full transition-all ${step >= 2 ? 'bg-sky-600' : 'bg-slate-200'}`} />
-          <div className={`h-1.5 rounded-full transition-all ${step >= 3 ? 'bg-emerald-600' : 'bg-slate-200'}`} />
+          <div className={`h-1.5 rounded-full transition-all ${step >= 1 ? 'bg-gradient-to-r from-amber-500 to-emerald-500' : 'bg-slate-800'}`} />
+          <div className={`h-1.5 rounded-full transition-all ${step >= 2 ? 'bg-gradient-to-r from-amber-500 to-emerald-500' : 'bg-slate-800'}`} />
+          <div className={`h-1.5 rounded-full transition-all ${step >= 3 ? 'bg-emerald-500' : 'bg-slate-800'}`} />
         </div>
 
         {errorMessage && (
-          <div className="p-3.5 rounded-2xl bg-red-50 border border-red-200 text-xs font-semibold text-red-700 flex items-center gap-2 animate-scale-in">
+          <div className="p-3.5 rounded-2xl bg-red-950/80 border border-red-800 text-xs font-semibold text-red-200 flex items-center gap-2 animate-scale-in">
             <AlertCircle className="w-4 h-4 shrink-0" />
             <span>{errorMessage}</span>
           </div>
@@ -152,11 +153,11 @@ export const ForgotPasswordView = ({ onNavigate }) => {
         {step === 1 && (
           <form onSubmit={handleRequestOtp} className="space-y-4">
             <div>
-              <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+              <label className="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-1.5">
                 Registered Account Email Address
               </label>
               <div className="relative">
-                <Mail className="w-4 h-4 text-slate-400 absolute left-3 top-3.5" />
+                <Mail className="w-4 h-4 text-slate-500 absolute left-3 top-3.5" />
                 <input
                   type="email"
                   required
@@ -164,10 +165,10 @@ export const ForgotPasswordView = ({ onNavigate }) => {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="name@organization.org or name@example.com"
-                  className="w-full pl-9 pr-4 py-3 rounded-xl border border-slate-300 text-xs font-medium focus:ring-2 focus:ring-sky-500 focus:outline-none transition-all"
+                  className="w-full pl-9 pr-4 py-3 rounded-xl border border-slate-700/80 bg-slate-950 text-xs font-bold text-white focus:border-amber-500 focus:ring-1 focus:ring-amber-500 focus:outline-none transition-all placeholder:text-slate-500"
                 />
               </div>
-              <p className="text-[11px] text-slate-500 mt-1.5">
+              <p className="text-[11px] text-slate-400 mt-1.5">
                 We will dispatch a secure 6-digit one-time password (OTP) directly to this email inbox.
               </p>
             </div>
@@ -175,10 +176,10 @@ export const ForgotPasswordView = ({ onNavigate }) => {
             <button
               type="submit"
               disabled={loading || !email}
-              className={`w-full py-3.5 rounded-xl font-bold text-xs uppercase tracking-wider shadow-md transition-all flex items-center justify-center gap-2 press-effect ${
+              className={`w-full py-3.5 rounded-xl font-black text-xs uppercase tracking-wider shadow-lg transition-all flex items-center justify-center gap-2 press-effect ${
                 email
-                  ? 'btn-glow-primary'
-                  : 'bg-slate-200 text-slate-400 cursor-not-allowed'
+                  ? 'bg-gradient-to-r from-amber-500 via-emerald-500 to-sky-500 hover:from-amber-400 hover:to-sky-400 text-slate-950 shadow-amber-500/10'
+                  : 'bg-slate-800 text-slate-500 cursor-not-allowed'
               }`}
             >
               {loading ? (
@@ -199,15 +200,15 @@ export const ForgotPasswordView = ({ onNavigate }) => {
         {/* STEP 2: Enter OTP & Set New Password */}
         {step === 2 && (
           <form onSubmit={handleResetPassword} className="space-y-4 animate-scale-in">
-            <div className="p-3.5 rounded-2xl bg-sky-50 border border-sky-200 text-xs text-slate-700 flex items-center justify-between">
+            <div className="p-3.5 rounded-2xl bg-slate-950/80 border border-slate-800 text-xs text-slate-300 flex items-center justify-between">
               <div>
-                <span className="text-[10px] font-extrabold text-sky-700 uppercase tracking-wider block">Reset Code Sent To:</span>
-                <strong className="font-mono text-slate-900">{email}</strong>
+                <span className="text-[10px] font-extrabold text-amber-400 uppercase tracking-wider block">Reset Code Sent To:</span>
+                <strong className="font-mono text-white">{email}</strong>
               </div>
               <button
                 type="button"
                 onClick={() => setStep(1)}
-                className="text-xs text-sky-600 hover:underline font-bold"
+                className="text-xs text-amber-400 hover:underline font-bold"
               >
                 Change Email
               </button>
@@ -215,7 +216,7 @@ export const ForgotPasswordView = ({ onNavigate }) => {
 
             {/* 6-Digit OTP */}
             <div>
-              <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5 text-center">
+              <label className="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-1.5 text-center">
                 Enter 6-Digit Email OTP Code:
               </label>
               <input
@@ -226,30 +227,30 @@ export const ForgotPasswordView = ({ onNavigate }) => {
                 value={otpInput}
                 onChange={(e) => setOtpInput(e.target.value.replace(/\D/g, ''))}
                 placeholder="••••••"
-                className="w-full text-center py-3 text-2xl font-black font-mono tracking-[0.4em] rounded-2xl border-2 border-slate-300 focus:border-sky-500 focus:ring-4 focus:ring-sky-100 focus:outline-none transition-all bg-white shadow-inner"
+                className="w-full text-center py-3 text-2xl font-black font-mono tracking-[0.4em] rounded-2xl border-2 border-amber-500/40 focus:border-amber-400 focus:ring-4 focus:ring-amber-500/20 focus:outline-none transition-all bg-slate-950 text-amber-300 shadow-inner"
               />
             </div>
 
             {/* New Password */}
             <div className="grid sm:grid-cols-2 gap-3 pt-2">
               <div>
-                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
+                <label className="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-1">
                   New Password
                 </label>
                 <div className="relative">
-                  <Lock className="w-4 h-4 text-slate-400 absolute left-3 top-3" />
+                  <Lock className="w-4 h-4 text-slate-500 absolute left-3 top-3" />
                   <input
                     type={showPassword ? 'text' : 'password'}
                     required
                     value={newPassword}
                     onChange={(e) => setNewPassword(e.target.value)}
                     placeholder="Min 6 characters"
-                    className="w-full pl-9 pr-10 py-2.5 rounded-xl border border-slate-300 text-xs font-medium focus:ring-2 focus:ring-sky-500 focus:outline-none"
+                    className="w-full pl-9 pr-10 py-2.5 rounded-xl border border-slate-700/80 bg-slate-950 text-xs font-bold text-white focus:border-amber-500 focus:ring-1 focus:ring-amber-500 focus:outline-none placeholder:text-slate-500"
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-3 text-slate-400 hover:text-slate-600"
+                    className="absolute right-3 top-3 text-slate-400 hover:text-slate-200"
                   >
                     {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                   </button>
@@ -257,18 +258,18 @@ export const ForgotPasswordView = ({ onNavigate }) => {
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
+                <label className="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-1">
                   Confirm New Password
                 </label>
                 <div className="relative">
-                  <Lock className="w-4 h-4 text-slate-400 absolute left-3 top-3" />
+                  <Lock className="w-4 h-4 text-slate-500 absolute left-3 top-3" />
                   <input
                     type={showPassword ? 'text' : 'password'}
                     required
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
                     placeholder="Re-enter password"
-                    className="w-full pl-9 pr-4 py-2.5 rounded-xl border border-slate-300 text-xs font-medium focus:ring-2 focus:ring-sky-500 focus:outline-none"
+                    className="w-full pl-9 pr-4 py-2.5 rounded-xl border border-slate-700/80 bg-slate-950 text-xs font-bold text-white focus:border-amber-500 focus:ring-1 focus:ring-amber-500 focus:outline-none placeholder:text-slate-500"
                   />
                 </div>
               </div>
@@ -277,27 +278,27 @@ export const ForgotPasswordView = ({ onNavigate }) => {
             <button
               type="submit"
               disabled={loading || otpInput.length !== 6 || !newPassword}
-              className={`w-full py-3.5 rounded-xl font-bold text-xs uppercase tracking-wider shadow-md transition-all flex items-center justify-center gap-2 press-effect ${
+              className={`w-full py-3.5 rounded-xl font-black text-xs uppercase tracking-wider shadow-lg transition-all flex items-center justify-center gap-2 press-effect ${
                 otpInput.length === 6 && newPassword
-                  ? 'btn-glow-primary'
-                  : 'bg-slate-200 text-slate-400 cursor-not-allowed'
+                  ? 'bg-gradient-to-r from-amber-500 via-emerald-500 to-sky-500 hover:from-amber-400 hover:to-sky-400 text-slate-950 shadow-amber-500/10'
+                  : 'bg-slate-800 text-slate-500 cursor-not-allowed'
               }`}
             >
               {loading ? (
                 <>
                   <RefreshCw className="w-4 h-4 animate-spin" />
-                  <span>Verifying & Resetting Password...</span>
+                  <span>Verifying &amp; Resetting Password...</span>
                 </>
               ) : (
                 <>
                   <CheckCircle2 className="w-4 h-4" />
-                  <span>Verify OTP & Save New Password</span>
+                  <span>Verify OTP &amp; Save New Password</span>
                 </>
               )}
             </button>
 
             {/* Resend Action */}
-            <div className="pt-2 text-center flex items-center justify-center gap-2 text-xs text-slate-500">
+            <div className="pt-2 text-center flex items-center justify-center gap-2 text-xs text-slate-400">
               <span>Didn't receive the email?</span>
               <button
                 type="button"
@@ -305,8 +306,8 @@ export const ForgotPasswordView = ({ onNavigate }) => {
                 disabled={resendCooldown > 0}
                 className={`font-extrabold flex items-center gap-1 transition-colors ${
                   resendCooldown > 0
-                    ? 'text-slate-400 cursor-not-allowed'
-                    : 'text-sky-600 hover:text-sky-700 underline'
+                    ? 'text-slate-500 cursor-not-allowed'
+                    : 'text-amber-400 hover:text-amber-300 underline'
                 }`}
               >
                 <RefreshCw className={`w-3 h-3 ${resendCooldown > 0 ? '' : 'hover:rotate-180 transition-transform'}`} />
@@ -319,29 +320,29 @@ export const ForgotPasswordView = ({ onNavigate }) => {
         {/* STEP 3: Success Confirmation */}
         {step === 3 && (
           <div className="text-center py-6 space-y-4 animate-scale-in">
-            <div className="w-16 h-16 rounded-2xl bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto shadow-md">
+            <div className="w-16 h-16 rounded-2xl bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 flex items-center justify-center mx-auto shadow-lg">
               <CheckCircle2 className="w-8 h-8" />
             </div>
-            <h2 className="text-2xl font-black text-slate-900">Password Reset Successfully!</h2>
-            <p className="text-xs text-slate-600 max-w-md mx-auto leading-relaxed">
+            <h2 className="text-2xl font-black text-white">Password Reset Successfully!</h2>
+            <p className="text-xs text-slate-300 max-w-md mx-auto leading-relaxed">
               Your password has been updated securely. You can now use your new password to sign into any of the role portals.
             </p>
             <div className="flex flex-wrap justify-center gap-3 pt-2">
               <button
                 onClick={() => onNavigate('volunteer-login')}
-                className="px-5 py-2.5 rounded-xl btn-glow-primary font-bold text-xs shadow-md press-effect"
+                className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 via-emerald-500 to-sky-500 hover:from-amber-400 hover:to-sky-400 text-slate-950 font-black text-xs shadow-lg transition-all press-effect"
               >
                 Go to Volunteer Sign In →
               </button>
               <button
                 onClick={() => onNavigate('company-login')}
-                className="px-5 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs press-effect"
+                className="px-5 py-2.5 rounded-xl bg-slate-800/80 hover:bg-slate-800 border border-slate-700 text-slate-200 font-bold text-xs press-effect"
               >
                 Company Sign In
               </button>
               <button
                 onClick={() => onNavigate('ngo-login')}
-                className="px-5 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs press-effect"
+                className="px-5 py-2.5 rounded-xl bg-slate-800/80 hover:bg-slate-800 border border-slate-700 text-slate-200 font-bold text-xs press-effect"
               >
                 NGO Portal
               </button>

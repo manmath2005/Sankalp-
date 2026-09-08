@@ -165,11 +165,14 @@ export const EsgReportGeneratorView = ({ onNavigate }) => {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8 text-left page-enter print:p-0 print:m-0">
       
-      {/* 1. Header Banner & Actions */}
-      <div className="glass-panel p-8 rounded-3xl border border-slate-200/90 shadow-sm bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 text-white flex flex-col md:flex-row md:items-center justify-between gap-6 print:hidden">
+      {/* 1. Header Banner & Actions - Luminous Horizon Glass */}
+      <div className="relative overflow-hidden rounded-3xl bg-slate-900/85 backdrop-blur-2xl border border-slate-800/90 p-8 shadow-2xl flex flex-col md:flex-row md:items-center justify-between gap-6 print:hidden">
+        <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-amber-500 via-emerald-400 to-sky-500 opacity-90" />
+        <div className="absolute -top-24 -right-24 w-80 h-80 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
+
         <div className="space-y-2 max-w-2xl">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/20 border border-emerald-400/30 text-emerald-300 text-xs font-black uppercase tracking-wider">
-            <ShieldCheck className="w-3.5 h-3.5" />
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-950/80 border border-emerald-500/40 text-emerald-300 text-xs font-black uppercase tracking-wider">
+            <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
             MCA Section 135 & BRSR Impact Ready
           </div>
           <h1 className="text-2xl sm:text-3xl font-black tracking-tight text-white">
@@ -185,15 +188,15 @@ export const EsgReportGeneratorView = ({ onNavigate }) => {
           <select
             value={selectedFiscalYear}
             onChange={(e) => setSelectedFiscalYear(e.target.value)}
-            className="px-3.5 py-2.5 rounded-xl bg-white/10 border border-white/20 text-xs font-bold text-white focus:outline-none focus:ring-2 focus:ring-sky-400"
+            className="px-3.5 py-2.5 rounded-xl bg-slate-950/80 border border-slate-700 text-xs font-bold text-white focus:outline-none focus:ring-2 focus:ring-amber-500"
           >
-            <option value="FY 2025-26" className="text-slate-900">FY 2025-26 (Active)</option>
-            <option value="FY 2024-25" className="text-slate-900">FY 2024-25 (Audited)</option>
+            <option value="FY 2025-26" className="bg-slate-900 text-white">FY 2025-26 (Active)</option>
+            <option value="FY 2024-25" className="bg-slate-900 text-white">FY 2024-25 (Audited)</option>
           </select>
 
           <button
             onClick={handleExportCsv}
-            className="px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-xs font-bold transition-all flex items-center gap-2 press-effect text-white"
+            className="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-xs font-bold transition-all flex items-center gap-2 press-effect text-white shadow-sm"
           >
             <FileSpreadsheet className="w-4 h-4 text-emerald-400" />
             <span>Export Excel/CSV</span>
@@ -201,7 +204,7 @@ export const EsgReportGeneratorView = ({ onNavigate }) => {
 
           <button
             onClick={handlePrintPdf}
-            className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-sky-500 to-indigo-600 hover:from-sky-600 hover:to-indigo-700 text-xs font-black uppercase tracking-wider text-white shadow-lg transition-all flex items-center gap-2 press-effect"
+            className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-xs font-black uppercase tracking-wider text-slate-950 shadow-lg shadow-amber-500/20 transition-all flex items-center gap-2 press-effect"
           >
             <Printer className="w-4 h-4" />
             <span>Generate Official PDF</span>
@@ -209,58 +212,58 @@ export const EsgReportGeneratorView = ({ onNavigate }) => {
         </div>
       </div>
 
-      {/* 2. Top-Level Core KPI Cards */}
+      {/* 2. Top-Level Core KPI Cards - Luminous Horizon Glass */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         
-        <div className="p-6 rounded-3xl bg-white border border-slate-200/80 shadow-sm space-y-2">
-          <div className="flex items-center justify-between text-xs font-extrabold text-slate-500 uppercase">
+        <div className="relative overflow-hidden rounded-3xl bg-slate-900/85 backdrop-blur-xl border border-slate-800/90 p-6 shadow-xl space-y-2">
+          <div className="flex items-center justify-between text-xs font-extrabold text-slate-400 uppercase tracking-wider">
             <span>CSR Funds Deployed</span>
-            <Landmark className="w-4 h-4 text-indigo-600" />
+            <Landmark className="w-4 h-4 text-amber-400" />
           </div>
-          <p className="text-2xl font-black text-slate-900 font-mono">
+          <p className="text-2xl sm:text-3xl font-black text-white font-mono">
             ₹{(((financialSummary?.csrFundsDeployedINR ?? financialSummary?.fundsDeployedINR) || 0) / 10000000).toFixed(2)} Cr
           </p>
-          <div className="flex items-center gap-1.5 text-[11px] font-bold text-emerald-600">
+          <div className="flex items-center gap-1.5 text-[11px] font-bold text-emerald-400">
             <CheckCircle2 className="w-3.5 h-3.5" />
             <span>96.1% of Mandated Budget (₹4.50 Cr)</span>
           </div>
         </div>
 
-        <div className="p-6 rounded-3xl bg-white border border-slate-200/80 shadow-sm space-y-2">
-          <div className="flex items-center justify-between text-xs font-extrabold text-slate-500 uppercase">
+        <div className="relative overflow-hidden rounded-3xl bg-slate-900/85 backdrop-blur-xl border border-slate-800/90 p-6 shadow-xl space-y-2">
+          <div className="flex items-center justify-between text-xs font-extrabold text-slate-400 uppercase tracking-wider">
             <span>Employee Volunteer Hours</span>
-            <Clock className="w-4 h-4 text-sky-600" />
+            <Clock className="w-4 h-4 text-sky-400" />
           </div>
-          <p className="text-2xl font-black text-slate-900 font-mono">
+          <p className="text-2xl sm:text-3xl font-black text-sky-400 font-mono">
             {(impactSummary?.totalVolunteerHoursLogged || 0).toLocaleString()} hrs
           </p>
-          <div className="flex items-center gap-1.5 text-[11px] font-bold text-slate-600">
+          <div className="flex items-center gap-1.5 text-[11px] font-bold text-slate-400">
             <span>Across {(impactSummary?.totalEmployeesParticipated || impactSummary?.activeEmployeeVolunteers || 0).toLocaleString()} Employees</span>
           </div>
         </div>
 
-        <div className="p-6 rounded-3xl bg-white border border-slate-200/80 shadow-sm space-y-2">
-          <div className="flex items-center justify-between text-xs font-extrabold text-slate-500 uppercase">
+        <div className="relative overflow-hidden rounded-3xl bg-slate-900/85 backdrop-blur-xl border border-slate-800/90 p-6 shadow-xl space-y-2">
+          <div className="flex items-center justify-between text-xs font-extrabold text-slate-400 uppercase tracking-wider">
             <span>Citizens Impacted</span>
-            <Users className="w-4 h-4 text-emerald-600" />
+            <Users className="w-4 h-4 text-emerald-400" />
           </div>
-          <p className="text-2xl font-black text-slate-900 font-mono">
+          <p className="text-2xl sm:text-3xl font-black text-emerald-400 font-mono">
             {(impactSummary?.directBeneficiariesImpacted || impactSummary?.communityCitizensImpacted || 0).toLocaleString()}+
           </p>
-          <div className="flex items-center gap-1.5 text-[11px] font-bold text-emerald-600">
+          <div className="flex items-center gap-1.5 text-[11px] font-bold text-emerald-400">
             <span>Verified On-ground Reach</span>
           </div>
         </div>
 
-        <div className="p-6 rounded-3xl bg-white border border-slate-200/80 shadow-sm space-y-2">
-          <div className="flex items-center justify-between text-xs font-extrabold text-slate-500 uppercase">
+        <div className="relative overflow-hidden rounded-3xl bg-slate-900/85 backdrop-blur-xl border border-slate-800/90 p-6 shadow-xl space-y-2">
+          <div className="flex items-center justify-between text-xs font-extrabold text-slate-400 uppercase tracking-wider">
             <span>Partner NGOs (Darpan)</span>
-            <ShieldCheck className="w-4 h-4 text-amber-600" />
+            <ShieldCheck className="w-4 h-4 text-indigo-400" />
           </div>
-          <p className="text-2xl font-black text-slate-900 font-mono">
+          <p className="text-2xl sm:text-3xl font-black text-indigo-300 font-mono">
             {partnerNgos.length} Accredited
           </p>
-          <div className="flex items-center gap-1.5 text-[11px] font-bold text-slate-600">
+          <div className="flex items-center gap-1.5 text-[11px] font-bold text-slate-400">
             <span>100% 80G & 12A Compliant</span>
           </div>
         </div>
@@ -268,19 +271,19 @@ export const EsgReportGeneratorView = ({ onNavigate }) => {
       </div>
 
       {/* 3. Interactive Monthly Deployment Histogram (Chart Preview) */}
-      <div className="glass-panel p-8 rounded-3xl border border-slate-200/80 bg-white shadow-sm space-y-6">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 pb-4">
+      <div className="relative overflow-hidden rounded-3xl bg-slate-900/85 backdrop-blur-xl border border-slate-800/90 p-8 shadow-xl space-y-6">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-800 pb-4">
           <div>
-            <h3 className="text-base font-black text-slate-900 flex items-center gap-2">
-              <BarChart3 className="w-5 h-5 text-indigo-600" />
+            <h3 className="text-base font-black text-white flex items-center gap-2">
+              <BarChart3 className="w-5 h-5 text-amber-400" />
               Monthly CSR Capital Deployment & Mobilization (INR vs Beneficiaries)
             </h3>
-            <p className="text-xs text-slate-500">Monthly fiscal progression conforming to MCA CSR Form CSR-2 quarterly disclosure</p>
+            <p className="text-xs text-slate-400">Monthly fiscal progression conforming to MCA CSR Form CSR-2 quarterly disclosure</p>
           </div>
-          <span className="text-xs font-bold text-slate-400 font-mono">Annualized Trajectory: Healthy</span>
+          <span className="text-xs font-bold text-emerald-400 font-mono">Annualized Trajectory: Healthy</span>
         </div>
 
-        {/* Custom CSS Bar Chart */}
+        {/* Custom CSS Bar Chart with Luminous Horizon Glow */}
         <div className="grid grid-cols-12 gap-2 sm:gap-3 items-end h-56 pt-6 px-2">
           {monthlyMetrics.map((item, idx) => {
             const heightPercent = Math.round((item.fundsDeployedINR / maxMonthlyFunds) * 100);
@@ -288,16 +291,16 @@ export const EsgReportGeneratorView = ({ onNavigate }) => {
               <div key={idx} className="flex flex-col items-center gap-2 h-full justify-end group relative">
                 
                 {/* Tooltip */}
-                <div className="absolute -top-12 opacity-0 group-hover:opacity-100 transition-opacity bg-slate-900 text-white text-[10px] p-1.5 rounded-lg whitespace-nowrap z-20 pointer-events-none shadow-lg">
+                <div className="absolute -top-12 opacity-0 group-hover:opacity-100 transition-opacity bg-slate-950 border border-slate-700 text-white text-[10px] p-2 rounded-xl whitespace-nowrap z-20 pointer-events-none shadow-xl">
                   ₹{(item.fundsDeployedINR / 100000).toFixed(1)}L • {item.beneficiaries} Citizens
                 </div>
 
                 <div 
-                  className="w-full bg-gradient-to-t from-indigo-600 to-sky-400 rounded-t-xl group-hover:from-indigo-700 group-hover:to-sky-500 transition-all duration-500"
+                  className="w-full bg-gradient-to-t from-amber-500 via-emerald-400 to-sky-400 rounded-t-xl group-hover:from-amber-400 group-hover:to-sky-300 transition-all duration-500 shadow-sm"
                   style={{ height: `${heightPercent}%` }}
                 />
                 
-                <span className="text-[11px] font-bold text-slate-600">{item.month}</span>
+                <span className="text-[11px] font-bold text-slate-400">{item.month}</span>
               </div>
             );
           })}
@@ -308,56 +311,56 @@ export const EsgReportGeneratorView = ({ onNavigate }) => {
       <div className="grid lg:grid-cols-2 gap-8">
         
         {/* SDG Pillar Distribution */}
-        <div className="glass-panel p-8 rounded-3xl border border-slate-200/80 bg-white shadow-sm space-y-6">
-          <div className="border-b border-slate-100 pb-3">
-            <h3 className="text-base font-black text-slate-900 flex items-center gap-2">
-              <Globe2 className="w-5 h-5 text-emerald-600" />
+        <div className="relative overflow-hidden rounded-3xl bg-slate-900/85 backdrop-blur-xl border border-slate-800/90 p-8 shadow-xl space-y-6">
+          <div className="border-b border-slate-800 pb-3">
+            <h3 className="text-base font-black text-white flex items-center gap-2">
+              <Globe2 className="w-5 h-5 text-emerald-400" />
               UN Sustainable Development Goals (SDG) Alignment
             </h3>
-            <p className="text-xs text-slate-500">Corporate resource allocation mapped to international SDG targets</p>
+            <p className="text-xs text-slate-400">Corporate resource allocation mapped to international SDG targets</p>
           </div>
 
           <div className="space-y-4">
             {sdgBreakdown.map((item, idx) => (
               <div key={idx} className="space-y-1.5">
                 <div className="flex items-center justify-between text-xs font-bold">
-                  <span className="text-slate-800">{item.sdg}</span>
-                  <span className="text-slate-900 font-mono font-black">
+                  <span className="text-slate-200">{item.sdg}</span>
+                  <span className="text-white font-mono font-black">
                     ₹{(item.allocatedINR / 100000).toFixed(1)}L ({item.percentage}%)
                   </span>
                 </div>
-                <div className="w-full bg-slate-100 rounded-full h-2.5 overflow-hidden">
+                <div className="w-full bg-slate-950 rounded-full h-2.5 overflow-hidden border border-slate-800">
                   <div 
-                    className="h-full rounded-full transition-all duration-700"
-                    style={{ width: `${item.percentage}%`, backgroundColor: item.color }}
+                    className="h-full rounded-full transition-all duration-700 bg-gradient-to-r from-amber-500 via-emerald-400 to-sky-400"
+                    style={{ width: `${item.percentage}%` }}
                   />
                 </div>
-                <p className="text-[10px] text-slate-500 font-medium">{item.hours} Employee Volunteer Hours Contributed</p>
+                <p className="text-[10px] text-slate-400 font-medium">{item.hours} Employee Volunteer Hours Contributed</p>
               </div>
             ))}
           </div>
         </div>
 
         {/* Accredited NGO Partner Table */}
-        <div className="glass-panel p-8 rounded-3xl border border-slate-200/80 bg-white shadow-sm space-y-6">
-          <div className="border-b border-slate-100 pb-3">
-            <h3 className="text-base font-black text-slate-900 flex items-center gap-2">
-              <Building2 className="w-5 h-5 text-sky-600" />
+        <div className="relative overflow-hidden rounded-3xl bg-slate-900/85 backdrop-blur-xl border border-slate-800/90 p-8 shadow-xl space-y-6">
+          <div className="border-b border-slate-800 pb-3">
+            <h3 className="text-base font-black text-white flex items-center gap-2">
+              <Building2 className="w-5 h-5 text-sky-400" />
               Accredited Implementing Partners (Darpan Verified)
             </h3>
-            <p className="text-xs text-slate-500">Audited partner list under MCA Section 135 CSR-1 Guidelines</p>
+            <p className="text-xs text-slate-400">Audited partner list under MCA Section 135 CSR-1 Guidelines</p>
           </div>
 
           <div className="space-y-3">
             {partnerNgos.map((ngo, idx) => (
-              <div key={idx} className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200/80 flex items-center justify-between gap-3 text-xs">
+              <div key={idx} className="p-3.5 rounded-2xl bg-slate-950/60 border border-slate-800/80 flex items-center justify-between gap-3 text-xs">
                 <div>
-                  <h4 className="font-extrabold text-slate-900">{ngo.name}</h4>
-                  <p className="text-[11px] text-slate-500 font-mono">Darpan ID: {ngo.darpanId} • {ngo.projectsConducted} Campaigns</p>
+                  <h4 className="font-extrabold text-white">{ngo.name}</h4>
+                  <p className="text-[11px] text-slate-400 font-mono">Darpan ID: {ngo.darpanId} • {ngo.projectsConducted} Campaigns</p>
                 </div>
                 <div className="text-right">
-                  <span className="font-mono font-extrabold text-indigo-700 block">₹{(ngo.deployedFundsINR / 100000).toFixed(1)}L</span>
-                  <span className="text-[10px] font-bold text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded-md">
+                  <span className="font-mono font-black text-amber-400 block">₹{(ngo.deployedFundsINR / 100000).toFixed(1)}L</span>
+                  <span className="text-[10px] font-bold text-emerald-300 bg-emerald-950/80 px-2 py-0.5 rounded-md border border-emerald-500/40">
                     {ngo.complianceStatus}
                   </span>
                 </div>
@@ -369,18 +372,18 @@ export const EsgReportGeneratorView = ({ onNavigate }) => {
       </div>
 
       {/* 5. Raw Participation Audit Ledger */}
-      <div className="glass-panel p-8 rounded-3xl border border-slate-200/80 bg-white shadow-sm space-y-6">
-        <div className="flex items-center justify-between border-b border-slate-100 pb-4">
+      <div className="relative overflow-hidden rounded-3xl bg-slate-900/85 backdrop-blur-xl border border-slate-800/90 p-8 shadow-xl space-y-6">
+        <div className="flex items-center justify-between border-b border-slate-800 pb-4">
           <div>
-            <h3 className="text-base font-black text-slate-900 flex items-center gap-2">
-              <FileSpreadsheet className="w-5 h-5 text-emerald-600" />
+            <h3 className="text-base font-black text-white flex items-center gap-2">
+              <FileSpreadsheet className="w-5 h-5 text-emerald-400" />
               Volunteer Engagement & Timestamped Audit Ledger
             </h3>
-            <p className="text-xs text-slate-500">Verifiable employee attendance and pro-bono participation logs</p>
+            <p className="text-xs text-slate-400">Verifiable employee attendance and pro-bono participation logs</p>
           </div>
           <button
             onClick={handleExportCsv}
-            className="text-xs font-bold text-sky-700 hover:text-sky-900 flex items-center gap-1"
+            className="text-xs font-bold text-sky-400 hover:text-sky-300 flex items-center gap-1"
           >
             <Download className="w-3.5 h-3.5" /> Download Full CSV
           </button>
@@ -389,7 +392,7 @@ export const EsgReportGeneratorView = ({ onNavigate }) => {
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="bg-slate-100 text-slate-600 text-[11px] font-extrabold uppercase border-b border-slate-200">
+              <tr className="bg-slate-950/80 text-slate-400 text-[11px] font-extrabold uppercase border-b border-slate-800">
                 <th className="p-3">Timestamp</th>
                 <th className="p-3">Emp ID & Name</th>
                 <th className="p-3">Department</th>
@@ -398,20 +401,20 @@ export const EsgReportGeneratorView = ({ onNavigate }) => {
                 <th className="p-3">Audited Status</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-200 text-xs font-medium text-slate-800">
+            <tbody className="divide-y divide-slate-800 text-xs font-medium text-slate-300">
               {rawParticipationLedger.map((row, idx) => (
-                <tr key={idx} className="hover:bg-slate-50">
-                  <td className="p-3 font-mono text-slate-500">{row.timestamp}</td>
+                <tr key={idx} className="hover:bg-slate-950/50 transition-colors">
+                  <td className="p-3 font-mono text-slate-400">{row.timestamp}</td>
                   <td className="p-3">
-                    <strong className="text-slate-900 block">{row.name}</strong>
+                    <strong className="text-white block">{row.name}</strong>
                     <span className="text-[10px] text-slate-400 font-mono">{row.employeeId}</span>
                   </td>
-                  <td className="p-3 text-slate-600">{row.dept}</td>
-                  <td className="p-3 font-semibold text-slate-900">{row.event}</td>
-                  <td className="p-3 font-mono font-bold text-sky-700">{row.hours} hrs</td>
+                  <td className="p-3 text-slate-300">{row.dept}</td>
+                  <td className="p-3 font-semibold text-white">{row.event}</td>
+                  <td className="p-3 font-mono font-bold text-sky-400">{row.hours} hrs</td>
                   <td className="p-3">
-                    <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-extrabold border border-emerald-200">
-                      <CheckCircle2 className="w-3 h-3 text-emerald-600" />
+                    <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-emerald-950/80 text-emerald-300 text-[10px] font-extrabold border border-emerald-500/40">
+                      <CheckCircle2 className="w-3 h-3 text-emerald-400" />
                       {row.status}
                     </span>
                   </td>

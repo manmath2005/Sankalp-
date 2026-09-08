@@ -100,30 +100,31 @@ export const NgoLoginView = ({ onNavigate }) => {
   if (currentUser && (currentUser.role === 'NGO_PARTNER' || currentUser.role === 'NGO_STAFF')) {
     return (
       <div className="max-w-2xl mx-auto px-4 py-12 text-center space-y-6 page-enter">
-        <div className="glass-panel p-8 rounded-3xl border border-slate-200 shadow-float space-y-4 hover-lift">
-          <div className="w-16 h-16 rounded-2xl bg-gradient-to-tr from-sky-600 to-indigo-600 text-white flex items-center justify-center mx-auto shadow-md animate-bounce-soft">
+        <div className="horizon-glass-panel p-8 rounded-3xl border border-slate-800/90 shadow-2xl relative overflow-hidden backdrop-blur-2xl space-y-4 hover-lift">
+          <div className="horizon-gradient-line absolute top-0 left-0 right-0 h-1"></div>
+          <div className="w-16 h-16 rounded-2xl bg-amber-500/20 border border-amber-500/30 text-amber-400 flex items-center justify-center mx-auto shadow-lg animate-bounce-soft">
             <ShieldCheck className="w-8 h-8" />
           </div>
-          <h2 className="text-2xl font-extrabold text-slate-900">Signed In as Accredited NGO Partner</h2>
-          <p className="text-xs text-slate-600">
+          <h2 className="text-2xl font-black text-white">Signed In as Accredited NGO Partner</h2>
+          <p className="text-xs text-slate-300">
             Organization: <strong>{currentUser.ngoName || currentUser.name}</strong> ({currentUser.email})
           </p>
-          <div className="flex flex-wrap justify-center gap-3">
+          <div className="flex flex-wrap justify-center gap-3 pt-2">
             <button
               onClick={() => onNavigate('dbms')}
-              className="px-6 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs shadow-md press-effect flex items-center gap-2"
+              className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 via-emerald-500 to-sky-500 hover:from-amber-400 hover:to-sky-400 text-slate-950 font-black text-xs shadow-lg transition-all press-effect flex items-center gap-2"
             >
-              Open NGO Drives & Volunteer Manager <ArrowRight className="w-4 h-4" />
+              Open NGO Drives &amp; Volunteer Manager <ArrowRight className="w-4 h-4" />
             </button>
             <button
               onClick={() => onNavigate('events')}
-              className="px-4 py-2.5 rounded-xl bg-sky-50 dark:bg-sky-950/60 text-sky-700 dark:text-sky-300 font-bold text-xs border border-sky-200 dark:border-sky-800 press-effect"
+              className="px-4 py-2.5 rounded-xl bg-slate-800/80 hover:bg-slate-800 text-slate-200 font-bold text-xs border border-slate-700 press-effect"
             >
               Browse Public Drives
             </button>
             <button
               onClick={logoutUser}
-              className="px-4 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 font-bold text-xs press-effect"
+              className="px-4 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-300 font-bold text-xs border border-slate-800 press-effect"
             >
               Logout
             </button>
@@ -194,44 +195,44 @@ export const NgoLoginView = ({ onNavigate }) => {
         
         {/* Left Column: NGO Network Information */}
         <div className="md:col-span-5 space-y-5">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-gradient-to-r from-sky-600 to-indigo-600 text-white text-xs font-black shadow-md">
-            <ShieldCheck className="w-4 h-4" />
-            NGO Partner Access & Onboarding
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-900/90 border border-amber-500/30 text-amber-300 text-xs font-black shadow-md">
+            <ShieldCheck className="w-4 h-4 text-amber-400" />
+            NGO Partner Access &amp; Onboarding
           </div>
 
-          <h1 className="text-3xl font-extrabold text-slate-900 leading-tight">
+          <h1 className="text-3xl sm:text-4xl font-black text-white leading-tight">
             National Directory of <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-sky-600 via-indigo-600 to-emerald-600">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-emerald-400 to-sky-400">
               Verified Social NGOs
             </span>
           </h1>
 
-          <p className="text-xs text-slate-600 leading-relaxed">
+          <p className="text-xs text-slate-300 leading-relaxed">
             Register your NGO organization or sign in to access the National Awareness Events Management DBMS. Conduct drives for colleges, government bodies, schools, and corporate institutions.
           </p>
 
           <div className="space-y-3 pt-2">
-            <div className="flex items-start gap-3 p-3.5 rounded-2xl bg-gradient-to-r from-sky-50 to-indigo-50 border border-sky-100 shadow-sm hover-lift cursor-default">
-              <Award className="w-5 h-5 text-sky-600 mt-0.5 shrink-0" />
+            <div className="flex items-start gap-3 p-3.5 rounded-2xl bg-slate-900/80 border border-slate-800 shadow-sm hover-lift cursor-default">
+              <Award className="w-5 h-5 text-amber-400 mt-0.5 shrink-0" />
               <div>
-                <p className="text-xs font-bold text-slate-900">National Awareness Network</p>
-                <p className="text-[11px] text-slate-600 mt-0.5">Receive event requests directly from verified government offices, universities, and corporate MNCs.</p>
+                <p className="text-xs font-bold text-white">National Awareness Network</p>
+                <p className="text-[11px] text-slate-300 mt-0.5">Receive event requests directly from verified government offices, universities, and corporate MNCs.</p>
               </div>
             </div>
 
-            <div className="flex items-start gap-3 p-3.5 rounded-2xl bg-gradient-to-r from-emerald-50 to-teal-50 border border-emerald-100 shadow-sm hover-lift cursor-default">
-              <FileText className="w-5 h-5 text-emerald-600 mt-0.5 shrink-0" />
+            <div className="flex items-start gap-3 p-3.5 rounded-2xl bg-slate-900/80 border border-slate-800 shadow-sm hover-lift cursor-default">
+              <FileText className="w-5 h-5 text-emerald-400 mt-0.5 shrink-0" />
               <div>
-                <p className="text-xs font-bold text-slate-900">Automated QR Certificate Studio</p>
-                <p className="text-[11px] text-slate-600 mt-0.5">Issue cryptographically authentic SVG certificates with dynamic QR code verification.</p>
+                <p className="text-xs font-bold text-white">Automated QR Certificate Studio</p>
+                <p className="text-[11px] text-slate-300 mt-0.5">Issue cryptographically authentic SVG certificates with dynamic QR code verification.</p>
               </div>
             </div>
 
-            <div className="flex items-start gap-3 p-3.5 rounded-2xl bg-gradient-to-r from-purple-50 to-indigo-50 border border-purple-100 shadow-sm hover-lift cursor-default">
-              <Globe2 className="w-5 h-5 text-purple-600 mt-0.5 shrink-0" />
+            <div className="flex items-start gap-3 p-3.5 rounded-2xl bg-slate-900/80 border border-slate-800 shadow-sm hover-lift cursor-default">
+              <Globe2 className="w-5 h-5 text-sky-400 mt-0.5 shrink-0" />
               <div>
-                <p className="text-xs font-bold text-slate-900">80G & 12A Verified Directory</p>
-                <p className="text-[11px] text-slate-600 mt-0.5">Showcase your organization's impact metrics, past events timeline, and partner ratings.</p>
+                <p className="text-xs font-bold text-white">80G &amp; 12A Verified Directory</p>
+                <p className="text-[11px] text-slate-300 mt-0.5">Showcase your organization's impact metrics, past events timeline, and partner ratings.</p>
               </div>
             </div>
           </div>
@@ -239,31 +240,32 @@ export const NgoLoginView = ({ onNavigate }) => {
 
         {/* Right Column: Dual-Mode Login / Register Card */}
         <div className="md:col-span-7">
-          <div className="glass-panel p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-float animate-scale-in">
+          <div className="horizon-glass-panel p-6 sm:p-8 rounded-3xl border border-slate-800/90 bg-slate-900/90 shadow-2xl relative overflow-hidden backdrop-blur-2xl animate-scale-in">
+            <div className="horizon-gradient-line absolute top-0 left-0 right-0 h-1"></div>
             
             {/* Tab Switcher */}
-            <div className="flex items-center justify-between border-b border-slate-200 pb-4 mb-6">
+            <div className="flex items-center justify-between border-b border-slate-800 pb-4 mb-6">
               <div>
-                <h2 className="text-xl font-extrabold text-slate-900">
+                <h2 className="text-xl font-black text-white">
                   {isRegisterMode ? 'Register New NGO Partner' : 'NGO Partner Login'}
                 </h2>
-                <p className="text-xs text-slate-500 mt-0.5">
+                <p className="text-xs text-slate-400 mt-0.5">
                   {isRegisterMode ? 'Onboard your NGO with 6-digit email OTP' : 'Sign in to access DBMS and campaign management'}
                 </p>
               </div>
 
-              <div className="flex bg-slate-100 p-1 rounded-xl">
+              <div className="flex bg-slate-950 p-1 rounded-xl border border-slate-800">
                 <button
                   type="button"
                   onClick={() => { setIsRegisterMode(false); setErrorMessage(''); }}
-                  className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all press-effect ${!isRegisterMode ? 'bg-gradient-to-r from-sky-600 to-indigo-600 text-white shadow-sm' : 'text-slate-600 hover:text-slate-900'}`}
+                  className={`px-3.5 py-1.5 rounded-lg text-xs font-black transition-all press-effect ${!isRegisterMode ? 'bg-gradient-to-r from-amber-500 to-emerald-500 text-slate-950 shadow-sm' : 'text-slate-400 hover:text-white'}`}
                 >
                   Sign In
                 </button>
                 <button
                   type="button"
                   onClick={() => { setIsRegisterMode(true); setErrorMessage(''); }}
-                  className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all press-effect ${isRegisterMode ? 'bg-gradient-to-r from-sky-600 to-indigo-600 text-white shadow-sm' : 'text-slate-600 hover:text-slate-900'}`}
+                  className={`px-3.5 py-1.5 rounded-lg text-xs font-black transition-all press-effect ${isRegisterMode ? 'bg-gradient-to-r from-amber-500 to-emerald-500 text-slate-950 shadow-sm' : 'text-slate-400 hover:text-white'}`}
                 >
                   Register NGO
                 </button>
@@ -271,7 +273,7 @@ export const NgoLoginView = ({ onNavigate }) => {
             </div>
 
             {errorMessage && (
-              <div className="mb-4 p-3 rounded-xl bg-red-50 border border-red-200 text-xs font-semibold text-red-700 animate-scale-in">
+              <div className="mb-4 p-3 rounded-xl bg-red-950/80 border border-red-800 text-xs font-semibold text-red-200 animate-scale-in">
                 {errorMessage}
               </div>
             )}
@@ -281,17 +283,17 @@ export const NgoLoginView = ({ onNavigate }) => {
               <div className="space-y-4">
                 
                 {/* Method Switcher Tabs: Email/Password vs Mobile OTP */}
-                <div className="flex p-1 rounded-2xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+                <div className="flex p-1 rounded-2xl bg-slate-950 border border-slate-800">
                   <button
                     type="button"
                     onClick={() => { setLoginMethod('email_password'); setErrorMessage(''); }}
                     className={`flex-1 py-2 rounded-xl text-xs font-black transition-all flex items-center justify-center gap-1.5 ${
                       loginMethod === 'email_password'
-                        ? 'bg-white dark:bg-slate-900 text-slate-900 dark:text-white shadow-xs'
-                        : 'text-slate-500 hover:text-slate-800 dark:hover:text-slate-200'
+                        ? 'bg-slate-800 text-white shadow-xs'
+                        : 'text-slate-400 hover:text-slate-200'
                     }`}
                   >
-                    <Mail className="w-3.5 h-3.5 text-sky-600" />
+                    <Mail className="w-3.5 h-3.5 text-amber-400" />
                     <span>Email &amp; Password</span>
                   </button>
 
@@ -300,8 +302,8 @@ export const NgoLoginView = ({ onNavigate }) => {
                     onClick={() => { setLoginMethod('mobile_otp'); setErrorMessage(''); }}
                     className={`flex-1 py-2 rounded-xl text-xs font-black transition-all flex items-center justify-center gap-1.5 ${
                       loginMethod === 'mobile_otp'
-                        ? 'bg-gradient-to-r from-sky-600 to-indigo-600 text-white shadow-xs'
-                        : 'text-slate-500 hover:text-slate-800 dark:hover:text-slate-200'
+                        ? 'bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-xs'
+                        : 'text-slate-400 hover:text-slate-200'
                     }`}
                   >
                     <Smartphone className="w-3.5 h-3.5" />
@@ -313,48 +315,48 @@ export const NgoLoginView = ({ onNavigate }) => {
                 {loginMethod === 'email_password' ? (
                   <form onSubmit={handleLoginSubmit} className="space-y-4">
                     <div>
-                      <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">
+                      <label className="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-1">
                         Official NGO Email
                       </label>
                       <div className="relative">
-                        <Mail className="w-4 h-4 text-slate-400 absolute left-3 top-3" />
+                        <Mail className="w-4 h-4 text-slate-500 absolute left-3 top-3" />
                         <input
                           type="email"
                           required
                           value={email}
                           onChange={(e) => setEmail(e.target.value)}
                           placeholder="contact@sankalpfoundation.org"
-                          className="w-full pl-9 pr-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 text-xs font-bold text-slate-900 dark:text-white bg-white dark:bg-slate-900 focus:ring-2 focus:ring-sky-500 focus:outline-none transition-all placeholder:text-slate-400 dark:placeholder:text-slate-500"
+                          className="w-full pl-9 pr-4 py-2.5 rounded-xl border border-slate-700/80 text-xs font-bold text-white bg-slate-950 focus:border-amber-500 focus:ring-1 focus:ring-amber-500 focus:outline-none transition-all placeholder:text-slate-500"
                         />
                       </div>
                     </div>
 
                     <div>
                       <div className="flex items-center justify-between mb-1">
-                        <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider">
+                        <label className="block text-xs font-bold text-slate-300 uppercase tracking-wider">
                           Password
                         </label>
                         <button
                           type="button"
                           onClick={() => onNavigate('forgot-password')}
-                          className="text-[11px] font-bold text-sky-600 dark:text-sky-400 hover:text-sky-700 hover:underline"
+                          className="text-[11px] font-bold text-amber-400 hover:text-amber-300 hover:underline"
                         >
                           Forgot Password?
                         </button>
                       </div>
                       <div className="relative">
-                        <Lock className="w-4 h-4 text-slate-400 absolute left-3 top-3" />
+                        <Lock className="w-4 h-4 text-slate-500 absolute left-3 top-3" />
                         <input
                           type={showPassword ? 'text' : 'password'}
                           value={password}
                           onChange={(e) => setPassword(e.target.value)}
                           placeholder="••••••••"
-                          className="w-full pl-9 pr-10 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 text-xs font-bold text-slate-900 dark:text-white bg-white dark:bg-slate-900 focus:ring-2 focus:ring-sky-500 focus:outline-none transition-all placeholder:text-slate-400 dark:placeholder:text-slate-500"
+                          className="w-full pl-9 pr-10 py-2.5 rounded-xl border border-slate-700/80 text-xs font-bold text-white bg-slate-950 focus:border-amber-500 focus:ring-1 focus:ring-amber-500 focus:outline-none transition-all placeholder:text-slate-500"
                         />
                         <button
                           type="button"
                           onClick={() => setShowPassword(!showPassword)}
-                          className="absolute right-3 top-3 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"
+                          className="absolute right-3 top-3 text-slate-400 hover:text-slate-200"
                         >
                           {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                         </button>
@@ -365,7 +367,7 @@ export const NgoLoginView = ({ onNavigate }) => {
                       type="submit"
                       disabled={loading || !password}
                       className={`w-full py-2.5 rounded-xl font-black text-xs uppercase tracking-wider shadow-md transition-all ${
-                        password ? 'bg-gradient-to-r from-emerald-600 via-teal-600 to-sky-600 hover:from-emerald-700 hover:to-sky-700 text-white press-effect' : 'bg-slate-200 dark:bg-slate-800 text-slate-400 cursor-not-allowed'
+                        password ? 'bg-gradient-to-r from-amber-500 via-emerald-500 to-sky-500 hover:from-amber-400 hover:to-sky-400 text-slate-950 press-effect shadow-lg shadow-amber-500/10' : 'bg-slate-800 text-slate-500 cursor-not-allowed'
                       }`}
                     >
                       {loading ? 'Authenticating NGO Account...' : 'Sign In with Password'}
@@ -383,8 +385,8 @@ export const NgoLoginView = ({ onNavigate }) => {
                 
                 {/* Instant Google / Gmail Sign In */}
                 <div className="relative flex items-center justify-center pt-2">
-                  <div className="border-t border-slate-200 dark:border-slate-700 w-full"></div>
-                  <span className="bg-white dark:bg-slate-900 px-3 text-[11px] font-bold text-slate-400 uppercase tracking-wider absolute">
+                  <div className="border-t border-slate-800 w-full"></div>
+                  <span className="bg-slate-900 px-3 text-[11px] font-bold text-slate-500 uppercase tracking-wider absolute">
                     or instant access
                   </span>
                 </div>
@@ -393,7 +395,7 @@ export const NgoLoginView = ({ onNavigate }) => {
                   type="button"
                   onClick={handleGoogleSignIn}
                   disabled={loading}
-                  className="w-full py-2.5 rounded-xl bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-800 dark:text-white border-2 border-slate-200 dark:border-slate-700 font-extrabold text-xs tracking-wide shadow-xs transition-all flex items-center justify-center gap-2.5 press-effect"
+                  className="w-full py-2.5 rounded-xl bg-slate-950 hover:bg-slate-800 text-white border border-slate-700 font-extrabold text-xs tracking-wide shadow-xs transition-all flex items-center justify-center gap-2.5 press-effect"
                 >
                   <svg className="w-4 h-4" viewBox="0 0 24 24">
                     <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
@@ -408,25 +410,25 @@ export const NgoLoginView = ({ onNavigate }) => {
               /* NEW NGO REGISTRATION FORM */
               <form onSubmit={handleRegisterSubmit} className="space-y-3">
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
+                  <label className="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-1">
                     NGO / Foundation Name
                   </label>
                   <div className="relative">
-                    <Building2 className="w-4 h-4 text-slate-400 absolute left-3 top-2.5" />
+                    <Building2 className="w-4 h-4 text-slate-500 absolute left-3 top-2.5" />
                     <input
                       type="text"
                       required
                       value={ngoName}
                       onChange={(e) => setNgoName(e.target.value)}
                       placeholder="e.g. Hope Social Foundation"
-                      className="w-full pl-9 pr-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 text-xs font-bold text-slate-900 dark:text-white bg-white dark:bg-slate-900 focus:ring-2 focus:ring-sky-500 focus:outline-none placeholder:text-slate-400 dark:placeholder:text-slate-500"
+                      className="w-full pl-9 pr-3 py-2 rounded-xl border border-slate-700/80 text-xs font-bold text-white bg-slate-950 focus:border-amber-500 focus:ring-1 focus:ring-amber-500 focus:outline-none placeholder:text-slate-500"
                     />
                   </div>
                 </div>
 
                 <div className="grid grid-cols-2 gap-2">
                   <div>
-                    <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">
+                    <label className="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-1">
                       Director / Key Contact Person
                     </label>
                     <input
@@ -435,11 +437,11 @@ export const NgoLoginView = ({ onNavigate }) => {
                       value={directorName}
                       onChange={(e) => setDirectorName(e.target.value)}
                       placeholder="Dr. S. K. Verma"
-                      className="w-full px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 text-xs font-bold text-slate-900 dark:text-white bg-white dark:bg-slate-900 focus:ring-2 focus:ring-sky-500 focus:outline-none placeholder:text-slate-400 dark:placeholder:text-slate-500"
+                      className="w-full px-3 py-2 rounded-xl border border-slate-700/80 text-xs font-bold text-white bg-slate-950 focus:border-amber-500 focus:ring-1 focus:ring-amber-500 focus:outline-none placeholder:text-slate-500"
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">
+                    <label className="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-1">
                       Phone Number
                     </label>
                     <input
@@ -448,14 +450,14 @@ export const NgoLoginView = ({ onNavigate }) => {
                       value={regPhone}
                       onChange={(e) => setRegPhone(e.target.value)}
                       placeholder="+91 98000 00000"
-                      className="w-full px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 text-xs font-bold text-slate-900 dark:text-white bg-white dark:bg-slate-900 focus:ring-2 focus:ring-sky-500 focus:outline-none placeholder:text-slate-400 dark:placeholder:text-slate-500"
+                      className="w-full px-3 py-2 rounded-xl border border-slate-700/80 text-xs font-bold text-white bg-slate-950 focus:border-amber-500 focus:ring-1 focus:ring-amber-500 focus:outline-none placeholder:text-slate-500"
                     />
                   </div>
                 </div>
 
                 <div className="grid grid-cols-2 gap-2">
                   <div>
-                    <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">
+                    <label className="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-1">
                       Registration No. (Trust/Society)
                     </label>
                     <input
@@ -464,11 +466,11 @@ export const NgoLoginView = ({ onNavigate }) => {
                       value={registrationNo}
                       onChange={(e) => setRegistrationNo(e.target.value)}
                       placeholder="NGO/MAH/2026/0129"
-                      className="w-full px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 text-xs font-bold font-mono text-slate-900 dark:text-white bg-white dark:bg-slate-900 focus:ring-2 focus:ring-sky-500 focus:outline-none placeholder:text-slate-400 dark:placeholder:text-slate-500"
+                      className="w-full px-3 py-2 rounded-xl border border-slate-700/80 text-xs font-mono font-bold text-white bg-slate-950 focus:border-amber-500 focus:ring-1 focus:ring-amber-500 focus:outline-none placeholder:text-slate-500"
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">
+                    <label className="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-1">
                       NITI Aayog Darpan ID (Optional)
                     </label>
                     <input
@@ -476,39 +478,39 @@ export const NgoLoginView = ({ onNavigate }) => {
                       value={darpanId}
                       onChange={(e) => setDarpanId(e.target.value)}
                       placeholder="MH/2026/00912"
-                      className="w-full px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 text-xs font-bold font-mono text-slate-900 dark:text-white bg-white dark:bg-slate-900 focus:ring-2 focus:ring-sky-500 focus:outline-none placeholder:text-slate-400 dark:placeholder:text-slate-500"
+                      className="w-full px-3 py-2 rounded-xl border border-slate-700/80 text-xs font-mono font-bold text-white bg-slate-950 focus:border-amber-500 focus:ring-1 focus:ring-amber-500 focus:outline-none placeholder:text-slate-500"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">
+                  <label className="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-1">
                     Official Email (OTP Verification Sent Here)
                   </label>
                   <div className="relative">
-                    <Mail className="w-4 h-4 text-slate-400 absolute left-3 top-2.5" />
+                    <Mail className="w-4 h-4 text-slate-500 absolute left-3 top-2.5" />
                     <input
                       type="email"
                       required
                       value={regEmail}
                       onChange={(e) => setRegEmail(e.target.value)}
                       placeholder="director@hopesocial.org"
-                      className="w-full pl-9 pr-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 text-xs font-bold text-slate-900 dark:text-white bg-white dark:bg-slate-900 focus:ring-2 focus:ring-sky-500 focus:outline-none placeholder:text-slate-400 dark:placeholder:text-slate-500"
+                      className="w-full pl-9 pr-3 py-2 rounded-xl border border-slate-700/80 text-xs font-bold text-white bg-slate-950 focus:border-amber-500 focus:ring-1 focus:ring-amber-500 focus:outline-none placeholder:text-slate-500"
                     />
                   </div>
                 </div>
 
                 {/* Primary Sectors Selection */}
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">
+                  <label className="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-1.5">
                     Target Sectors for Awareness Drives (Select all that apply)
                   </label>
                   <div className="grid grid-cols-2 gap-1.5">
                     {[
-                      { id: 'Government Office', icon: Landmark, color: 'text-amber-600' },
-                      { id: 'Public Office', icon: Building2, color: 'text-sky-600' },
-                      { id: 'College', icon: GraduationCap, color: 'text-indigo-600' },
-                      { id: 'School', icon: Users, color: 'text-emerald-600' }
+                      { id: 'Government Office', icon: Landmark, color: 'text-amber-400' },
+                      { id: 'Public Office', icon: Building2, color: 'text-sky-400' },
+                      { id: 'College', icon: GraduationCap, color: 'text-indigo-400' },
+                      { id: 'School', icon: Users, color: 'text-emerald-400' }
                     ].map(sec => {
                       const Icon = sec.icon;
                       const isSelected = selectedSectors.includes(sec.id);
@@ -519,13 +521,13 @@ export const NgoLoginView = ({ onNavigate }) => {
                           onClick={() => toggleSector(sec.id)}
                           className={`flex items-center gap-2 p-2 rounded-xl text-xs font-bold border transition-all text-left ${
                             isSelected 
-                              ? 'bg-sky-50 dark:bg-sky-950/80 border-sky-300 dark:border-sky-700 text-sky-900 dark:text-sky-200 shadow-sm' 
-                              : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800'
+                              ? 'bg-amber-950/30 border-amber-500/60 text-white shadow-sm' 
+                              : 'bg-slate-950 border-slate-800 text-slate-400 hover:bg-slate-900'
                           }`}
                         >
                           <Icon className={`w-3.5 h-3.5 ${sec.color}`} />
                           <span className="truncate">{sec.id}</span>
-                          {isSelected && <CheckCircle2 className="w-3.5 h-3.5 text-sky-600 ml-auto" />}
+                          {isSelected && <CheckCircle2 className="w-3.5 h-3.5 text-amber-400 ml-auto" />}
                         </button>
                       );
                     })}
@@ -534,8 +536,8 @@ export const NgoLoginView = ({ onNavigate }) => {
 
                 <div className="grid grid-cols-2 gap-2">
                   <div>
-                    <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">
-                      City & State
+                    <label className="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-1">
+                      City &amp; State
                     </label>
                     <input
                       type="text"
@@ -543,11 +545,11 @@ export const NgoLoginView = ({ onNavigate }) => {
                       value={regCity}
                       onChange={(e) => setRegCity(e.target.value)}
                       placeholder="Mumbai, Maharashtra"
-                      className="w-full px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 text-xs font-bold text-slate-900 dark:text-white bg-white dark:bg-slate-900 focus:ring-2 focus:ring-sky-500 focus:outline-none placeholder:text-slate-400 dark:placeholder:text-slate-500"
+                      className="w-full px-3 py-2 rounded-xl border border-slate-700/80 text-xs font-bold text-white bg-slate-950 focus:border-amber-500 focus:ring-1 focus:ring-amber-500 focus:outline-none placeholder:text-slate-500"
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">
+                    <label className="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-1">
                       Account Password
                     </label>
                     <input
@@ -556,14 +558,14 @@ export const NgoLoginView = ({ onNavigate }) => {
                       value={regPassword}
                       onChange={(e) => setRegPassword(e.target.value)}
                       placeholder="Min 6 characters"
-                      className="w-full px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 text-xs font-bold text-slate-900 dark:text-white bg-white dark:bg-slate-900 focus:ring-2 focus:ring-sky-500 focus:outline-none placeholder:text-slate-400 dark:placeholder:text-slate-500"
+                      className="w-full px-3 py-2 rounded-xl border border-slate-700/80 text-xs font-bold text-white bg-slate-950 focus:border-amber-500 focus:ring-1 focus:ring-amber-500 focus:outline-none placeholder:text-slate-500"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">
-                    Specialization & Campaign Focus
+                  <label className="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-1">
+                    Specialization &amp; Campaign Focus
                   </label>
                   <input
                     type="text"
@@ -571,17 +573,17 @@ export const NgoLoginView = ({ onNavigate }) => {
                     value={specialization}
                     onChange={(e) => setSpecialization(e.target.value)}
                     placeholder="e.g. Women Safety, Anti-Substance Abuse, Mental Health, Road Safety"
-                    className="w-full px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 text-xs font-bold text-slate-900 dark:text-white bg-white dark:bg-slate-900 focus:ring-2 focus:ring-sky-500 focus:outline-none placeholder:text-slate-400 dark:placeholder:text-slate-500"
+                    className="w-full px-3 py-2 rounded-xl border border-slate-700/80 text-xs font-bold text-white bg-slate-950 focus:border-amber-500 focus:ring-1 focus:ring-amber-500 focus:outline-none placeholder:text-slate-500"
                   />
                 </div>
 
                 {/* Preferred Verification Channel */}
-                <div className="p-3 rounded-2xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 space-y-2">
+                <div className="p-3 rounded-2xl bg-slate-950/70 border border-slate-800 space-y-2">
                   <div className="flex items-center justify-between">
-                    <label className="text-[11px] font-extrabold text-slate-700 dark:text-slate-300 uppercase tracking-wider">
+                    <label className="text-[11px] font-extrabold text-slate-300 uppercase tracking-wider">
                       Preferred Verification Method
                     </label>
-                    <span className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/60 px-2 py-0.5 rounded-md border border-emerald-200 dark:border-emerald-800">
+                    <span className="text-[10px] font-bold text-emerald-400 bg-emerald-950/80 px-2 py-0.5 rounded-md border border-emerald-800">
                       5-Min OTP
                     </span>
                   </div>
@@ -592,16 +594,16 @@ export const NgoLoginView = ({ onNavigate }) => {
                       onClick={() => setRegVerificationMethod('EMAIL')}
                       className={`p-2.5 rounded-xl border-2 text-left transition-all flex items-center gap-2 ${
                         regVerificationMethod === 'EMAIL'
-                          ? 'border-sky-500 bg-sky-50/80 dark:bg-sky-950/50 text-sky-900 dark:text-sky-200 shadow-xs'
-                          : 'border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-400 hover:border-slate-300'
+                          ? 'border-amber-500 bg-amber-950/30 text-white shadow-xs'
+                          : 'border-slate-800 bg-slate-900 text-slate-400 hover:border-slate-700'
                       }`}
                     >
-                      <div className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 ${regVerificationMethod === 'EMAIL' ? 'bg-sky-500 text-white' : 'bg-slate-100 text-slate-500'}`}>
+                      <div className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 ${regVerificationMethod === 'EMAIL' ? 'bg-amber-500 text-slate-950 font-bold' : 'bg-slate-800 text-slate-400'}`}>
                         <Mail className="w-3.5 h-3.5" />
                       </div>
                       <div>
                         <div className="text-xs font-bold leading-none">Official Email</div>
-                        <div className="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5">Code to Inbox</div>
+                        <div className="text-[10px] text-slate-400 mt-0.5">Code to Inbox</div>
                       </div>
                     </button>
 
@@ -610,16 +612,16 @@ export const NgoLoginView = ({ onNavigate }) => {
                       onClick={() => setRegVerificationMethod('MOBILE')}
                       className={`p-2.5 rounded-xl border-2 text-left transition-all flex items-center gap-2 ${
                         regVerificationMethod === 'MOBILE'
-                          ? 'border-emerald-500 bg-emerald-50/80 dark:bg-emerald-950/50 text-emerald-900 dark:text-emerald-200 shadow-xs'
-                          : 'border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-400 hover:border-slate-300'
+                          ? 'border-emerald-500 bg-emerald-950/30 text-white shadow-xs'
+                          : 'border-slate-800 bg-slate-900 text-slate-400 hover:border-slate-700'
                       }`}
                     >
-                      <div className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 ${regVerificationMethod === 'MOBILE' ? 'bg-emerald-500 text-white' : 'bg-slate-100 text-slate-500'}`}>
+                      <div className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 ${regVerificationMethod === 'MOBILE' ? 'bg-emerald-500 text-slate-950 font-bold' : 'bg-slate-800 text-slate-400'}`}>
                         <Smartphone className="w-3.5 h-3.5" />
                       </div>
                       <div>
                         <div className="text-xs font-bold leading-none">Mobile OTP</div>
-                        <div className="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5">Code to Phone (+91)</div>
+                        <div className="text-[10px] text-slate-400 mt-0.5">Code to Phone (+91)</div>
                       </div>
                     </button>
                   </div>
@@ -628,11 +630,7 @@ export const NgoLoginView = ({ onNavigate }) => {
                 <button
                   type="submit"
                   disabled={loading}
-                  className={`w-full py-2.5 rounded-xl text-white font-black text-xs uppercase tracking-wider shadow-md press-effect flex items-center justify-center gap-2 mt-2 ${
-                    regVerificationMethod === 'MOBILE'
-                      ? 'bg-gradient-to-r from-teal-600 via-emerald-600 to-green-600 hover:from-teal-700 hover:to-green-700'
-                      : 'bg-gradient-to-r from-emerald-600 via-teal-600 to-sky-600 hover:from-emerald-700 hover:to-sky-700'
-                  }`}
+                  className="w-full py-2.5 rounded-xl text-slate-950 font-black text-xs uppercase tracking-wider shadow-lg press-effect flex items-center justify-center gap-2 mt-2 bg-gradient-to-r from-amber-500 via-emerald-500 to-sky-500 hover:from-amber-400 hover:to-sky-400 shadow-amber-500/10"
                 >
                   <Zap className="w-3.5 h-3.5 fill-current" />
                   {loading 

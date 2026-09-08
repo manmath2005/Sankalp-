@@ -141,7 +141,7 @@ function MainLayout() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col justify-between bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 font-sans antialiased selection:bg-sky-500 selection:text-white transition-colors duration-300">
+    <div className="min-h-screen flex flex-col justify-between bg-[#0B1329] text-slate-100 font-sans antialiased selection:bg-amber-500 selection:text-slate-950 mesh-gradient-horizon transition-colors duration-300">
       
       {/* 1. Global Emergency Banner & Navigation Bar */}
       <div>
@@ -153,13 +153,13 @@ function MainLayout() {
         
         {/* Universal Top-Left Back Arrow for Internal Subpages */}
         {activeTab !== 'home' && (
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-3 pb-1 flex items-center">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 pb-1 flex items-center">
             <button
               onClick={handleGoBack}
-              className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-white dark:bg-slate-900 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200 border border-slate-200/90 dark:border-slate-800 text-xs font-bold shadow-xs transition-all hover-lift press-effect group"
+              className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-slate-900/80 hover:bg-slate-800 text-slate-200 border border-slate-700/80 text-xs font-bold shadow-xs backdrop-blur-md transition-all hover-lift press-effect group"
               title="Go back to previous screen"
             >
-              <ArrowLeft className="w-4 h-4 text-sky-600 dark:text-sky-400 group-hover:-translate-x-1 transition-transform" />
+              <ArrowLeft className="w-4 h-4 text-amber-400 group-hover:-translate-x-1 transition-transform" />
               <span>Back</span>
             </button>
           </div>
@@ -171,8 +171,10 @@ function MainLayout() {
         </main>
       </div>
 
-      {/* 2. Global Footer (Compact & Clean) */}
-      <footer className="bg-slate-900 text-slate-400 border-t border-slate-800 text-left py-6 mt-8">
+      {/* 2. Global Footer (Luminous Horizon Style) */}
+      <footer className="relative bg-slate-950/90 backdrop-blur-xl text-slate-400 border-t border-slate-800/80 text-left py-8 mt-12 overflow-hidden">
+        {/* Luminous Horizon Light Line */}
+        <div className="absolute top-0 left-0 right-0 h-[1.5px] bg-gradient-to-r from-transparent via-amber-500/60 via-emerald-500/50 to-transparent shadow-[0_0_12px_rgba(245,158,11,0.3)]" />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-5">
           
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6 items-start">

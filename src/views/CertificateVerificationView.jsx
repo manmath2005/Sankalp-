@@ -199,28 +199,30 @@ export const CertificateVerificationView = ({ certificateId, onNavigate }) => {
       <div className="max-w-3xl mx-auto px-4 py-12 text-center space-y-6 page-enter">
         <button
           onClick={() => onNavigate('home')}
-          className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-500 hover:text-slate-900 dark:hover:text-white transition-colors self-start mb-2"
+          className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-400 hover:text-white transition-colors self-start mb-2"
         >
           <ArrowLeft className="w-4 h-4" />
           Back to Home
         </button>
 
-        <div className="glass-panel p-8 sm:p-10 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-float-lg bg-white/95 dark:bg-slate-900/95 space-y-5 animate-float-up text-center">
-          <div className="w-16 h-16 rounded-3xl bg-amber-100 dark:bg-amber-950/80 border border-amber-300 dark:border-amber-700 text-amber-600 dark:text-amber-400 flex items-center justify-center mx-auto shadow-sm">
+        <div className="horizon-glass-panel p-8 sm:p-10 rounded-3xl border border-slate-800/90 shadow-2xl space-y-5 animate-float-up text-center relative overflow-hidden">
+          <div className="horizon-gradient-line absolute top-0 left-0 right-0 h-[2px]" />
+          
+          <div className="w-16 h-16 rounded-3xl bg-amber-950/60 border border-amber-500/30 text-amber-400 flex items-center justify-center mx-auto shadow-inner">
             <Lock className="w-8 h-8" />
           </div>
 
-          <h2 className="text-2xl font-black text-slate-900 dark:text-white">
+          <h2 className="text-2xl font-black text-white">
             No Verified Certificates Issued Yet
           </h2>
 
-          <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 max-w-lg mx-auto leading-relaxed">
-            Welcome, <strong className="text-slate-900 dark:text-white">{currentUser?.name || currentUser?.email}</strong>. You have not completed any verified awareness drives or micro-tasks yet. Once you participate in an on-ground or virtual drive, your accredited certificate with dynamic QR validation will appear here automatically.
+          <p className="text-xs sm:text-sm text-slate-300 max-w-lg mx-auto leading-relaxed">
+            Welcome, <strong className="text-white font-bold">{currentUser?.name || currentUser?.email}</strong>. You have not completed any verified awareness drives or micro-tasks yet. Once you participate in an on-ground or virtual drive, your accredited certificate with dynamic QR validation will appear here automatically.
           </p>
 
-          <div className="p-4 rounded-2xl bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800/60 max-w-md mx-auto text-left flex items-start gap-3">
-            <Sparkles className="w-5 h-5 text-amber-600 dark:text-amber-400 shrink-0 mt-0.5" />
-            <p className="text-[11px] text-amber-900 dark:text-amber-200 font-medium">
+          <div className="p-4 rounded-2xl bg-amber-950/30 border border-amber-800/60 max-w-md mx-auto text-left flex items-start gap-3">
+            <Sparkles className="w-5 h-5 text-amber-400 shrink-0 mt-0.5" />
+            <p className="text-[11px] text-amber-200/90 font-medium leading-relaxed">
               <strong>How to earn your certificate:</strong> Browse upcoming drives or complete 2–5 hour micro-volunteering tasks to receive official 80G/MCA Section 135 accredited digital credentials.
             </p>
           </div>
@@ -228,14 +230,14 @@ export const CertificateVerificationView = ({ certificateId, onNavigate }) => {
           <div className="flex flex-wrap justify-center gap-3 pt-2">
             <button
               onClick={() => onNavigate('events')}
-              className="px-6 py-3 rounded-2xl bg-gradient-to-r from-sky-600 to-indigo-600 hover:from-sky-700 hover:to-indigo-700 text-white text-xs font-black shadow-md press-effect flex items-center gap-2"
+              className="px-6 py-3 rounded-2xl bg-gradient-to-r from-amber-500 via-emerald-600 to-teal-600 hover:from-amber-600 hover:to-teal-700 text-white text-xs font-black shadow-lg shadow-emerald-900/30 press-effect flex items-center gap-2 hover-lift transition-all"
             >
               <span>Explore Active Drives & Tasks</span>
               <Award className="w-4 h-4" />
             </button>
             <button
               onClick={() => onNavigate('volunteer-hub')}
-              className="px-5 py-3 rounded-2xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-bold press-effect"
+              className="px-5 py-3 rounded-2xl bg-slate-800 hover:bg-slate-750 text-slate-200 hover:text-white text-xs font-bold border border-slate-700 press-effect transition-all"
             >
               Go to Volunteer Hub
             </button>
@@ -267,7 +269,7 @@ export const CertificateVerificationView = ({ certificateId, onNavigate }) => {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
         <button
           onClick={() => onNavigate('home')}
-          className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-500 hover:text-slate-900 dark:hover:text-white transition-colors"
+          className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-400 hover:text-white transition-colors"
         >
           <ArrowLeft className="w-4 h-4" />
           Back to Sankalp Home
@@ -276,7 +278,7 @@ export const CertificateVerificationView = ({ certificateId, onNavigate }) => {
         <div className="flex items-center gap-2.5 flex-wrap">
           <button
             onClick={handleCopyLink}
-            className="px-3.5 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-bold transition-all flex items-center gap-1.5 press-effect border border-slate-200 dark:border-slate-700"
+            className="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-750 text-slate-200 hover:text-white text-xs font-bold transition-all flex items-center gap-1.5 press-effect border border-slate-700"
           >
             <Share2 className="w-3.5 h-3.5" />
             {copied ? 'Link Copied!' : 'Share Public Link'}
@@ -299,7 +301,7 @@ export const CertificateVerificationView = ({ certificateId, onNavigate }) => {
 
               <button
                 onClick={handlePrint}
-                className="px-4 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 dark:bg-sky-600 dark:hover:bg-sky-500 text-white text-xs font-bold transition-all flex items-center gap-1.5 press-effect shadow-md"
+                className="px-4 py-2 rounded-xl bg-gradient-to-r from-amber-500 via-emerald-600 to-teal-600 hover:from-amber-600 hover:to-teal-700 text-white text-xs font-extrabold transition-all flex items-center gap-1.5 press-effect shadow-lg shadow-emerald-900/30 hover-lift"
               >
                 <Download className="w-3.5 h-3.5" />
                 <span>Download Official Certificate</span>
@@ -310,7 +312,7 @@ export const CertificateVerificationView = ({ certificateId, onNavigate }) => {
               <button
                 disabled
                 title="Download locked: Participation verification required"
-                className="px-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-800/80 text-slate-400 dark:text-slate-500 text-xs font-bold border border-slate-300 dark:border-slate-700 cursor-not-allowed flex items-center gap-1.5 shadow-none"
+                className="px-4 py-2 rounded-xl bg-slate-900/60 text-slate-500 text-xs font-bold border border-slate-800 cursor-not-allowed flex items-center gap-1.5 shadow-none"
               >
                 <Lock className="w-3.5 h-3.5 text-amber-500" />
                 <span>Download Locked (Participation Required)</span>
@@ -322,24 +324,24 @@ export const CertificateVerificationView = ({ certificateId, onNavigate }) => {
 
       {/* Participation Status Notice Banner */}
       {!hasParticipated && (
-        <div className="mb-6 p-4 rounded-2xl bg-amber-50 dark:bg-amber-950/40 border border-amber-300 dark:border-amber-700 text-amber-900 dark:text-amber-200 text-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div className="mb-6 p-4 rounded-2xl bg-amber-950/30 border border-amber-800/60 text-amber-200 text-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div className="flex items-center gap-2.5">
-            <Lock className="w-4 h-4 text-amber-600 dark:text-amber-400 shrink-0" />
+            <Lock className="w-4 h-4 text-amber-400 shrink-0" />
             <div>
-              <span className="font-extrabold block">Public Audit Verification Mode</span>
-              <p className="text-[11px] text-amber-800 dark:text-amber-300">
+              <span className="font-extrabold block text-amber-300">Public Audit Verification Mode</span>
+              <p className="text-[11px] text-amber-200/80">
                 This public audit record is authentic on Sankalp's cryptographic ledger. High-resolution PDF export and LinkedIn accreditation are unlocked only for the verified participant.
               </p>
             </div>
           </div>
           {currentUser ? (
-            <span className="text-[10px] font-mono px-2.5 py-1 rounded-lg bg-amber-200/80 dark:bg-amber-900/60 font-bold shrink-0 self-start sm:self-auto">
+            <span className="text-[10px] font-mono px-2.5 py-1 rounded-lg bg-amber-900/60 border border-amber-700/50 font-bold shrink-0 self-start sm:self-auto text-amber-200">
               Signed in as: {currentUser.name || currentUser.email}
             </span>
           ) : (
             <button
               onClick={() => onNavigate('volunteer-login')}
-              className="px-3 py-1.5 rounded-xl bg-amber-700 text-white text-[11px] font-black shrink-0 self-start sm:self-auto hover:bg-amber-800"
+              className="px-3 py-1.5 rounded-xl bg-amber-600 hover:bg-amber-700 text-white text-[11px] font-black shrink-0 self-start sm:self-auto transition-all"
             >
               Sign In to Unlock
             </button>
@@ -348,30 +350,31 @@ export const CertificateVerificationView = ({ certificateId, onNavigate }) => {
       )}
 
       {/* Main Official Verification Card */}
-      <div className="glass-panel rounded-3xl border border-slate-200 dark:border-slate-800 shadow-float-lg overflow-hidden space-y-8 bg-white/95 dark:bg-slate-900/95 relative">
+      <div className="horizon-glass-panel rounded-3xl border border-slate-800/90 shadow-2xl overflow-hidden space-y-8 relative">
+        <div className="horizon-gradient-line absolute top-0 left-0 right-0 h-[2px]" />
         
         {/* Verified Authentic Header Banner */}
-        <div className="p-6 sm:p-8 bg-gradient-to-r from-slate-900 via-sky-950 to-slate-900 text-white flex flex-col md:flex-row md:items-center justify-between gap-6">
+        <div className="p-6 sm:p-8 bg-slate-950/80 text-white flex flex-col md:flex-row md:items-center justify-between gap-6 border-b border-slate-800">
           <div className="space-y-1.5">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 text-xs font-extrabold border border-emerald-400/30">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-950/80 text-emerald-300 text-xs font-mono font-extrabold border border-emerald-800/60">
               <CheckCircle2 className="w-4 h-4 text-emerald-400" />
               <span>Verified Authentic by Sankalp Network</span>
             </div>
             <h1 className="text-2xl sm:text-3xl font-black text-white">
               Official Digital Credential Audit
             </h1>
-            <p className="text-xs text-slate-300 font-mono">
+            <p className="text-xs text-slate-400 font-mono">
               Certificate Record ID: {matchedCert.id} • SHA-256 Hash Verified
             </p>
           </div>
 
-          <div className="flex items-center gap-3 bg-white/10 p-3 rounded-2xl border border-white/10 backdrop-blur-md shrink-0">
-            <div className="w-12 h-12 rounded-xl bg-emerald-500 text-slate-950 flex items-center justify-center font-black shadow-md">
-              <ShieldCheck className="w-7 h-7" />
+          <div className="flex items-center gap-3 bg-slate-900/90 p-3 rounded-2xl border border-slate-800 shrink-0">
+            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600 text-slate-950 flex items-center justify-center font-black shadow-md">
+              <ShieldCheck className="w-7 h-7 text-white" />
             </div>
             <div>
               <p className="text-xs font-extrabold text-white">Cryptographic Validity</p>
-              <p className="text-[11px] text-emerald-300 font-bold">100% Tamper-Proof</p>
+              <p className="text-[11px] text-emerald-400 font-bold font-mono">100% Tamper-Proof</p>
             </div>
           </div>
         </div>
@@ -473,13 +476,13 @@ export const CertificateVerificationView = ({ certificateId, onNavigate }) => {
 
         {/* 1-Click Action Callout Banner */}
         {hasParticipated && (
-          <div className="p-6 bg-slate-50 dark:bg-slate-800/60 border-t border-slate-200 dark:border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-4 text-left">
+          <div className="p-6 bg-slate-950/80 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-4 text-left">
             <div className="space-y-0.5">
-              <h4 className="text-sm font-extrabold text-slate-900 dark:text-white flex items-center gap-1.5">
-                <Sparkles className="w-4 h-4 text-sky-600 dark:text-sky-400" />
+              <h4 className="text-sm font-extrabold text-white flex items-center gap-1.5">
+                <Sparkles className="w-4 h-4 text-amber-400" />
                 Add This Verifiable Certification to Your LinkedIn Profile
               </h4>
-              <p className="text-xs text-slate-500 dark:text-slate-400">
+              <p className="text-xs text-slate-400">
                 Directly integrates into the "Licenses &amp; Certifications" section on LinkedIn with 1 click.
               </p>
             </div>
