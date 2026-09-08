@@ -29,8 +29,7 @@ import { SankalpBrandLogo } from './components/SankalpBrandLogo';
 import { ShieldCheck, Heart, Mail, Phone, MapPin, Lock, ArrowLeft } from 'lucide-react';
 
 import { useApp } from './context/AppContext';
-
-
+import { useSEO } from './hooks/useSEO';
 
 function MainLayout() {
   const [activeTab, setActiveTab] = useState(() => {
@@ -42,6 +41,9 @@ function MainLayout() {
     }
     return 'home';
   });
+
+  // Dynamically update document title, meta tags, and structured data
+  useSEO(activeTab);
 
   // Navigation History Stack
   const [navHistory, setNavHistory] = useState(['home']);

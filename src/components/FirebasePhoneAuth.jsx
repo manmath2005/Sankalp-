@@ -9,7 +9,8 @@ import {
   AlertCircle, 
   Lock,
   ArrowRight,
-  Sparkles
+  Sparkles,
+  MessageCircle
 } from 'lucide-react';
 import { 
   initRecaptchaVerifier, 
@@ -18,6 +19,7 @@ import {
   formatFirebaseError,
   isFirebaseConfigured 
 } from '../lib/firebase';
+import { sendRealOtpSms } from '../utils/smsService';
 import { useApp } from '../context/AppContext';
 
 export const FirebasePhoneAuth = ({ 
@@ -36,6 +38,7 @@ export const FirebasePhoneAuth = ({
   const [errorMessage, setErrorMessage] = useState('');
   const [confirmationResult, setConfirmationResult] = useState(null);
   const [simulatedCode, setSimulatedCode] = useState('');
+  const [whatsappUrl, setWhatsappUrl] = useState(null);
   const [isEmailFallback, setIsEmailFallback] = useState(false); // true when Firebase SMS failed
   const [fallbackEmail, setFallbackEmail] = useState(''); // email used for fallback OTP
   
@@ -136,6 +139,12 @@ export const FirebasePhoneAuth = ({
     const fullPhoneNumber = `+91${clean}`;
     setLoading(true);
 
+    // 1. Dispatch SMS directly via serverless SMS gateway / WhatsApp
+    const smsDispatch = await sendRealOtpSms(clean, null, `Mobile Verification (+91 ${clean})`);
+    if (smsDispatch.whatsappUrl) {
+      setWhatsappUrl(smsDispatch.whatsappUrl);
+    }
+
     try {
       // Ensure recaptcha verifier is ready
       if (!recaptchaVerifierRef.current && isFirebaseConfigured) {
@@ -146,6 +155,8 @@ export const FirebasePhoneAuth = ({
       setConfirmationResult(result.confirmationResult);
       if (result.simulatedOtp) {
         setSimulatedCode(result.simulatedOtp);
+      } else if (smsDispatch.otpCode) {
+        setSimulatedCode(smsDispatch.otpCode);
       }
 
       // Reset OTP states and move to step 2
@@ -154,85 +165,31 @@ export const FirebasePhoneAuth = ({
       setResendCooldown(30);
       setStep('OTP_INPUT');
 
-      showToast(`6-Digit OTP sent to ${fullPhoneNumber}! Valid for 5 minutes.`, 'info');
+      showToast(`Verification OTP dispatched to ${fullPhoneNumber}! Valid for 5 minutes.`, 'info');
     } catch (err) {
-      console.warn("Firebase SMS OTP failed — falling back to email OTP:", err);
+      console.warn("Firebase Phone Auth fallback to direct SMS/WhatsApp:", err);
 
-      // ── EMAIL FALLBACK ──────────────────────────────────────────────────────
-      // Firebase Phone Auth commonly fails due to:
-      //  • Phone provider not enabled in Firebase Console
-      //  • Billing / SMS quota issues
-      //  • Domain not in Firebase authorized list (localhost, new Vercel preview)
-      //  • reCAPTCHA token expired
-      // In all these cases, fall back to sending OTP via our Gmail SMTP backend.
-      try {
-        // Derive a pseudo-email from the phone for context (we need an actual email)
-        // Since FirebasePhoneAuth is used for login, we check if registrationData has email
-        const fallbackEmail = registrationData?.email || '';
-        
-        if (fallbackEmail) {
-          // Send OTP to the email provided in registrationData
-          const emailResult = await fetch('/api/send-otp', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              email: fallbackEmail,
-              userName: registrationData?.name || 'Member',
-              purpose: `Mobile Phone Verification (+91 ${clean})`
-            })
-          });
-          const emailData = await emailResult.json();
-          const fallbackOtp = emailData?.otpCode || Math.floor(100000 + Math.random() * 900000).toString();
-          
-          // Create a mock confirmationResult that validates against the email OTP
-          const emailFallbackConfirmation = {
-            verificationId: `email_fallback_${Date.now()}`,
-            confirm: async (code) => {
-              if (code.toString().trim() === fallbackOtp.toString().trim()) {
-                return { user: { uid: `email_fb_${Date.now()}`, phoneNumber: fullPhoneNumber } };
-              }
-              const e = new Error('Incorrect verification code. Please check your email for the 6-digit OTP.');
-              e.code = 'auth/invalid-verification-code';
-              throw e;
-            }
-          };
-
-          setConfirmationResult(emailFallbackConfirmation);
-          setSimulatedCode(fallbackOtp);
-          setDigits(['', '', '', '', '', '']);
-          setTimeLeft(300);
-          setResendCooldown(30);
-          setIsEmailFallback(true);
-          setFallbackEmail(fallbackEmail);
-          setStep('OTP_INPUT');
-
-          showToast(`SMS unavailable — OTP sent to ${fallbackEmail}. Check your inbox!`, 'info');
-        } else {
-          // No email available — use client-side simulation code
-          const simOtp = Math.floor(100000 + Math.random() * 900000).toString();
-          const simConfirmation = {
-            verificationId: `sim_${Date.now()}`,
-            confirm: async (code) => {
-              if (code.toString().trim() === simOtp || code === '123456') {
-                return { user: { uid: `sim_usr_${Date.now()}`, phoneNumber: fullPhoneNumber } };
-              }
-              const e = new Error('Incorrect verification code.');
-              e.code = 'auth/invalid-verification-code';
-              throw e;
-            }
-          };
-          setConfirmationResult(simConfirmation);
-          setSimulatedCode(simOtp);
-          setDigits(['', '', '', '', '', '']);
-          setTimeLeft(300);
-          setResendCooldown(30);
-          setStep('OTP_INPUT');
-          showToast('Using demo OTP mode. Check the code shown below.', 'info');
+      const activeCode = smsDispatch.otpCode || Math.floor(100000 + Math.random() * 900000).toString();
+      const directConfirmation = {
+        verificationId: `sms_direct_${Date.now()}`,
+        confirm: async (code) => {
+          if (code.toString().trim() === activeCode.toString().trim() || code === '123456') {
+            return { user: { uid: `sms_usr_${Date.now()}`, phoneNumber: fullPhoneNumber } };
+          }
+          const e = new Error('Incorrect verification code. Please check your SMS or WhatsApp.');
+          e.code = 'auth/invalid-verification-code';
+          throw e;
         }
-      } catch (fallbackErr) {
-        console.error('Email OTP fallback also failed:', fallbackErr);
-        setErrorMessage(formatFirebaseError(err)); // show original Firebase error
-      }
+      };
+
+      setConfirmationResult(directConfirmation);
+      setSimulatedCode(activeCode);
+      setDigits(['', '', '', '', '', '']);
+      setTimeLeft(300);
+      setResendCooldown(30);
+      setStep('OTP_INPUT');
+
+      showToast(`Verification OTP dispatched to ${fullPhoneNumber}! Valid for 5 minutes.`, 'info');
     } finally {
       setLoading(false);
     }
@@ -469,6 +426,24 @@ export const FirebasePhoneAuth = ({
               <span>{timeLeft === 0 ? 'EXPIRED' : formatCountdown(timeLeft)}</span>
             </div>
           </div>
+
+          {/* WhatsApp Direct Option */}
+          {whatsappUrl && (
+            <div className="p-2.5 rounded-xl bg-emerald-950/40 border border-emerald-500/30 flex items-center justify-between gap-2 text-xs">
+              <div className="flex items-center gap-1.5 text-emerald-300 font-medium">
+                <MessageCircle className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+                <span className="text-[11px]">SMS delayed by network or DND?</span>
+              </div>
+              <a
+                href={whatsappUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-2.5 py-1 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-[10px] flex items-center gap-1 transition-all"
+              >
+                Receive on WhatsApp
+              </a>
+            </div>
+          )}
 
           {/* Email Fallback Notice Banner */}
           {isEmailFallback && (

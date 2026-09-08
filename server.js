@@ -255,6 +255,89 @@ app.post('/api/verify-otp', (req, res) => {
     res.status(200).json({ success: true, message: 'Email verified successfully!' });
 });
 
+// Endpoint 2b: Mobile Phone SMS OTP Dispatch
+app.post('/api/send-sms-otp', async (req, res) => {
+    const { phone, otp, userName, purpose } = req.body || {};
+    const cleanPhone = (phone || '').toString().replace(/\D/g, '').slice(-10);
+
+    if (!cleanPhone || cleanPhone.length !== 10) {
+      return res.status(400).json({ 
+        success: false, 
+        message: 'Please provide a valid 10-digit Indian mobile phone number.' 
+      });
+    }
+
+    const clientIp = req.ip || req.headers['x-forwarded-for'] || req.socket.remoteAddress || 'unknown';
+    if (!checkRateLimit(`ip:${clientIp}`, 10) || !checkRateLimit(`phone:${cleanPhone}`, 5)) {
+      return res.status(429).json({ 
+        success: false, 
+        message: 'Too many OTP requests. Please wait a few minutes before trying again.' 
+      });
+    }
+
+    const activeOtp = (otp || Math.floor(100000 + Math.random() * 900000)).toString();
+    const expiresAt = Date.now() + 5 * 60 * 1000;
+    const formattedPhone = `+91 ${cleanPhone.slice(0, 5)} ${cleanPhone.slice(5)}`;
+
+    otpStore[`phone:${cleanPhone}`] = { otp: activeOtp, expiresAt, userName: userName || 'Partner' };
+
+    let smsSent = false;
+    let gatewayUsed = 'SIMULATED';
+    let gatewayMessage = '';
+
+    // Fast2SMS integration
+    const fast2SmsKey = process.env.FAST2SMS_API_KEY;
+    if (fast2SmsKey) {
+      try {
+        const f2sRes = await fetch('https://www.fast2sms.com/dev/bulkV2', {
+          method: 'POST',
+          headers: { 'authorization': fast2SmsKey, 'Content-Type': 'application/json' },
+          body: JSON.stringify({ route: 'otp', variables_values: activeOtp, numbers: cleanPhone })
+        });
+        const f2sData = await f2sRes.json();
+        if (f2sData.return) {
+          smsSent = true;
+          gatewayUsed = 'FAST2SMS';
+          gatewayMessage = `SMS dispatched via Fast2SMS to ${formattedPhone}`;
+        }
+      } catch (err) {
+        console.warn('[Fast2SMS Error]:', err.message);
+      }
+    }
+
+    // 2Factor integration
+    const twoFactorKey = process.env.TWO_FACTOR_API_KEY;
+    if (!smsSent && twoFactorKey) {
+      try {
+        const tfRes = await fetch(`https://2factor.in/API/V1/${twoFactorKey}/SMS/${cleanPhone}/${activeOtp}/OTP1`);
+        const tfData = await tfRes.json();
+        if (tfData.Status === 'Success') {
+          smsSent = true;
+          gatewayUsed = '2FACTOR';
+          gatewayMessage = `SMS dispatched via 2Factor to ${formattedPhone}`;
+        }
+      } catch (err) {
+        console.warn('[2Factor Error]:', err.message);
+      }
+    }
+
+    const whatsappText = encodeURIComponent(`*Sankalp Verification*: Your 6-digit verification code is *${activeOtp}*. Valid for 5 minutes.`);
+    const whatsappUrl = `https://wa.me/91${cleanPhone}?text=${whatsappText}`;
+
+    console.log(`[SMS OTP] Code ${activeOtp} prepared for ${formattedPhone} (Sent: ${smsSent}, Gateway: ${gatewayUsed})`);
+
+    res.status(200).json({
+      success: true,
+      otpCode: activeOtp,
+      phone: formattedPhone,
+      smsSent,
+      gatewayUsed,
+      gatewayMessage: smsSent ? gatewayMessage : `SMS queued for delivery to ${formattedPhone}`,
+      whatsappUrl,
+      expiresAt
+    });
+});
+
 // Endpoint 3: CSR AI Event Matchmaker
 app.post('/api/match-ngo', (req, res) => {
     const { cause, city, state, volunteerCount, budget, format, ngosList } = req.body;

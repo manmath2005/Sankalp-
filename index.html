@@ -26,33 +26,78 @@
     <meta name="twitter:description" content="Disaster relief coordination platform connecting verified ground-level NGOs with corporate partners and volunteers." />
     <meta name="twitter:image" content="https://sankalp-zeta.vercel.app/sankalp_logo.png" />
 
+    <!-- PWA & Mobile Icons -->
+    <link rel="manifest" href="/site.webmanifest" />
+    <meta name="theme-color" content="#0B1329" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
     <!-- Schema.org JSON-LD Structured Data for Rich Search Results -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
-      "@type": "NGO",
-      "name": "Sankalp Social Awareness Network",
-      "alternateName": "Sankalp: Connecting Help to Hope",
-      "url": "https://sankalp-zeta.vercel.app",
-      "logo": "https://sankalp-zeta.vercel.app/sankalp_logo.png",
-      "telephone": "+917030403004",
-      "email": "manmathsangave.ece@gmail.com",
-      "founder": {
-        "@type": "Person",
-        "name": "Manmath N. Sangave"
-      },
-      "address": {
-        "@type": "PostalAddress",
-        "streetAddress": "Govt Admin Hub, Sector 12, Cyber City",
-        "addressLocality": "Mumbai",
-        "addressRegion": "Maharashtra",
-        "addressCountry": "IN"
-      },
-      "areaServed": "India",
-      "knowsAbout": ["Disaster Relief Coordination", "CSR Event Management", "Civic Awareness Drives", "Digital Volunteer Certification", "ESG Compliance Reporting"],
-      "nonprofitStatus": "Nonprofit501c3"
+      "@graph": [
+        {
+          "@type": "WebSite",
+          "@id": "https://sankalp-zeta.vercel.app/#website",
+          "url": "https://sankalp-zeta.vercel.app/",
+          "name": "Sankalp: Connecting Help to Hope",
+          "description": "Centralized disaster relief and CSR coordination network connecting verified NGOs, corporate sponsors, and volunteers across India.",
+          "inLanguage": "en-IN",
+          "potentialAction": {
+            "@type": "SearchAction",
+            "target": "https://sankalp-zeta.vercel.app/events?q={search_term_string}",
+            "query-input": "required name=search_term_string"
+          }
+        },
+        {
+          "@type": "NGO",
+          "@id": "https://sankalp-zeta.vercel.app/#organization",
+          "name": "Sankalp Social Awareness Network",
+          "alternateName": "Sankalp: Connecting Help to Hope",
+          "url": "https://sankalp-zeta.vercel.app",
+          "logo": "https://sankalp-zeta.vercel.app/sankalp_logo.png",
+          "image": "https://sankalp-zeta.vercel.app/sankalp_logo.png",
+          "telephone": "+917030403004",
+          "email": "manmathsangave.ece@gmail.com",
+          "founder": {
+            "@type": "Person",
+            "name": "Manmath N. Sangave",
+            "jobTitle": "Founder & Chief Coordinator"
+          },
+          "address": {
+            "@type": "PostalAddress",
+            "streetAddress": "Govt Admin Hub, Sector 12, Cyber City",
+            "addressLocality": "Mumbai",
+            "addressRegion": "Maharashtra",
+            "postalCode": "400051",
+            "addressCountry": "IN"
+          },
+          "areaServed": {
+            "@type": "Country",
+            "name": "India"
+          },
+          "knowsAbout": [
+            "Disaster Relief Coordination",
+            "CSR Event Management",
+            "Blood Donation Drives",
+            "Civic Awareness Programs",
+            "Digital Volunteer Certification",
+            "MCA Section 135 ESG Reporting"
+          ],
+          "award": [
+            "80G Tax Exempt Certified",
+            "12A Income Tax Registered",
+            "NITI Aayog Darpan Verified"
+          ],
+          "nonprofitStatus": "Nonprofit501c3"
+        }
+      ]
     }
     </script>
+
+    <!-- Google Identity Services (GSI) Client -->
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
 
     <!-- Google Fonts: Plus Jakarta Sans & Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">

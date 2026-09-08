@@ -16,6 +16,8 @@ import {
   sendCompanyDriveApprovedEmail,
   sendSosBroadcast
 } from '../utils/emailService';
+import { sendRealOtpSms } from '../utils/smsService';
+import { triggerGoogleAccountChooser } from '../lib/googleAuth';
 import { sendFirebasePhoneOtp, confirmFirebasePhoneOtp } from '../lib/firebase';
 
 
@@ -232,26 +234,36 @@ export const AppProvider = ({ children }) => {
 
     // Compute last10 once so it's accessible in both try and catch blocks
     const last10Digits = phoneDigits.slice(-10) || '';
+    let whatsappUrl = null;
 
     if (verificationChannel === 'MOBILE') {
+      // 1. Dispatch SMS directly to mobile number
+      const smsResult = await sendRealOtpSms(
+        formattedPhone,
+        generatedOtp,
+        `Mobile Registration (+91 ${last10Digits})`
+      );
+      activeOtp = smsResult.otpCode || generatedOtp;
+      whatsappUrl = smsResult.whatsappUrl;
+      dispatchMode = smsResult.mode || 'SMS_GATEWAY_DELIVERED';
+      dispatchMessage = smsResult.message || `SMS verification code dispatched to ${formattedPhone}`;
+
+      // 2. Also try Firebase phone auth confirmation if configured
       try {
         const phoneResult = await sendFirebasePhoneOtp(formattedPhone);
-        confirmationResult = phoneResult.confirmationResult;
-        if (phoneResult.simulatedOtp) {
-          activeOtp = phoneResult.simulatedOtp;
+        if (phoneResult?.confirmationResult) {
+          confirmationResult = phoneResult.confirmationResult;
         }
-        dispatchMode = phoneResult.isMock ? 'SIMULATED_SMS' : 'FIREBASE_SMS_DISPATCHED';
-        dispatchMessage = `SMS verification code dispatched via Firebase to ${formattedPhone}`;
-      } catch (err) {
-        console.warn("Firebase Phone OTP dispatch notice (falling back to email):", err);
-        // Fallback: deliver OTP to registered email since Firebase SMS failed
-        const emailFallback = await sendRealOtpEmail(
-          cleanEmail, name, generatedOtp,
-          `Mobile Registration — OTP via Email (+91 ${last10Digits})`
-        );
-        activeOtp = emailFallback.otpCode || generatedOtp;
-        dispatchMode = emailFallback.mode || 'EMAIL_FALLBACK';
-        dispatchMessage = `SMS delivery failed. OTP sent to your email ${cleanEmail} instead.`;
+      } catch (fbErr) {
+        console.warn("Firebase Phone Auth note:", fbErr.message);
+      }
+
+      // 3. Mirror to email if provided so user has dual access
+      if (cleanEmail) {
+        sendRealOtpEmail(
+          cleanEmail, name, activeOtp,
+          `Mobile Registration Backup OTP (+91 ${last10Digits})`
+        ).catch(() => null);
       }
     } else {
       // Dispatch real email OTP via Gmail backend
@@ -274,17 +286,13 @@ export const AppProvider = ({ children }) => {
       generatedOtp: activeOtp,
       expiresAt: Date.now() + 5 * 60 * 1000,
       isLogin: false,
+      whatsappUrl,
       dispatchMode,
       dispatchMessage
     });
 
-    const targetMsg = (verificationChannel === 'MOBILE' && dispatchMode === 'FIREBASE_SMS_DISPATCHED')
-      ? formattedPhone
-      : cleanEmail;
-    const toastMsg = dispatchMode === 'EMAIL_FALLBACK'
-      ? `SMS unavailable — OTP sent to ${cleanEmail} instead. Check your inbox!`
-      : `Verification code sent to ${targetMsg}! Valid for 5 minutes.`;
-    showToast(toastMsg, 'info');
+    const targetMsg = verificationChannel === 'MOBILE' ? formattedPhone : cleanEmail;
+    showToast(`Verification OTP dispatched to ${targetMsg}! Valid for 5 minutes.`, 'info');
     return { pendingUser, generatedOtp: activeOtp, confirmationResult, verificationChannel };
   };
 
@@ -297,14 +305,39 @@ export const AppProvider = ({ children }) => {
       verificationCode: newOtp
     } : null;
 
-    const emailResult = await sendRealOtpEmail(
-      otpModalData.userEmail || (otpModalData.pendingUser && otpModalData.pendingUser.email),
-      otpModalData.userName || (otpModalData.pendingUser && otpModalData.pendingUser.name) || 'Sankalp Member',
-      newOtp,
-      otpModalData.verificationChannel === 'MOBILE' ? 'Mobile OTP Resend' : 'Email OTP Resend'
-    );
+    let activeOtp = newOtp;
+    let dispatchMode = 'EMAIL';
+    let dispatchMessage = '';
+    let whatsappUrl = otpModalData.whatsappUrl;
 
-    const activeOtp = emailResult.otpCode || newOtp;
+    if (otpModalData.verificationChannel === 'MOBILE') {
+      const smsResult = await sendRealOtpSms(
+        otpModalData.userPhone || otpModalData.pendingUser?.phone,
+        newOtp,
+        'Mobile OTP Resend'
+      );
+      activeOtp = smsResult.otpCode || newOtp;
+      whatsappUrl = smsResult.whatsappUrl;
+      dispatchMode = smsResult.mode;
+      dispatchMessage = smsResult.message;
+
+      // Also mirror to email if available
+      const targetEmail = otpModalData.userEmail || (otpModalData.pendingUser && otpModalData.pendingUser.email);
+      if (targetEmail) {
+        sendRealOtpEmail(targetEmail, otpModalData.userName, activeOtp, 'Mobile OTP Resend (Email Mirror)').catch(() => null);
+      }
+    } else {
+      const emailResult = await sendRealOtpEmail(
+        otpModalData.userEmail || (otpModalData.pendingUser && otpModalData.pendingUser.email),
+        otpModalData.userName || (otpModalData.pendingUser && otpModalData.pendingUser.name) || 'Sankalp Member',
+        newOtp,
+        'Email OTP Resend'
+      );
+      activeOtp = emailResult.otpCode || newOtp;
+      dispatchMode = emailResult.mode;
+      dispatchMessage = emailResult.message;
+    }
+
     if (updatedPendingUser) {
       updatedPendingUser.verificationCode = activeOtp;
     }
@@ -314,8 +347,9 @@ export const AppProvider = ({ children }) => {
       generatedOtp: activeOtp,
       expiresAt: Date.now() + 5 * 60 * 1000,
       pendingUser: updatedPendingUser || otpModalData.pendingUser,
-      dispatchMode: emailResult.mode,
-      dispatchMessage: emailResult.message
+      whatsappUrl,
+      dispatchMode,
+      dispatchMessage
     });
 
     const targetDesc = otpModalData.verificationChannel === 'MOBILE' && otpModalData.userPhone 
@@ -324,25 +358,17 @@ export const AppProvider = ({ children }) => {
     showToast(`New verification code delivered to ${targetDesc}! Valid for 5 minutes.`, 'success');
   };
 
-  // Instant Sign In / Sign Up with Google / Gmail OAuth
+  // Instant Sign In / Sign Up with Google / Gmail OAuth (Pop up all accounts on device)
   const continueWithGoogleOAuth = async (suggestedRole = 'VOLUNTEER') => {
-    // 1. Simulate fast & secure Google Account Picker Dialog
-    const userEnteredEmail = window.prompt(
-      "Sign in with Google / Gmail:\nEnter your Google / Gmail address to continue:", 
-      currentUser?.email || "user@gmail.com"
-    );
+    // 1. Trigger native Google Account Chooser popup
+    const googleProfile = await triggerGoogleAccountChooser();
 
-    if (!userEnteredEmail || !userEnteredEmail.trim()) {
+    if (!googleProfile || !googleProfile.email) {
       return null;
     }
 
-    const cleanEmail = userEnteredEmail.trim().toLowerCase();
-    if (!cleanEmail.includes('@')) {
-      throw new Error("Please enter a valid Google email address.");
-    }
-
-    // Extract name from email prefix or capitalize
-    const autoName = cleanEmail.split('@')[0].replace(/[._-]/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+    const cleanEmail = googleProfile.email.trim().toLowerCase();
+    const autoName = googleProfile.name || cleanEmail.split('@')[0].replace(/[._-]/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
 
     // Check if user already exists
     let existingUser = users.find(u => u.email.toLowerCase() === cleanEmail);
@@ -350,7 +376,7 @@ export const AppProvider = ({ children }) => {
     if (existingUser) {
       // Existing user: sign them in automatically
       loginUserWithSession(existingUser, true);
-      showToast(`Welcome back, ${existingUser.name}! Signed in via Google Gmail.`, 'success');
+      showToast(`Welcome back, ${existingUser.name}! Signed in via Google (${cleanEmail}).`, 'success');
       return existingUser;
     }
 
@@ -372,6 +398,7 @@ export const AppProvider = ({ children }) => {
       status: 'Active',
       isEmailVerified: true,
       authProvider: 'google',
+      avatarUrl: googleProfile.picture || null,
       volunteerId,
       phone: '+91 98000 00000',
       institution: suggestedRole === 'VOLUNTEER' ? 'Independent Community' : 'Corporate Partner',
@@ -676,15 +703,25 @@ export const AppProvider = ({ children }) => {
     const generatedOtp = Math.floor(100000 + Math.random() * 900000).toString();
     const formattedPhone = `+91 ${last10.slice(0, 5)} ${last10.slice(5)}`;
 
-    // Deliver OTP via real serverless email to user's registered email
-    const emailResult = await sendRealOtpEmail(
-      user.email,
-      user.name,
+    // 1. Dispatch SMS directly to mobile phone via SMS gateway / WhatsApp fallback
+    const smsResult = await sendRealOtpSms(
+      last10,
       generatedOtp,
-      `Mobile Phone Login Verification (+91 ${last10})`
+      `Mobile Login (+91 ${last10})`
     );
 
-    const activeOtp = emailResult.otpCode || generatedOtp;
+    const activeOtp = smsResult.otpCode || generatedOtp;
+
+    // 2. Also deliver OTP via real serverless email to user's registered email as backup
+    let emailResult = null;
+    if (user.email) {
+      emailResult = await sendRealOtpEmail(
+        user.email,
+        user.name,
+        activeOtp,
+        `Mobile Phone Login Verification (+91 ${last10})`
+      ).catch(() => null);
+    }
 
     // Open OTP Verification Modal configured for Mobile Login
     setOtpModalData({
@@ -692,15 +729,17 @@ export const AppProvider = ({ children }) => {
       userEmail: user.email,
       userName: user.name,
       pendingUser: user,
+      verificationChannel: 'MOBILE',
       generatedOtp: activeOtp,
       expiresAt: Date.now() + 5 * 60 * 1000,
       isLogin: true,
-      dispatchMode: emailResult.mode,
-      dispatchMessage: emailResult.message
+      whatsappUrl: smsResult.whatsappUrl,
+      dispatchMode: smsResult.mode || 'SMS_GATEWAY_DELIVERED',
+      dispatchMessage: smsResult.message || `SMS verification code dispatched to ${formattedPhone}`
     });
 
-    showToast(`6-Digit OTP generated & dispatched for ${formattedPhone}! Valid for 5 minutes.`, 'info');
-    return { user, generatedOtp, formattedPhone, emailResult };
+    showToast(`Verification OTP dispatched to ${formattedPhone}! Valid for 5 minutes.`, 'info');
+    return { user, generatedOtp: activeOtp, formattedPhone, emailResult, smsResult };
   };
 
   // Authenticate User via Firebase Phone OTP Verification Result
