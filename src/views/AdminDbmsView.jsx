@@ -491,7 +491,8 @@ export const AdminDbmsView = () => {
           {/* Volunteers Data Table */}
           <div className="glass-panel rounded-2xl border border-slate-200 overflow-hidden">
             <div className="overflow-x-auto">
-              <table className="w-full text-left border-collapse">
+              <div className="overflow-x-auto w-full rounded-xl border border-slate-200 shadow-sm">
+                <table className="w-full text-left border-collapse min-w-[800px]">
                 <thead>
                   <tr className="bg-slate-100 text-slate-600 text-[11px] font-extrabold uppercase border-b border-slate-200">
                     <th className="p-3">ID</th>
@@ -531,6 +532,7 @@ export const AdminDbmsView = () => {
                   ))}
                 </tbody>
               </table>
+              </div>
             </div>
           </div>
 
@@ -555,7 +557,8 @@ export const AdminDbmsView = () => {
 
           <div className="glass-panel rounded-2xl border border-slate-200 overflow-hidden">
             <div className="overflow-x-auto">
-              <table className="w-full text-left border-collapse">
+              <div className="overflow-x-auto w-full rounded-xl border border-slate-200 shadow-sm">
+                <table className="w-full text-left border-collapse min-w-[800px]">
                 <thead>
                   <tr className="bg-slate-100 text-slate-600 text-[11px] font-extrabold uppercase border-b border-slate-200">
                     <th className="p-3">ID</th>
@@ -617,6 +620,7 @@ export const AdminDbmsView = () => {
                   ))}
                 </tbody>
               </table>
+              </div>
             </div>
           </div>
         </div>
@@ -628,7 +632,8 @@ export const AdminDbmsView = () => {
         <div className="space-y-4">
           <div className="glass-panel rounded-2xl border border-slate-200 overflow-hidden">
             <div className="overflow-x-auto">
-              <table className="w-full text-left border-collapse">
+              <div className="overflow-x-auto w-full rounded-xl border border-slate-200 shadow-sm">
+                <table className="w-full text-left border-collapse min-w-[800px]">
                 <thead>
                   <tr className="bg-slate-100 text-slate-600 text-[11px] font-extrabold uppercase border-b border-slate-200">
                     <th className="p-3">Req ID</th>
@@ -710,6 +715,7 @@ export const AdminDbmsView = () => {
                   ))}
                 </tbody>
               </table>
+              </div>
             </div>
           </div>
 
@@ -858,7 +864,8 @@ export const AdminDbmsView = () => {
         <div className="space-y-6">
           <div className="glass-panel rounded-2xl border border-slate-200 overflow-hidden">
             <div className="overflow-x-auto">
-              <table className="w-full text-left border-collapse">
+              <div className="overflow-x-auto w-full rounded-xl border border-slate-200 shadow-sm">
+                <table className="w-full text-left border-collapse min-w-[800px]">
                 <thead>
                   <tr className="bg-slate-100 text-slate-600 text-[11px] font-extrabold uppercase border-b border-slate-200">
                     <th className="p-3">User ID</th>
@@ -914,6 +921,7 @@ export const AdminDbmsView = () => {
                   })}
                 </tbody>
               </table>
+              </div>
             </div>
           </div>
         </div>

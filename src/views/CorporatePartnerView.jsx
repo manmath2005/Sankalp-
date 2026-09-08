@@ -193,11 +193,11 @@ export const CorporatePartnerView = ({ onNavigate }) => {
           </div>
 
           {/* NGO Cards Grid */}
-          <div className="grid md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" aria-live="polite">
             {filteredNgos.map((ngo, idx) => (
               <div 
                 key={ngo.id}
-                className={`glass-panel rounded-3xl border border-slate-200 shadow-sm hover-lift overflow-hidden flex flex-col justify-between animate-float-up stagger-${(idx % 6) + 1}`}
+                className={`glass-panel rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md transition-all duration-200 hover:-translate-y-1 overflow-hidden flex flex-col justify-between animate-float-up stagger-${(idx % 6) + 1}`}
               >
                 <div className="p-6 space-y-4">
                   
