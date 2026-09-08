@@ -42,13 +42,16 @@ export const EsgReportGeneratorView = ({ onNavigate }) => {
       financialSummary: {
         csrBudgetMandatedINR: 12500000,
         fundsDeployedINR: 12150000,
+        csrFundsDeployedINR: 12150000,
         unspentFundsINR: 350000,
         deploymentPercentage: 97.2
       },
       impactSummary: {
         totalVolunteerHoursLogged: 4820,
         activeEmployeeVolunteers: 640,
+        totalEmployeesParticipated: 640,
         communityCitizensImpacted: 85000,
+        directBeneficiariesImpacted: 85000,
         verifiedDrivesConducted: 42,
         darpanNgoPartnerships: 8
       },
@@ -215,7 +218,7 @@ export const EsgReportGeneratorView = ({ onNavigate }) => {
             <Landmark className="w-4 h-4 text-indigo-600" />
           </div>
           <p className="text-2xl font-black text-slate-900 font-mono">
-            ₹{(financialSummary.csrFundsDeployedINR / 10000000).toFixed(2)} Cr
+            ₹{(((financialSummary?.csrFundsDeployedINR ?? financialSummary?.fundsDeployedINR) || 0) / 10000000).toFixed(2)} Cr
           </p>
           <div className="flex items-center gap-1.5 text-[11px] font-bold text-emerald-600">
             <CheckCircle2 className="w-3.5 h-3.5" />
@@ -229,10 +232,10 @@ export const EsgReportGeneratorView = ({ onNavigate }) => {
             <Clock className="w-4 h-4 text-sky-600" />
           </div>
           <p className="text-2xl font-black text-slate-900 font-mono">
-            {impactSummary.totalVolunteerHoursLogged.toLocaleString()} hrs
+            {(impactSummary?.totalVolunteerHoursLogged || 0).toLocaleString()} hrs
           </p>
           <div className="flex items-center gap-1.5 text-[11px] font-bold text-slate-600">
-            <span>Across {impactSummary.totalEmployeesParticipated.toLocaleString()} Employees</span>
+            <span>Across {(impactSummary?.totalEmployeesParticipated || impactSummary?.activeEmployeeVolunteers || 0).toLocaleString()} Employees</span>
           </div>
         </div>
 
@@ -242,7 +245,7 @@ export const EsgReportGeneratorView = ({ onNavigate }) => {
             <Users className="w-4 h-4 text-emerald-600" />
           </div>
           <p className="text-2xl font-black text-slate-900 font-mono">
-            {impactSummary.directBeneficiariesImpacted.toLocaleString()}+
+            {(impactSummary?.directBeneficiariesImpacted || impactSummary?.communityCitizensImpacted || 0).toLocaleString()}+
           </p>
           <div className="flex items-center gap-1.5 text-[11px] font-bold text-emerald-600">
             <span>Verified On-ground Reach</span>
