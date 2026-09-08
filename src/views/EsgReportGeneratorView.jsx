@@ -18,7 +18,8 @@ import {
   CheckCircle2,
   RefreshCw,
   Landmark,
-  Layers
+  Layers,
+  Lock
 } from 'lucide-react';
 import { useApp } from '../context/AppContext';
 
@@ -29,31 +30,44 @@ export const EsgReportGeneratorView = ({ onNavigate }) => {
   const [activeTab, setActiveTab] = useState('overview'); // 'overview', 'mca-filing', 'sdg', 'raw-data'
   const [selectedFiscalYear, setSelectedFiscalYear] = useState('FY 2025-26');
 
+  const isCompanyUser = currentUser && (currentUser.role === 'COMPANY_PARTNER' || currentUser.role === 'SUPER_ADMIN');
+
   const generateFallbackReport = () => {
-    const compName = currentUser?.companyName || currentUser?.name || 'Tata Consultancy Services Ltd';
+    const compName = isCompanyUser 
+      ? (currentUser?.companyName || currentUser?.name || 'Tata Consultancy Services Ltd')
+      : 'Sample Enterprise Corporation (Preview Mode)';
+      
+    const cin = isCompanyUser 
+      ? (currentUser?.cin || 'L72200MH1995PLC085642')
+      : 'U72200MH2024PTC999999';
+
+    const auditorNote = isCompanyUser
+      ? 'Statutory MCA Section 135 & BRSR Impact Dossier'
+      : 'Sample Illustrative MCA Section 135 & BRSR Impact Dossier (Sign In as Corporate Partner for Live Data & Exports)';
+
     return {
       meta: {
         companyName: compName,
-        cinNumber: 'L72200MH1995PLC085642',
+        cinNumber: cin,
         reportingPeriod: selectedFiscalYear,
         generatedAt: new Date().toISOString().split('T')[0],
-        auditorNote: 'Statutory MCA Section 135 & BRSR Impact Dossier'
+        auditorNote
       },
       financialSummary: {
-        csrBudgetMandatedINR: 12500000,
-        fundsDeployedINR: 12150000,
-        csrFundsDeployedINR: 12150000,
+        csrBudgetMandatedINR: isCompanyUser ? 12500000 : 10000000,
+        fundsDeployedINR: isCompanyUser ? 12150000 : 9650000,
+        csrFundsDeployedINR: isCompanyUser ? 12150000 : 9650000,
         unspentFundsINR: 350000,
-        deploymentPercentage: 97.2
+        deploymentPercentage: isCompanyUser ? 97.2 : 96.5
       },
       impactSummary: {
-        totalVolunteerHoursLogged: 4820,
-        activeEmployeeVolunteers: 640,
-        totalEmployeesParticipated: 640,
-        communityCitizensImpacted: 85000,
-        directBeneficiariesImpacted: 85000,
-        verifiedDrivesConducted: 42,
-        darpanNgoPartnerships: 8
+        totalVolunteerHoursLogged: isCompanyUser ? 4820 : 3420,
+        activeEmployeeVolunteers: isCompanyUser ? 640 : 450,
+        totalEmployeesParticipated: isCompanyUser ? 640 : 450,
+        communityCitizensImpacted: isCompanyUser ? 85000 : 52000,
+        directBeneficiariesImpacted: isCompanyUser ? 85000 : 52000,
+        verifiedDrivesConducted: isCompanyUser ? 42 : 28,
+        darpanNgoPartnerships: isCompanyUser ? 8 : 6
       },
       sdgBreakdown: [
         { sdg: 'SDG 4: Quality Education', percentage: 38, fundsINR: 4617000 },
@@ -62,9 +76,9 @@ export const EsgReportGeneratorView = ({ onNavigate }) => {
         { sdg: 'SDG 2: Zero Hunger & Food Logistics', percentage: 12, fundsINR: 1458000 }
       ],
       partnerNgos: [
-        { name: 'Sankalp Social Foundation', darpanId: 'MH/2018/019482', projectsConducted: 18, rating: 4.9 },
-        { name: 'Pratham Education Foundation', darpanId: 'MH/2009/0002148', projectsConducted: 12, rating: 4.9 },
-        { name: 'The Akshaya Patra Foundation', darpanId: 'KA/2009/0009858', projectsConducted: 12, rating: 4.9 }
+        { name: 'Sankalp Social Foundation', darpanId: 'MH/2018/019482', projectsConducted: 18, rating: 4.9, deployedFundsINR: 3200000, complianceStatus: 'Compliant' },
+        { name: 'Pratham Education Foundation', darpanId: 'MH/2009/0002148', projectsConducted: 12, rating: 4.9, deployedFundsINR: 2800000, complianceStatus: 'Compliant' },
+        { name: 'The Akshaya Patra Foundation', darpanId: 'KA/2009/0009858', projectsConducted: 12, rating: 4.9, deployedFundsINR: 2500000, complianceStatus: 'Compliant' }
       ],
       monthlyMetrics: [
         { month: 'Apr', fundsDeployedINR: 950000, volunteerHours: 380 },
@@ -76,21 +90,33 @@ export const EsgReportGeneratorView = ({ onNavigate }) => {
         { month: 'Oct', fundsDeployedINR: 1150000, volunteerHours: 440 },
         { month: 'Nov', fundsDeployedINR: 980000, volunteerHours: 370 },
         { month: 'Dec', fundsDeployedINR: 1320000, volunteerHours: 510 },
-        { month: 'Jan', fundsDeployedINR: 890000, volunteerHours: 340 },
+        { month: 'Jan', fundsINR: 890000, fundsDeployedINR: 890000, volunteerHours: 340 },
         { month: 'Feb', fundsDeployedINR: 1050000, volunteerHours: 380 },
         { month: 'Mar', fundsDeployedINR: 860000, volunteerHours: 310 }
       ],
-      rawParticipationLedger: [
+      rawParticipationLedger: isCompanyUser ? [
         { timestamp: '2026-08-14 10:30', employeeId: 'EMP-9021', name: 'Siddharth Rao', dept: 'Enterprise Cloud', event: 'Miyawaki Forest Plantation Drive', hours: 6, status: 'Verified & Audited' },
         { timestamp: '2026-08-14 10:30', employeeId: 'EMP-9044', name: 'Neha Deshmukh', dept: 'AI & Data Platforms', event: 'Miyawaki Forest Plantation Drive', hours: 6, status: 'Verified & Audited' },
         { timestamp: '2026-07-20 09:00', employeeId: 'EMP-8812', name: 'Aditya Kulkarni', dept: 'Fintech Solutions', event: 'PM POSHAN Mega-Kitchen Meal Packing', hours: 8, status: 'Verified & Audited' },
         { timestamp: '2026-06-18 11:15', employeeId: 'EMP-7734', name: 'Pooja Iyer', dept: 'HR & People Operations', event: 'Govt School Cyber Hygiene Workshop', hours: 5, status: 'Verified & Audited' }
+      ] : [
+        { timestamp: '2026-08-14 10:30', employeeId: 'SAMPLE-001', name: 'Sample Employee A', dept: 'Sample Operations', event: 'Miyawaki Forest Plantation (Sample)', hours: 6, status: 'Illustrative Preview' },
+        { timestamp: '2026-08-14 10:30', employeeId: 'SAMPLE-002', name: 'Sample Employee B', dept: 'Sample Engineering', event: 'Miyawaki Forest Plantation (Sample)', hours: 6, status: 'Illustrative Preview' },
+        { timestamp: '2026-07-20 09:00', employeeId: 'SAMPLE-003', name: 'Sample Employee C', dept: 'Sample Human Resources', event: 'Meal Packing Drive (Sample)', hours: 8, status: 'Illustrative Preview' },
+        { timestamp: '2026-06-18 11:15', employeeId: 'SAMPLE-004', name: 'Sample Employee D', dept: 'Sample Finance', event: 'Cyber Hygiene Drive (Sample)', hours: 5, status: 'Illustrative Preview' }
       ]
     };
   };
 
   const fetchReport = async () => {
     setLoading(true);
+    // For non-signed in users, immediately use sample demonstration data
+    if (!isCompanyUser) {
+      setReportData(generateFallbackReport());
+      setLoading(false);
+      return;
+    }
+
     try {
       const res = await fetch('/api/corporate/reports/csr', {
         method: 'POST',
@@ -118,13 +144,23 @@ export const EsgReportGeneratorView = ({ onNavigate }) => {
 
   useEffect(() => {
     fetchReport();
-  }, [selectedFiscalYear]);
+  }, [selectedFiscalYear, currentUser]);
 
   const handlePrintPdf = () => {
+    if (!isCompanyUser) {
+      showToast("Download restricted: Sign in as Corporate Partner to export official PDF reports.", "error");
+      onNavigate('company-login');
+      return;
+    }
     window.print();
   };
 
   const handleExportCsv = () => {
+    if (!isCompanyUser) {
+      showToast("Export restricted: Sign in as Corporate Partner to download audit CSV ledgers.", "error");
+      onNavigate('company-login');
+      return;
+    }
     if (!reportData?.rawParticipationLedger) return;
     const headers = ["Timestamp", "Employee ID", "Employee Name", "Department", "Event Name", "Volunteer Hours", "Verification Status"];
     const rows = reportData.rawParticipationLedger.map(item => [
@@ -165,6 +201,36 @@ export const EsgReportGeneratorView = ({ onNavigate }) => {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8 text-left page-enter print:p-0 print:m-0">
       
+      {/* Sample Preview Mode Banner for Public Users */}
+      {!isCompanyUser && (
+        <div className="relative overflow-hidden rounded-3xl bg-amber-950/30 backdrop-blur-xl border border-amber-500/40 p-5 shadow-xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 print:hidden">
+          <div className="flex items-center gap-3.5">
+            <div className="p-3 rounded-2xl bg-amber-500/10 text-amber-400 border border-amber-500/30 shrink-0">
+              <Lock className="w-6 h-6" />
+            </div>
+            <div>
+              <div className="flex items-center gap-2 flex-wrap">
+                <span className="text-xs font-black text-amber-400 uppercase tracking-wider">
+                  Sample Compliance Preview Mode
+                </span>
+                <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-900 text-slate-300 border border-slate-700">
+                  Official Downloads Locked
+                </span>
+              </div>
+              <p className="text-xs text-amber-200/90 mt-0.5">
+                Displaying illustrative sample CSR metrics. Official statutory PDF, Excel & CSV filing dossiers are available exclusively to verified institutional partners after sign-in.
+              </p>
+            </div>
+          </div>
+          <button
+            onClick={() => onNavigate('company-login')}
+            className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-slate-950 font-black text-xs shadow-lg shadow-amber-500/20 press-effect shrink-0 flex items-center gap-2"
+          >
+            <Building2 className="w-4 h-4" /> Sign In as Corporate Partner
+          </button>
+        </div>
+      )}
+
       {/* 1. Header Banner & Actions - Luminous Horizon Glass */}
       <div className="relative overflow-hidden rounded-3xl bg-slate-900/85 backdrop-blur-2xl border border-slate-800/90 p-8 shadow-2xl flex flex-col md:flex-row md:items-center justify-between gap-6 print:hidden">
         <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-amber-500 via-emerald-400 to-sky-500 opacity-90" />
@@ -173,7 +239,7 @@ export const EsgReportGeneratorView = ({ onNavigate }) => {
         <div className="space-y-2 max-w-2xl">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-950/80 border border-emerald-500/40 text-emerald-300 text-xs font-black uppercase tracking-wider">
             <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
-            MCA Section 135 & BRSR Impact Ready
+            {isCompanyUser ? "MCA Section 135 & BRSR Impact Ready" : "MCA Section 135 & BRSR Impact (Sample Preview)"}
           </div>
           <h1 className="text-2xl sm:text-3xl font-black tracking-tight text-white">
             One-Click Corporate CSR & ESG Annual Report Generator
@@ -194,21 +260,34 @@ export const EsgReportGeneratorView = ({ onNavigate }) => {
             <option value="FY 2024-25" className="bg-slate-900 text-white">FY 2024-25 (Audited)</option>
           </select>
 
-          <button
-            onClick={handleExportCsv}
-            className="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-xs font-bold transition-all flex items-center gap-2 press-effect text-white shadow-sm"
-          >
-            <FileSpreadsheet className="w-4 h-4 text-emerald-400" />
-            <span>Export Excel/CSV</span>
-          </button>
+          {!isCompanyUser ? (
+            <button
+              onClick={() => onNavigate('company-login')}
+              className="px-5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-amber-500/40 text-amber-400 text-xs font-black transition-all flex items-center gap-2 press-effect shadow-md"
+              title="Sign in as Corporate Partner to export official PDF/Excel reports"
+            >
+              <Lock className="w-4 h-4 text-amber-400" />
+              <span>Sign In to Export PDF/CSV</span>
+            </button>
+          ) : (
+            <>
+              <button
+                onClick={handleExportCsv}
+                className="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-xs font-bold transition-all flex items-center gap-2 press-effect text-white shadow-sm"
+              >
+                <FileSpreadsheet className="w-4 h-4 text-emerald-400" />
+                <span>Export Excel/CSV</span>
+              </button>
 
-          <button
-            onClick={handlePrintPdf}
-            className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-xs font-black uppercase tracking-wider text-slate-950 shadow-lg shadow-amber-500/20 transition-all flex items-center gap-2 press-effect"
-          >
-            <Printer className="w-4 h-4" />
-            <span>Generate Official PDF</span>
-          </button>
+              <button
+                onClick={handlePrintPdf}
+                className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-xs font-black uppercase tracking-wider text-slate-950 shadow-lg shadow-amber-500/20 transition-all flex items-center gap-2 press-effect"
+              >
+                <Printer className="w-4 h-4" />
+                <span>Generate Official PDF</span>
+              </button>
+            </>
+          )}
         </div>
       </div>
 
@@ -381,12 +460,22 @@ export const EsgReportGeneratorView = ({ onNavigate }) => {
             </h3>
             <p className="text-xs text-slate-400">Verifiable employee attendance and pro-bono participation logs</p>
           </div>
-          <button
-            onClick={handleExportCsv}
-            className="text-xs font-bold text-sky-400 hover:text-sky-300 flex items-center gap-1"
-          >
-            <Download className="w-3.5 h-3.5" /> Download Full CSV
-          </button>
+          {isCompanyUser ? (
+            <button
+              onClick={handleExportCsv}
+              className="text-xs font-bold text-sky-400 hover:text-sky-300 flex items-center gap-1"
+            >
+              <Download className="w-3.5 h-3.5" /> Download Full CSV
+            </button>
+          ) : (
+            <button
+              onClick={() => onNavigate('company-login')}
+              className="text-xs font-bold text-amber-400 hover:text-amber-300 flex items-center gap-1.5 bg-amber-950/40 px-3 py-1.5 rounded-xl border border-amber-500/30 transition-all press-effect shadow-xs"
+              title="Sign in as Corporate Partner to download audit CSV ledgers"
+            >
+              <Lock className="w-3.5 h-3.5 text-amber-400" /> Sign In to Export Full CSV
+            </button>
+          )}
         </div>
 
         <div className="overflow-x-auto">

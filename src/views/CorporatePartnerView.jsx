@@ -61,24 +61,24 @@ export const CorporatePartnerView = ({ onNavigate }) => {
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8 text-left page-enter">
       
       {/* Welcome / Header Banner - Luminous Horizon Glass */}
-      <div className="relative overflow-hidden rounded-3xl bg-slate-900/85 backdrop-blur-2xl border border-slate-800/90 p-6 sm:p-8 shadow-2xl flex flex-col md:flex-row md:items-center justify-between gap-6">
+      <div className="relative overflow-hidden rounded-3xl bg-slate-900/85 backdrop-blur-2xl border border-slate-800/90 p-6 sm:p-8 shadow-2xl flex flex-col lg:flex-row lg:items-center justify-between gap-6">
         <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-amber-500 via-emerald-400 to-sky-500 opacity-90" />
         <div className="absolute -top-20 -left-20 w-72 h-72 bg-sky-500/10 rounded-full blur-3xl pointer-events-none" />
 
-        <div className="flex items-center gap-4">
+        <div className="flex items-start sm:items-center gap-4 flex-1 min-w-0 pr-0 lg:pr-4">
           <div className="w-14 h-14 rounded-2xl bg-gradient-to-tr from-amber-500 to-emerald-400 text-slate-950 flex items-center justify-center font-black text-xl shadow-lg shadow-amber-500/20 shrink-0">
             {isCompanyUser ? ((currentUser?.companyName || currentUser?.name || currentUser?.email || 'C').charAt(0).toUpperCase()) : <Building2 className="w-7 h-7" />}
           </div>
-          <div>
-            <div className="flex items-center gap-2 flex-wrap">
-              <h1 className="text-xl sm:text-2xl font-black text-white">
+          <div className="min-w-0 flex-1">
+            <div className="flex items-center gap-2.5 flex-wrap">
+              <h1 className="text-xl sm:text-2xl lg:text-3xl font-black text-white tracking-tight">
                 {isCompanyUser ? (currentUser?.companyName || currentUser?.name || 'Institutional Partner') : "Host an Institutional Awareness Drive"}
               </h1>
               <HorizonBadge variant={isCompanyUser ? "emerald" : "sky"}>
                 {isCompanyUser ? "Verified Institutional Partner" : "Govt Offices • MNCs • Colleges • Schools"}
               </HorizonBadge>
             </div>
-            <p className="text-xs sm:text-sm text-slate-300 mt-1">
+            <p className="text-xs sm:text-sm text-slate-300 mt-1.5 leading-relaxed max-w-3xl">
               {isCompanyUser 
                 ? `${currentUser.email} • Select an accredited NGO below to conduct verified awareness drives`
                 : "Browse verified 80G/12A accredited NGOs, inspect past audit tracks, and submit event drive requests with official HR/CEO sanction letters."
@@ -87,70 +87,96 @@ export const CorporatePartnerView = ({ onNavigate }) => {
           </div>
         </div>
 
-        <div className="flex items-center gap-2.5 shrink-0 flex-wrap">
-          {!isCompanyUser && (
-            <button
-              onClick={() => onNavigate('company-login')}
-              className="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-bold text-xs border border-slate-700 shadow-sm press-effect flex items-center gap-1.5"
-            >
-              <Building2 className="w-4 h-4 text-sky-400" /> Sign In as Institution
-            </button>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 shrink-0 w-full lg:w-auto min-w-0 sm:min-w-[340px] max-w-md">
+          {!isCompanyUser ? (
+            <>
+              <button
+                onClick={() => onNavigate('company-login')}
+                className="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-bold text-xs border border-slate-700 shadow-sm press-effect flex items-center justify-center gap-1.5"
+              >
+                <Building2 className="w-4 h-4 text-sky-400" /> Sign In as Institution
+              </button>
+              <button
+                onClick={() => { setSelectedTargetNgo(null); setModalOpen(true); }}
+                className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 font-black text-xs shadow-md press-effect flex items-center justify-center gap-2"
+              >
+                <Send className="w-4 h-4" /> Book Event Request
+              </button>
+              <button
+                onClick={() => onNavigate('esg-report')}
+                className="px-4 py-2.5 rounded-xl bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-400 font-bold text-xs border border-emerald-500/40 press-effect flex items-center justify-center gap-1.5"
+              >
+                <ShieldCheck className="w-4 h-4" /> ESG Report (Preview)
+              </button>
+              <button
+                onClick={() => onNavigate('matchmaker')}
+                className="px-4 py-2.5 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 text-amber-400 font-bold text-xs border border-amber-500/40 press-effect flex items-center justify-center gap-1.5"
+              >
+                <Sparkles className="w-4 h-4" /> AI CSR Matchmaker
+              </button>
+            </>
+          ) : (
+            <>
+              <button
+                onClick={() => onNavigate('esg-report')}
+                className="px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-black text-xs shadow-lg shadow-emerald-500/20 press-effect flex items-center justify-center gap-1.5"
+              >
+                <ShieldCheck className="w-4 h-4" /> 1-Click ESG/MCA Report
+              </button>
+              <button
+                onClick={() => onNavigate('matchmaker')}
+                className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-slate-950 font-black text-xs shadow-lg shadow-amber-500/20 press-effect flex items-center justify-center gap-1.5"
+              >
+                <Sparkles className="w-4 h-4" /> AI CSR Matchmaker
+              </button>
+              <button
+                onClick={() => { setSelectedTargetNgo(null); setModalOpen(true); }}
+                className="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-bold text-xs border border-slate-700 shadow-sm press-effect flex items-center justify-center gap-2 col-span-1 sm:col-span-2"
+              >
+                <Send className="w-4 h-4 text-emerald-400" /> Book General Event Request
+              </button>
+            </>
           )}
-
-          <button
-            onClick={() => onNavigate('esg-report')}
-            className="px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-black text-xs shadow-lg shadow-emerald-500/20 press-effect flex items-center gap-1.5"
-          >
-            <ShieldCheck className="w-4 h-4" /> 1-Click ESG/MCA Report
-          </button>
-
-          <button
-            onClick={() => onNavigate('matchmaker')}
-            className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-slate-950 font-black text-xs shadow-lg shadow-amber-500/20 press-effect flex items-center gap-1.5"
-          >
-            <Sparkles className="w-4 h-4" /> AI CSR Matchmaker
-          </button>
-          
-          <button
-            onClick={() => { setSelectedTargetNgo(null); setModalOpen(true); }}
-            className="px-5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-bold text-xs border border-slate-700 shadow-sm press-effect flex items-center gap-2"
-          >
-            <Send className="w-4 h-4 text-emerald-400" /> Book General Event Request
-          </button>
         </div>
       </div>
 
       {/* Section Navigation Tabs */}
-      <div className="flex flex-wrap gap-2">
-        <button 
-          onClick={() => onNavigate('esg-report')}
-          className="px-4 py-2.5 rounded-xl text-xs font-black transition-all press-effect flex items-center gap-1.5 bg-emerald-950/60 text-emerald-300 border border-emerald-500/40 hover:bg-emerald-900/60"
-        >
-          <ShieldCheck className="w-4 h-4 text-emerald-400" /> MCA Section 135 & ESG Report Generator
-        </button>
-        <button 
-          onClick={() => onNavigate('matchmaker')}
-          className="px-4 py-2.5 rounded-xl text-xs font-black transition-all press-effect flex items-center gap-1.5 bg-amber-950/60 text-amber-300 border border-amber-500/40 hover:bg-amber-900/60"
-        >
-          <Sparkles className="w-4 h-4 text-amber-400" /> AI Event Matchmaker Wizard
-        </button>
+      <div className="flex flex-wrap items-center gap-2">
         <button 
           onClick={() => setActiveSection('directory')} 
           className={`px-4 py-2.5 rounded-xl text-xs font-extrabold transition-all press-effect flex items-center gap-1.5 ${activeSection === 'directory' ? 'bg-gradient-to-r from-amber-500 via-emerald-500 to-sky-500 text-slate-950 font-black shadow-lg' : 'bg-slate-900/80 text-slate-300 border border-slate-800 hover:bg-slate-800'}`}
         >
           <Globe2 className="w-4 h-4" /> Browse NGOs for Event Conduction ({ngos?.length || 0})
         </button>
+
+        {isCompanyUser && (
+          <>
+            <button 
+              onClick={() => setActiveSection('history')} 
+              className={`px-4 py-2.5 rounded-xl text-xs font-extrabold transition-all press-effect flex items-center gap-1.5 ${activeSection === 'history' ? 'bg-gradient-to-r from-amber-500 via-emerald-500 to-sky-500 text-slate-950 font-black shadow-lg' : 'bg-slate-900/80 text-slate-300 border border-slate-800 hover:bg-slate-800'}`}
+            >
+              <Calendar className="w-4 h-4" /> Past Conducted Drives & History ({pastEvents?.length || 0})
+            </button>
+            <button 
+              onClick={() => setActiveSection('tracker')} 
+              className={`px-4 py-2.5 rounded-xl text-xs font-extrabold transition-all press-effect flex items-center gap-1.5 ${activeSection === 'tracker' ? 'bg-gradient-to-r from-amber-500 via-emerald-500 to-sky-500 text-slate-950 font-black shadow-lg' : 'bg-slate-900/80 text-slate-300 border border-slate-800 hover:bg-slate-800'}`}
+            >
+              <FileText className="w-4 h-4" /> My Event Requests ({corporateRequests?.length || 0})
+            </button>
+          </>
+        )}
+
         <button 
-          onClick={() => setActiveSection('history')} 
-          className={`px-4 py-2.5 rounded-xl text-xs font-extrabold transition-all press-effect flex items-center gap-1.5 ${activeSection === 'history' ? 'bg-gradient-to-r from-amber-500 via-emerald-500 to-sky-500 text-slate-950 font-black shadow-lg' : 'bg-slate-900/80 text-slate-300 border border-slate-800 hover:bg-slate-800'}`}
+          onClick={() => onNavigate('esg-report')}
+          className="px-4 py-2.5 rounded-xl text-xs font-black transition-all press-effect flex items-center gap-1.5 bg-emerald-950/60 text-emerald-300 border border-emerald-500/40 hover:bg-emerald-900/60 sm:ml-auto"
         >
-          <Calendar className="w-4 h-4" /> Past Conducted Drives & History ({pastEvents?.length || 0})
+          <ShieldCheck className="w-4 h-4 text-emerald-400" /> {isCompanyUser ? 'MCA Section 135 & ESG Report' : 'ESG Report (Preview)'}
         </button>
         <button 
-          onClick={() => setActiveSection('tracker')} 
-          className={`px-4 py-2.5 rounded-xl text-xs font-extrabold transition-all press-effect flex items-center gap-1.5 ${activeSection === 'tracker' ? 'bg-gradient-to-r from-amber-500 via-emerald-500 to-sky-500 text-slate-950 font-black shadow-lg' : 'bg-slate-900/80 text-slate-300 border border-slate-800 hover:bg-slate-800'}`}
+          onClick={() => onNavigate('matchmaker')}
+          className="px-4 py-2.5 rounded-xl text-xs font-black transition-all press-effect flex items-center gap-1.5 bg-amber-950/60 text-amber-300 border border-amber-500/40 hover:bg-amber-900/60"
         >
-          <FileText className="w-4 h-4" /> My Event Requests ({corporateRequests?.length || 0})
+          <Sparkles className="w-4 h-4 text-amber-400" /> AI CSR Matchmaker
         </button>
       </div>
 
@@ -291,7 +317,7 @@ export const CorporatePartnerView = ({ onNavigate }) => {
       )}
 
       {/* SECTION 2: PAST EVENT HISTORY & AUDIT */}
-      {activeSection === 'history' && (
+      {activeSection === 'history' && isCompanyUser && (
         <div className="space-y-6 animate-float-up">
           <div className="relative overflow-hidden rounded-3xl bg-slate-900/80 backdrop-blur-xl border border-slate-800/90 p-6 space-y-2">
             <h2 className="text-lg font-black text-white flex items-center gap-2">
@@ -356,7 +382,7 @@ export const CorporatePartnerView = ({ onNavigate }) => {
       )}
 
       {/* SECTION 3: MY SUBMITTED REQUESTS */}
-      {activeSection === 'tracker' && (
+      {activeSection === 'tracker' && isCompanyUser && (
         <div className="space-y-4 animate-float-up">
           <div className="flex items-center justify-between">
             <div>
@@ -411,6 +437,33 @@ export const CorporatePartnerView = ({ onNavigate }) => {
               <p className="text-xs text-slate-400">Browse the NGO directory above, choose an organization, and submit your first awareness drive request!</p>
             </div>
           )}
+        </div>
+      )}
+
+      {/* Access Gate Fallback for Public Non-Signed-In Users */}
+      {!isCompanyUser && (activeSection === 'history' || activeSection === 'tracker') && (
+        <div className="relative overflow-hidden rounded-3xl bg-slate-900/85 backdrop-blur-xl border border-slate-800/90 p-12 text-center space-y-4 max-w-2xl mx-auto shadow-2xl animate-float-up">
+          <div className="w-16 h-16 rounded-2xl bg-amber-500/10 border border-amber-500/30 text-amber-400 flex items-center justify-center mx-auto shadow-lg">
+            <Building2 className="w-8 h-8" />
+          </div>
+          <h3 className="text-xl font-black text-white">Institutional Partner Sign-In Required</h3>
+          <p className="text-xs text-slate-300 max-w-md mx-auto leading-relaxed">
+            Past conducted drives, corporate employee participation ledgers, and official event sanction requests are restricted to verified institutional CSR partners.
+          </p>
+          <div className="pt-2 flex items-center justify-center gap-3">
+            <button
+              onClick={() => setActiveSection('directory')}
+              className="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold border border-slate-700 press-effect"
+            >
+              Back to NGO Directory
+            </button>
+            <button
+              onClick={() => onNavigate('company-login')}
+              className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-slate-950 font-black text-xs shadow-lg shadow-amber-500/20 press-effect inline-flex items-center gap-2"
+            >
+              <Building2 className="w-4 h-4" /> Sign In as Institution
+            </button>
+          </div>
         </div>
       )}
 
