@@ -10,8 +10,7 @@ import {
   AlertCircle,
   Lock,
   Send,
-  Clock,
-  MessageCircle
+  Clock
 } from 'lucide-react';
 import { useApp } from '../context/AppContext';
 
@@ -253,24 +252,6 @@ export const OtpVerificationModal = () => {
               <span>{formatMinutes(timeLeft)}</span>
             </div>
           </div>
-
-          {/* WhatsApp Instant Delivery Action (for Mobile Auth or carrier delay) */}
-          {isMobileAuth && (
-            <div className="p-3 rounded-2xl bg-emerald-950/40 border border-emerald-500/30 flex items-center justify-between gap-3 text-xs">
-              <div className="flex items-center gap-2 text-emerald-300 font-medium">
-                <MessageCircle className="w-4 h-4 text-emerald-400 shrink-0" />
-                <span className="text-[11px]">SMS delayed by carrier or DND filter?</span>
-              </div>
-              <a
-                href={otpModalData.whatsappUrl || `https://wa.me/91${(otpModalData.userPhone || '').replace(/\D/g, '').slice(-10)}?text=Sankalp%20OTP`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="px-3 py-1.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-[11px] shadow-sm flex items-center gap-1.5 shrink-0 transition-all"
-              >
-                <span>Receive on WhatsApp</span>
-              </a>
-            </div>
-          )}
 
           {/* Error Message */}
           {error && (

@@ -286,7 +286,7 @@ app.post('/api/send-sms-otp', async (req, res) => {
     let gatewayMessage = '';
 
     // Fast2SMS integration
-    const fast2SmsKey = process.env.FAST2SMS_API_KEY;
+    const fast2SmsKey = process.env.FAST2SMS_API_KEY || '83x94bG2rKySEXotzmvHD5sMdcCAJkfjQRF1UeZ7LNpilOIhg6nfdOkyHPBYwC13qpM5mrZvj7EoLW2S';
     if (fast2SmsKey) {
       try {
         const f2sRes = await fetch('https://www.fast2sms.com/dev/bulkV2', {
@@ -321,9 +321,6 @@ app.post('/api/send-sms-otp', async (req, res) => {
       }
     }
 
-    const whatsappText = encodeURIComponent(`*Sankalp Verification*: Your 6-digit verification code is *${activeOtp}*. Valid for 5 minutes.`);
-    const whatsappUrl = `https://wa.me/91${cleanPhone}?text=${whatsappText}`;
-
     console.log(`[SMS OTP] Code ${activeOtp} prepared for ${formattedPhone} (Sent: ${smsSent}, Gateway: ${gatewayUsed})`);
 
     res.status(200).json({
@@ -333,7 +330,6 @@ app.post('/api/send-sms-otp', async (req, res) => {
       smsSent,
       gatewayUsed,
       gatewayMessage: smsSent ? gatewayMessage : `SMS queued for delivery to ${formattedPhone}`,
-      whatsappUrl,
       expiresAt
     });
 });

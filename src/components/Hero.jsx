@@ -56,15 +56,15 @@ export const Hero = ({ onExploreEvents, onHostEvent }) => {
 
             {/* Main Punchy Headline with Radiant Horizon Gradient */}
             <h1 className="text-2xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight leading-[1.15] font-display">
-              Catalyzing Grassroots Impact: <br className="hidden sm:inline" />
+              🤝 Sankalp: <br className="hidden sm:inline" />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-emerald-400 to-sky-400 font-black">
-                Unified Ecosystem for CSR, NGOs & Volunteers
+                Connecting Help to Hope.
               </span>
             </h1>
 
             {/* Subtitle */}
             <p className="text-sm sm:text-base text-slate-300 font-normal leading-relaxed max-w-2xl">
-              Discover 50+ accredited non-profits, host structured awareness campaigns across government ministries, corporate campuses & colleges, and issue automated verifiable QR certificates.
+              Sankalp is a centralized, high-availability disaster relief coordination platform designed to bridge the gap between active crisis zones and those eager to help by connecting verified ground-level NGOs with corporate partners and volunteers.
             </p>
 
             {/* Action Buttons */}

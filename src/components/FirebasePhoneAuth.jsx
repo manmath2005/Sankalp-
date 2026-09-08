@@ -9,8 +9,7 @@ import {
   AlertCircle, 
   Lock,
   ArrowRight,
-  Sparkles,
-  MessageCircle
+  Sparkles
 } from 'lucide-react';
 import { 
   initRecaptchaVerifier, 
@@ -38,7 +37,6 @@ export const FirebasePhoneAuth = ({
   const [errorMessage, setErrorMessage] = useState('');
   const [confirmationResult, setConfirmationResult] = useState(null);
   const [simulatedCode, setSimulatedCode] = useState('');
-  const [whatsappUrl, setWhatsappUrl] = useState(null);
   const [isEmailFallback, setIsEmailFallback] = useState(false); // true when Firebase SMS failed
   const [fallbackEmail, setFallbackEmail] = useState(''); // email used for fallback OTP
   
@@ -139,11 +137,8 @@ export const FirebasePhoneAuth = ({
     const fullPhoneNumber = `+91${clean}`;
     setLoading(true);
 
-    // 1. Dispatch SMS directly via serverless SMS gateway / WhatsApp
+    // 1. Dispatch SMS directly via Fast2SMS serverless SMS gateway
     const smsDispatch = await sendRealOtpSms(clean, null, `Mobile Verification (+91 ${clean})`);
-    if (smsDispatch.whatsappUrl) {
-      setWhatsappUrl(smsDispatch.whatsappUrl);
-    }
 
     try {
       // Ensure recaptcha verifier is ready
@@ -167,7 +162,7 @@ export const FirebasePhoneAuth = ({
 
       showToast(`Verification OTP dispatched to ${fullPhoneNumber}! Valid for 5 minutes.`, 'info');
     } catch (err) {
-      console.warn("Firebase Phone Auth fallback to direct SMS/WhatsApp:", err);
+      console.warn("Firebase Phone Auth fallback to direct SMS:", err);
 
       const activeCode = smsDispatch.otpCode || Math.floor(100000 + Math.random() * 900000).toString();
       const directConfirmation = {
@@ -176,7 +171,7 @@ export const FirebasePhoneAuth = ({
           if (code.toString().trim() === activeCode.toString().trim() || code === '123456') {
             return { user: { uid: `sms_usr_${Date.now()}`, phoneNumber: fullPhoneNumber } };
           }
-          const e = new Error('Incorrect verification code. Please check your SMS or WhatsApp.');
+          const e = new Error('Incorrect verification code. Please check your SMS.');
           e.code = 'auth/invalid-verification-code';
           throw e;
         }
@@ -426,24 +421,6 @@ export const FirebasePhoneAuth = ({
               <span>{timeLeft === 0 ? 'EXPIRED' : formatCountdown(timeLeft)}</span>
             </div>
           </div>
-
-          {/* WhatsApp Direct Option */}
-          {whatsappUrl && (
-            <div className="p-2.5 rounded-xl bg-emerald-950/40 border border-emerald-500/30 flex items-center justify-between gap-2 text-xs">
-              <div className="flex items-center gap-1.5 text-emerald-300 font-medium">
-                <MessageCircle className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
-                <span className="text-[11px]">SMS delayed by network or DND?</span>
-              </div>
-              <a
-                href={whatsappUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="px-2.5 py-1 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-[10px] flex items-center gap-1 transition-all"
-              >
-                Receive on WhatsApp
-              </a>
-            </div>
-          )}
 
           {/* Email Fallback Notice Banner */}
           {isEmailFallback && (

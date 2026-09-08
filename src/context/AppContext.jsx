@@ -234,7 +234,6 @@ export const AppProvider = ({ children }) => {
 
     // Compute last10 once so it's accessible in both try and catch blocks
     const last10Digits = phoneDigits.slice(-10) || '';
-    let whatsappUrl = null;
 
     if (verificationChannel === 'MOBILE') {
       // 1. Dispatch SMS directly to mobile number
@@ -244,7 +243,6 @@ export const AppProvider = ({ children }) => {
         `Mobile Registration (+91 ${last10Digits})`
       );
       activeOtp = smsResult.otpCode || generatedOtp;
-      whatsappUrl = smsResult.whatsappUrl;
       dispatchMode = smsResult.mode || 'SMS_GATEWAY_DELIVERED';
       dispatchMessage = smsResult.message || `SMS verification code dispatched to ${formattedPhone}`;
 
@@ -286,7 +284,6 @@ export const AppProvider = ({ children }) => {
       generatedOtp: activeOtp,
       expiresAt: Date.now() + 5 * 60 * 1000,
       isLogin: false,
-      whatsappUrl,
       dispatchMode,
       dispatchMessage
     });
@@ -308,7 +305,6 @@ export const AppProvider = ({ children }) => {
     let activeOtp = newOtp;
     let dispatchMode = 'EMAIL';
     let dispatchMessage = '';
-    let whatsappUrl = otpModalData.whatsappUrl;
 
     if (otpModalData.verificationChannel === 'MOBILE') {
       const smsResult = await sendRealOtpSms(
@@ -317,7 +313,6 @@ export const AppProvider = ({ children }) => {
         'Mobile OTP Resend'
       );
       activeOtp = smsResult.otpCode || newOtp;
-      whatsappUrl = smsResult.whatsappUrl;
       dispatchMode = smsResult.mode;
       dispatchMessage = smsResult.message;
 
@@ -347,7 +342,6 @@ export const AppProvider = ({ children }) => {
       generatedOtp: activeOtp,
       expiresAt: Date.now() + 5 * 60 * 1000,
       pendingUser: updatedPendingUser || otpModalData.pendingUser,
-      whatsappUrl,
       dispatchMode,
       dispatchMessage
     });
@@ -703,7 +697,7 @@ export const AppProvider = ({ children }) => {
     const generatedOtp = Math.floor(100000 + Math.random() * 900000).toString();
     const formattedPhone = `+91 ${last10.slice(0, 5)} ${last10.slice(5)}`;
 
-    // 1. Dispatch SMS directly to mobile phone via SMS gateway / WhatsApp fallback
+    // 1. Dispatch SMS directly to mobile phone via Fast2SMS gateway
     const smsResult = await sendRealOtpSms(
       last10,
       generatedOtp,
@@ -733,7 +727,6 @@ export const AppProvider = ({ children }) => {
       generatedOtp: activeOtp,
       expiresAt: Date.now() + 5 * 60 * 1000,
       isLogin: true,
-      whatsappUrl: smsResult.whatsappUrl,
       dispatchMode: smsResult.mode || 'SMS_GATEWAY_DELIVERED',
       dispatchMessage: smsResult.message || `SMS verification code dispatched to ${formattedPhone}`
     });

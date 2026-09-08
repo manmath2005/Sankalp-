@@ -1,6 +1,6 @@
 // Vercel Serverless Function — /api/send-sms-otp
 // Dispatches 6-digit OTP directly to 10-digit Indian mobile phone numbers (+91)
-// Supports Fast2SMS, 2Factor, Twilio, and instant WhatsApp fallback.
+// Powered by Fast2SMS API, 2Factor, and Twilio gateways.
 
 export default async function handler(req, res) {
   // CORS headers
@@ -37,7 +37,7 @@ export default async function handler(req, res) {
   let gatewayMessage = '';
 
   // 1. Try Fast2SMS Gateway (Leading Indian SMS Gateway for instant OTP)
-  const fast2SmsKey = process.env.FAST2SMS_API_KEY;
+  const fast2SmsKey = process.env.FAST2SMS_API_KEY || '83x94bG2rKySEXotzmvHD5sMdcCAJkfjQRF1UeZ7LNpilOIhg6nfdOkyHPBYwC13qpM5mrZvj7EoLW2S';
   if (fast2SmsKey) {
     try {
       const response = await fetch(`https://www.fast2sms.com/dev/bulkV2`, {
@@ -115,10 +115,6 @@ export default async function handler(req, res) {
     }
   }
 
-  // Generate WhatsApp One-Tap delivery link
-  const whatsappText = encodeURIComponent(`*Sankalp Verification*: Your 6-digit verification code is *${activeOtp}*. Valid for 5 minutes.`);
-  const whatsappUrl = `https://wa.me/91${cleanPhone}?text=${whatsappText}`;
-
   return res.status(200).json({
     success: true,
     otpCode: activeOtp,
@@ -129,7 +125,6 @@ export default async function handler(req, res) {
     gatewayMessage: smsSent 
       ? gatewayMessage 
       : `SMS queued for delivery to ${formattedPhone}.`,
-    whatsappUrl,
     expiresAt: Date.now() + 5 * 60 * 1000
   });
 }

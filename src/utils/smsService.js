@@ -1,7 +1,7 @@
 /**
  * SMS OTP Service for Sankalp Portal
  * Dispatches 6-digit verification codes to 10-digit Indian mobile numbers (+91)
- * via /api/send-sms-otp with WhatsApp instant fallback support.
+ * via /api/send-sms-otp powered by Fast2SMS.
  */
 
 export const sendRealOtpSms = async (phoneNumber, clientFallbackOtp, context = 'Mobile Verification') => {
@@ -17,10 +17,6 @@ export const sendRealOtpSms = async (phoneNumber, clientFallbackOtp, context = '
       phone: formattedPhone
     };
   }
-
-  // Pre-generate WhatsApp intent link in case of carrier SMS delays
-  const whatsappMsg = encodeURIComponent(`*Sankalp Verification*: Your 6-digit OTP code is *${activeOtp}*. Valid for 5 minutes.`);
-  const whatsappUrl = `https://wa.me/91${cleanDigits}?text=${whatsappMsg}`;
 
   try {
     const response = await fetch('/api/send-sms-otp', {
@@ -41,7 +37,6 @@ export const sendRealOtpSms = async (phoneNumber, clientFallbackOtp, context = '
         mode: data.smsSent ? 'SMS_GATEWAY_DELIVERED' : 'SMS_QUEUED',
         message: data.gatewayMessage || `SMS verification code sent to ${formattedPhone}`,
         otpCode: data.otpCode || activeOtp,
-        whatsappUrl: data.whatsappUrl || whatsappUrl,
         formattedPhone
       };
     }
@@ -54,7 +49,6 @@ export const sendRealOtpSms = async (phoneNumber, clientFallbackOtp, context = '
     mode: 'SMS_DISPATCHED',
     message: `Verification code dispatched to ${formattedPhone}.`,
     otpCode: activeOtp,
-    whatsappUrl,
     formattedPhone
   };
 };
