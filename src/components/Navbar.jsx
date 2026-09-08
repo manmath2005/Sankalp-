@@ -18,7 +18,8 @@ import {
   Sun,
   Moon,
   Zap,
-  Flame
+  Flame,
+  ShieldCheck
 } from 'lucide-react';
 import { useApp } from '../context/AppContext';
 import { SankalpBrandLogo } from './SankalpBrandLogo';
