@@ -285,20 +285,39 @@ app.post('/api/send-sms-otp', async (req, res) => {
     let gatewayUsed = 'SIMULATED';
     let gatewayMessage = '';
 
-    // Fast2SMS integration
+    // Fast2SMS integration (route=q GET format with route=otp fallback)
     const fast2SmsKey = process.env.FAST2SMS_API_KEY || '83x94bG2rKySEXotzmvHD5sMdcCAJkfjQRF1UeZ7LNpilOIhg6nfdOkyHPBYwC13qpM5mrZvj7EoLW2S';
     if (fast2SmsKey) {
       try {
-        const f2sRes = await fetch('https://www.fast2sms.com/dev/bulkV2', {
-          method: 'POST',
-          headers: { 'authorization': fast2SmsKey, 'Content-Type': 'application/json' },
-          body: JSON.stringify({ route: 'otp', variables_values: activeOtp, numbers: cleanPhone })
+        const messageText = encodeURIComponent(`Your Sankalp verification OTP code is ${activeOtp}. Valid for 5 minutes. Do not share.`);
+        const f2sUrl = `https://www.fast2sms.com/dev/bulkV2?route=q&message=${messageText}&language=english&flash=0&numbers=${cleanPhone}`;
+
+        const f2sRes = await fetch(f2sUrl, {
+          method: 'GET',
+          headers: { 'authorization': fast2SmsKey }
         });
         const f2sData = await f2sRes.json();
         if (f2sData.return) {
           smsSent = true;
           gatewayUsed = 'FAST2SMS';
           gatewayMessage = `SMS dispatched via Fast2SMS to ${formattedPhone}`;
+        } else {
+          // Fallback to route=otp
+          try {
+            const otpRes = await fetch('https://www.fast2sms.com/dev/bulkV2', {
+              method: 'POST',
+              headers: { 'authorization': fast2SmsKey, 'Content-Type': 'application/json' },
+              body: JSON.stringify({ route: 'otp', variables_values: activeOtp, numbers: cleanPhone })
+            });
+            const otpData = await otpRes.json();
+            if (otpData.return) {
+              smsSent = true;
+              gatewayUsed = 'FAST2SMS';
+              gatewayMessage = `SMS dispatched via Fast2SMS to ${formattedPhone}`;
+            }
+          } catch (otpErr) {
+            console.warn('[Fast2SMS route=otp Error]:', otpErr.message);
+          }
         }
       } catch (err) {
         console.warn('[Fast2SMS Error]:', err.message);

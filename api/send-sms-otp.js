@@ -36,21 +36,19 @@ export default async function handler(req, res) {
   let gatewayUsed = 'SIMULATED';
   let gatewayMessage = '';
 
-  // 1. Try Fast2SMS Gateway (Leading Indian SMS Gateway for instant OTP)
+  // 1. Try Fast2SMS Gateway (Leading Indian SMS Gateway - route=q GET format)
   const fast2SmsKey = process.env.FAST2SMS_API_KEY || '83x94bG2rKySEXotzmvHD5sMdcCAJkfjQRF1UeZ7LNpilOIhg6nfdOkyHPBYwC13qpM5mrZvj7EoLW2S';
   if (fast2SmsKey) {
     try {
-      const response = await fetch(`https://www.fast2sms.com/dev/bulkV2`, {
-        method: 'POST',
+      const messageText = encodeURIComponent(`Your Sankalp verification OTP code is ${activeOtp}. Valid for 5 minutes. Do not share.`);
+      const f2sUrl = `https://www.fast2sms.com/dev/bulkV2?route=q&message=${messageText}&language=english&flash=0&numbers=${cleanPhone}`;
+
+      console.log(`[FAST2SMS DISPATCH] Calling Fast2SMS route=q GET for +91 ${cleanPhone}`);
+      const response = await fetch(f2sUrl, {
+        method: 'GET',
         headers: {
-          'authorization': fast2SmsKey,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          route: 'otp',
-          variables_values: activeOtp,
-          numbers: cleanPhone
-        })
+          'authorization': fast2SmsKey
+        }
       });
       const data = await response.json();
       if (data.return) {
@@ -59,7 +57,34 @@ export default async function handler(req, res) {
         gatewayMessage = `SMS successfully dispatched to +91 ${cleanPhone} via Fast2SMS.`;
         console.log('[FAST2SMS SUCCESS]:', data);
       } else {
-        console.warn('[FAST2SMS ERROR]:', data);
+        console.warn('[FAST2SMS route=q NOTICE]:', data);
+
+        // Fallback to route=otp if route=q returned requirement notice
+        try {
+          const otpRes = await fetch(`https://www.fast2sms.com/dev/bulkV2`, {
+            method: 'POST',
+            headers: {
+              'authorization': fast2SmsKey,
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              route: 'otp',
+              variables_values: activeOtp,
+              numbers: cleanPhone
+            })
+          });
+          const otpData = await otpRes.json();
+          if (otpData.return) {
+            smsSent = true;
+            gatewayUsed = 'FAST2SMS';
+            gatewayMessage = `SMS successfully dispatched to +91 ${cleanPhone} via Fast2SMS OTP.`;
+            console.log('[FAST2SMS OTP SUCCESS]:', otpData);
+          } else {
+            console.warn('[FAST2SMS route=otp NOTICE]:', otpData);
+          }
+        } catch (otpErr) {
+          console.warn('[FAST2SMS route=otp EXCEPTION]:', otpErr.message);
+        }
       }
     } catch (err) {
       console.error('[FAST2SMS EXCEPTION]:', err);
