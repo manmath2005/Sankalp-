@@ -65,7 +65,6 @@ export const NgoLoginView = ({ onNavigate }) => {
   const [specialization, setSpecialization] = useState('');
   const [regPassword, setRegPassword] = useState('');
   const [selectedSectors, setSelectedSectors] = useState(['Government Office', 'College']);
-  const [regVerificationMethod, setRegVerificationMethod] = useState('EMAIL'); // 'EMAIL' or 'MOBILE'
 
   const toggleSector = (sector) => {
     if (selectedSectors.includes(sector)) {
@@ -152,7 +151,7 @@ export const NgoLoginView = ({ onNavigate }) => {
         primarySectors: selectedSectors,
         specialization,
         password: regPassword
-      }, regVerificationMethod);
+      }, 'EMAIL');
       // OTP verification modal opens automatically
     } catch (err) {
       setErrorMessage(err.message);
@@ -515,54 +514,15 @@ export const NgoLoginView = ({ onNavigate }) => {
                   />
                 </div>
 
-                {/* Preferred Verification Channel */}
-                <div className="p-3 rounded-2xl bg-slate-950/70 border border-slate-800 space-y-2">
-                  <div className="flex items-center justify-between">
-                    <label className="text-[11px] font-extrabold text-slate-300 uppercase tracking-wider">
-                      Preferred Verification Method
-                    </label>
-                    <span className="text-[10px] font-bold text-emerald-400 bg-emerald-950/80 px-2 py-0.5 rounded-md border border-emerald-800">
-                      5-Min OTP
-                    </span>
+                {/* Email Verification Banner */}
+                <div className="p-3 rounded-2xl bg-slate-950/70 border border-slate-800 flex items-center justify-between">
+                  <div className="flex items-center gap-2 text-xs text-slate-300">
+                    <Mail className="w-4 h-4 text-amber-400" />
+                    <span>A 6-digit verification code will be sent to the official NGO email inbox.</span>
                   </div>
-
-                  <div className="grid grid-cols-2 gap-2">
-                    <button
-                      type="button"
-                      onClick={() => setRegVerificationMethod('EMAIL')}
-                      className={`p-2.5 rounded-xl border-2 text-left transition-all flex items-center gap-2 ${
-                        regVerificationMethod === 'EMAIL'
-                          ? 'border-amber-500 bg-amber-950/30 text-white shadow-xs'
-                          : 'border-slate-800 bg-slate-900 text-slate-400 hover:border-slate-700'
-                      }`}
-                    >
-                      <div className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 ${regVerificationMethod === 'EMAIL' ? 'bg-amber-500 text-slate-950 font-bold' : 'bg-slate-800 text-slate-400'}`}>
-                        <Mail className="w-3.5 h-3.5" />
-                      </div>
-                      <div>
-                        <div className="text-xs font-bold leading-none">Official Email</div>
-                        <div className="text-[10px] text-slate-400 mt-0.5">Code to Inbox</div>
-                      </div>
-                    </button>
-
-                    <button
-                      type="button"
-                      onClick={() => setRegVerificationMethod('MOBILE')}
-                      className={`p-2.5 rounded-xl border-2 text-left transition-all flex items-center gap-2 ${
-                        regVerificationMethod === 'MOBILE'
-                          ? 'border-emerald-500 bg-emerald-950/30 text-white shadow-xs'
-                          : 'border-slate-800 bg-slate-900 text-slate-400 hover:border-slate-700'
-                      }`}
-                    >
-                      <div className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 ${regVerificationMethod === 'MOBILE' ? 'bg-emerald-500 text-slate-950 font-bold' : 'bg-slate-800 text-slate-400'}`}>
-                        <Smartphone className="w-3.5 h-3.5" />
-                      </div>
-                      <div>
-                        <div className="text-xs font-bold leading-none">Mobile OTP</div>
-                        <div className="text-[10px] text-slate-400 mt-0.5">Code to Phone (+91)</div>
-                      </div>
-                    </button>
-                  </div>
+                  <span className="text-[10px] font-mono font-bold text-amber-400 bg-amber-950/60 px-2 py-0.5 rounded-md border border-amber-800/60">
+                    5-Min Email OTP
+                  </span>
                 </div>
 
                 <button
@@ -571,9 +531,7 @@ export const NgoLoginView = ({ onNavigate }) => {
                   className="w-full py-2.5 rounded-xl text-slate-950 font-black text-xs uppercase tracking-wider shadow-lg press-effect flex items-center justify-center gap-2 mt-2 bg-gradient-to-r from-amber-500 via-emerald-500 to-sky-500 hover:from-amber-400 hover:to-sky-400 shadow-amber-500/10"
                 >
                   <Zap className="w-3.5 h-3.5 fill-current" />
-                  {loading 
-                    ? 'Submitting Registration...' 
-                    : (regVerificationMethod === 'MOBILE' ? 'Proceed to Mobile OTP Verification (5 Min)' : 'Proceed to Email OTP Verification (5 Min)')}
+                  {loading ? 'Submitting Registration...' : 'Proceed to Email OTP Verification (5 Min)'}
                 </button>
               </form>
             )}
